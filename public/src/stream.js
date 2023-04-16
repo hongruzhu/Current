@@ -1,7 +1,7 @@
 let socket = io();
 const myPeer = new Peer(undefined, {
-  host: "localhost", // hongruzhu.link
-  port: "3001", // 443
+  host: "hongruzhu.link", // hongruzhu.link
+  port: "443", // 443
   path: "/myapp",
   debug: 2,
 });
