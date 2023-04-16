@@ -219,9 +219,12 @@ convertCanvasToStream(canvasElement).then((stream) => {
 });
 
 // 進入會議房間，建立peer連線，產出自己的id
+const urlParams = new URLSearchParams(window.location.search);
+const roomId = urlParams.get("roomId");
+console.log(roomId);
 myPeer.on("open", (peerId) => {
   console.log(`my peerId: ${peerId}`);
-  socket.emit("join-room", "room", peerId);
+  socket.emit("join-room", roomId, peerId);
 });
 
 socket.on("user-disconnected", (userId) => {
