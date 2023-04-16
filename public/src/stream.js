@@ -1,6 +1,6 @@
 let socket = io();
 const myPeer = new Peer(undefined, {
-  host: "hongruzhu.link", // hongruzhu.link
+  host: "currentmeet.com", // currentmeet.com
   port: "443", // 443
   path: "/myapp",
   debug: 2,
