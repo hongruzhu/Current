@@ -10,7 +10,7 @@ import { Server } from "socket.io";
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server);
-const { PORT, API_VERSION } = process.env;
+const { PORT } = process.env;
 
 app.set("view engine", "ejs");
 app.use(express.static("public"));
