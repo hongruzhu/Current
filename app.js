@@ -1,11 +1,6 @@
 import * as dotenv from "dotenv";
 dotenv.config();
 
-// To get __dirname (and __filename) back
-import * as url from "url";
-const __filename = url.fileURLToPath(import.meta.url);
-const __dirname = url.fileURLToPath(new URL(".", import.meta.url));
-
 // Express Initialization
 import express from "express";
 import cors from "cors";
@@ -18,7 +13,7 @@ const io = new Server(server);
 const { PORT, API_VERSION } = process.env;
 
 app.set("view engine", "ejs");
-app.use(express.static(__dirname + "/public"));
+app.use(express.static("public"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
@@ -28,7 +23,6 @@ import { index_route } from "./server/routes/index_route.js";
 import { concall_route } from "./server/routes/concall_route.js";
 
 app.use(index_route, concall_route);
-
 
 // live streaming
 io.on("connection", (socket) => {

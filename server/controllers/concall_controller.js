@@ -1,9 +1,14 @@
-const verifyConfNumber = async (req, res) => {
-  let room = [];
-  
-  console.log("roomId", req.query.roomId);
+import { redis } from "../util/cache.js";
 
-  res.render("concall")
+const verifyConfNumber = async (req, res) => {  
+  const checkRoomNumber = await redis.sismember("room", req.query.roomId);
+  if (checkRoomNumber === 1) {
+    res.render("concall", {
+      roomId: req.query.roomId,
+    });
+    return;
+  }
+  res.render("wrongNumber");
 }
 
 export { verifyConfNumber };
