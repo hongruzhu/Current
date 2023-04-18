@@ -28,6 +28,7 @@ const myWebcamStream = await navigator.mediaDevices.getUserMedia({
   },
   audio: true,
 });
+console.log("myWebcamStream", myWebcamStream);
 
 myVideo.srcObject = myWebcamStream;
 // 當webcam stream開始播放時，執行playing function
@@ -88,8 +89,10 @@ async function convertCanvasToStream(canvas) {
 
 // 取得自己視訊的stream後，藉由Socket.io和Peer與其他user交換stream
 const myStream = await convertCanvasToStream(canvasElement);
+console.log("myStream", myStream);
+
+//FIXME: 這邊要排queue
 myPeer.on("call", async (call) => {
-  console.log("test");
   const peerId = call.peer;
   console.log(`Connection with ${peerId}`);
   call.answer(myStream);
@@ -100,7 +103,7 @@ myPeer.on("call", async (call) => {
 });
 
 socket.on("user-connected", async (peerId) => {
-  console.log("hahaha");
+  //FIXME: 這邊要排queue
   connectToNewUser(peerId, myStream);
 });
 
