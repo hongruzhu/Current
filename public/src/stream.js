@@ -11,7 +11,6 @@ const myWebcamStream = await navigator.mediaDevices.getUserMedia({
   },
   audio: true,
 });
-console.log("myWebcamStream", myWebcamStream);
 
 myVideo.srcObject = myWebcamStream;
 // 當webcam stream開始播放時，執行playing function
@@ -39,6 +38,7 @@ function background_origin() {
   canvasCtx.drawImage(myVideo, 0, 0, canvasElement.width, canvasElement.height);
   canvasCtx.restore();
 }
+
 async function playing() {
   // await selfieSegmentation.send({ image: myVideo });
   background_origin();
@@ -72,7 +72,6 @@ async function convertCanvasToStream(canvas) {
 
 // 取得自己視訊的stream後，藉由Socket.io和Peer與其他user交換stream
 const myStream = await convertCanvasToStream(canvasElement);
-console.log("myStream", myStream);
 
 // Socket.IO and Peer setup
 let socket = io();
@@ -91,7 +90,6 @@ myPeer.on("open", (peerId) => {
   socket.emit("join-room", roomId, peerId);
 });
 
-//FIXME: 這邊要排queue
 myPeer.on("call", async (call) => {
   const peerId = call.peer;
   console.log(`Connection with ${peerId}`);
@@ -103,15 +101,13 @@ myPeer.on("call", async (call) => {
 });
 
 socket.on("user-connected", async (peerId) => {
-  //FIXME: 這邊要排queue
   connectToNewUser(peerId, myStream);
 });
 
 // 若有user離開，移除他的視訊畫面
-socket.on("user-disconnected", (userId) => {
-  const video = document.getElementById(userId);
-  video.remove();
-  console.log(`Disconnect with ${userId}`);
+socket.on("user-disconnected", (peerId) => {
+  $(`div[id=${peerId}]`).remove()
+  console.log(`Disconnect with ${peerId}`);
 });
 
 // 新user加入，建立peer連線的function
