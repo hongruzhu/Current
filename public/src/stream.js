@@ -1,12 +1,25 @@
-let socket = io();
-const myPeer = new Peer(undefined, {
-  host: "currentmeet.com", // currentmeet.com
-  port: "443", // 443
-  path: "/myapp",
-  debug: 2,
+// 開啟視訊鏡頭，擷取自己的視訊畫面
+const myVideo = document.createElement("video");
+myVideo.setAttribute("id", "myself");
+myVideo.muted = true;
+
+const myWebcamStream = await navigator.mediaDevices.getUserMedia({
+  video: {
+    width: 1280,
+    height: 720,
+    aspectRatio: 1.777777778,
+  },
+  audio: true,
 });
 
-// 把video輸出成canvas
+myVideo.srcObject = myWebcamStream;
+// 當webcam stream開始播放時，執行playing function
+myVideo.onplay = playing;
+myVideo.addEventListener("loadedmetadata", () => {
+  myVideo.play();
+});
+
+// 將自己視訊的video stream，轉換成canvas，以利更換背景功能運作
 const canvasElement = document.createElement("canvas");
 canvasElement.setAttribute("id", "output");
 canvasElement.setAttribute("width", 1280);
@@ -17,247 +30,116 @@ canvasElement.setAttribute(
 );
 const canvasCtx = canvasElement.getContext("2d");
 
-// 原始背景
-function onResults_selfie_segmentation_origin(results) {
+function background_origin() {
   canvasCtx.save();
   canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
   // canvasCtx.filter = "blur(0)"
 
-  canvasCtx.drawImage(
-    results.image,
-    0,
-    0,
-    canvasElement.width,
-    canvasElement.height
-  );
+  canvasCtx.drawImage(myVideo, 0, 0, canvasElement.width, canvasElement.height);
   canvasCtx.restore();
 }
-
-// 背景模糊
-function onResults_selfie_segmentation_blur(results) {
-  canvasCtx.save();
-  canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
-  // canvasCtx.filter = "blur(0)"
-
-  canvasCtx.drawImage(
-    results.segmentationMask,
-    0,
-    0,
-    canvasElement.width,
-    canvasElement.height
-  );
-
-  // Only overwrite existing pixels.
-  canvasCtx.globalCompositeOperation = "source-in";
-  canvasCtx.drawImage(
-    results.image,
-    0,
-    0,
-    canvasElement.width,
-    canvasElement.height
-  );
-  // canvasCtx.fillRect(0, 0, canvasElement.width, canvasElement.height);
-
-  // // Only overwrite missing pixels.
-  canvasCtx.globalCompositeOperation = "destination-atop";
-  canvasCtx.filter = "blur(10px)";
-
-  canvasCtx.drawImage(
-    results.image,
-    0,
-    0,
-    canvasElement.width,
-    canvasElement.height
-  );
-  canvasCtx.restore();
-}
-
-// 更換背景圖片
-function onResults_selfie_segmentation_image(results) {
-  canvasCtx.save();
-
-  canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
-  canvasCtx.drawImage(
-    results.segmentationMask,
-    0,
-    0,
-    canvasElement.width,
-    canvasElement.height
-  );
-
-  canvasCtx.globalCompositeOperation = "source-out";
-
-  const backgroundImg = new Image();
-  backgroundImg.src = `assets/${path}`;
-  const pat = canvasCtx.createPattern(backgroundImg, "no-repeat");
-  canvasCtx.fillStyle = pat;
-  canvasCtx.fillRect(0, 0, canvasElement.width, canvasElement.height);
-
-  canvasCtx.globalCompositeOperation = "destination-atop";
-  canvasCtx.drawImage(
-    results.image,
-    0,
-    0,
-    canvasElement.width,
-    canvasElement.height
-  );
-
-  canvasCtx.restore();
-}
-
-const selfieSegmentation = new SelfieSegmentation({
-  locateFile: (file) => {
-    return `https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation/${file}`;
-  },
-});
-selfieSegmentation.setOptions({
-  modelSelection: 1,
-});
-
-// 選擇背景
-let path = "";
-
-$("#background").on("change", () => {
-  if ($("#background").val() === "blur") {
-    selfieSegmentation.onResults(onResults_selfie_segmentation_blur);
-    return;
-  }
-  if ($("#background").val() === "") {
-    selfieSegmentation.onResults(onResults_selfie_segmentation_origin);
-    return;
-  }
-  path = $("#background").val();
-  selfieSegmentation.onResults(onResults_selfie_segmentation_image);
-});
-
-selfieSegmentation.onResults(onResults_selfie_segmentation_origin);
 
 async function playing() {
-  await selfieSegmentation.send({ image: myVideo });
+  // await selfieSegmentation.send({ image: myVideo });
+  background_origin();
   // 當沒有在chrome tab時(最小化 or 不在分頁)，window.requestAnimationFrame()不會執行，會造成其他人看到自己的畫面停格
   // 改成setTimeout就解決這個問題了！來源：https://github.com/google/mediapipe/issues/3018
   // window.requestAnimationFrame(playing);
   setTimeout(playing, 0);
 }
 
-// 擷取自己的視訊
-const myVideo = document.createElement("video");
-myVideo.setAttribute("class", "myself");
-myVideo.muted = true;
-
-navigator.mediaDevices
-  .getUserMedia({
-    video: {
-      width: 1280,
-      height: 720,
-      aspectRatio: 1.777777778,
-      
-    },
-    audio: true,
-  })
-  .then((stream) => {
-    myVideo.srcObject = stream;
-    // 把自己的視訊丟給mediapipe進行解析
-    myVideo.onplay = playing;
-    myVideo.addEventListener("loadedmetadata", () => {
-      myVideo.play();
-    });
-  });
-
-// 把自己的視訊畫面，連同包裝的div，append到html上
+// 把自己的視訊畫面canvas，連同包裝的div，append到html上
 const videoGrid = document.getElementById("display");
-const videoGridElement = $("<div>", {
-  id: "myVideo",
-  class: "relative pb-[56.25%] overflow-hidden h-0",
-});
-$("#display").append(videoGridElement);
+addVideoGridElement("myVideo");
 $("#myVideo").append(canvasElement);
 
-// 把canvas轉回video stream
+// PeerJS需傳送stream給其他人，把自己畫面的canvas轉回video stream的function
 async function convertCanvasToStream(canvas) {
   // 把canvas的畫面重新轉回stream
   const videoOutput = canvas.captureStream();
-
-  // 沒有麥克風聲音，拼回去！
+  // canvas的畫面不會有聲音，另外擷取拼回去！
   const mic = await navigator.mediaDevices.getUserMedia({
     audio: true,
     video: false,
   });
-
   // Combine both video/audio stream with MediaStream object
   const combine = new MediaStream([
     ...videoOutput.getTracks(),
     ...mic.getTracks(),
   ]);
-
   return combine;
 }
 
-convertCanvasToStream(canvasElement).then((stream) => {
-  myPeer.on("call", async (call) => {
-    console.log(`Connection with ${call.peer}`);
-    call.answer(stream);
-    const video = document.createElement("video");
-    video.setAttribute("id", `${call.peer}`);
-    video.setAttribute(
-      "class",
-      "absolute w-full h-full t-0 l-0 object-cover transform-rotateY-180"
-    );
-    const videoGridElement = $("<div>", {
-      id: call.peer,
-      class: "relative pb-[56.25%] overflow-hidden h-0",
-    });
-    $("#display").append(videoGridElement);
-    call.on("stream", (userVideoStream) => {
-      addVideoStream(video, userVideoStream, call.peer);
-    });
-  });
+// 取得自己視訊的stream後，藉由Socket.io和Peer與其他user交換stream
+const myStream = await convertCanvasToStream(canvasElement);
 
-  socket.on("user-connected", async (peerId) => {
-    connectToNewUser(peerId, stream);
-  });
+// Socket.IO and Peer setup
+let socket = io();
+const myPeer = new Peer(undefined, {
+  host: "currentmeet.com", // currentmeet.com
+  port: "443", // 443
+  path: "/myapp",
+  debug: 2,
 });
 
-// 進入會議房間，建立peer連線，產出自己的id
+// 進入會議房間，建立peer連線，產出自己的peerId
 const urlParams = new URLSearchParams(window.location.search);
 const roomId = urlParams.get("roomId");
-console.log(roomId);
 myPeer.on("open", (peerId) => {
   console.log(`my peerId: ${peerId}`);
   socket.emit("join-room", roomId, peerId);
 });
 
-socket.on("user-disconnected", (userId) => {
-  const video = document.getElementById(userId);
-  video.remove();
-  console.log(`Disconnect with ${userId}`);
+myPeer.on("call", async (call) => {
+  const peerId = call.peer;
+  console.log(`Connection with ${peerId}`);
+  call.answer(myStream);
+  addVideoGridElement(peerId);
+  call.on("stream", (userVideoStream) => {
+    addVideoStream(userVideoStream, peerId);
+  });
 });
 
-// 新user加入
+socket.on("user-connected", async (peerId) => {
+  connectToNewUser(peerId, myStream);
+});
+
+// 若有user離開，移除他的視訊畫面
+socket.on("user-disconnected", (peerId) => {
+  $(`div[id=${peerId}]`).remove()
+  console.log(`Disconnect with ${peerId}`);
+});
+
+// 新user加入，建立peer連線的function
 function connectToNewUser(peerId, stream) {
   const call = myPeer.call(peerId, stream);
+  addVideoGridElement(peerId);
+  call.on("stream", (userVideoStream) => {
+    addVideoStream(userVideoStream, peerId);
+  });
+  console.log(`Connection with ${peerId}`);
+}
+
+// Append包裹視訊的div到html上的function
+function addVideoGridElement(peerId) {
+  const videoGridElement = $("<div>", {
+    id: peerId,
+    class: "relative pb-[56.25%] overflow-hidden h-0",
+  });
+  $("#display").append(videoGridElement);
+}
+
+// Append視訊畫面到html上的function
+function addVideoStream(stream, peerId) {
   const video = document.createElement("video");
   video.setAttribute("id", peerId);
   video.setAttribute(
     "class",
     "absolute w-full h-full t-0 l-0 object-cover transform-rotateY-180"
   );
-  const videoGridElement = $("<div>", {
-    id: peerId,
-    class: "relative pb-[56.25%] overflow-hidden h-0",
-  });
-  $("#display").append(videoGridElement);
-  call.on("stream", (userVideoStream) => {
-    addVideoStream(video, userVideoStream, peerId);
-  });
-  console.log(`Connection with ${peerId}`);
-}
-
-// 增加視訊畫面
-function addVideoStream(video, stream, userId) {
   video.srcObject = stream;
   video.addEventListener("loadedmetadata", () => {
     video.play();
   });
-  $(`#${userId}`).append(video);
+  $(`#${peerId}`).append(video);
 }

@@ -10,25 +10,28 @@ import { Server } from "socket.io";
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server);
-const port = process.env.PORT;
+const { PORT } = process.env;
 
+app.set("view engine", "ejs");
 app.use(express.static("public"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 
-// live streaming
-io.on("connection", (socket) => {
-  socket.on("join-room", (roomId, peerId) => {
-    // User加入此roomId的會議室
-    socket.join(roomId);
-    const newUserSocketId = socket.id;
-    socket.to(roomId).emit("user-connected", peerId, newUserSocketId);
-    socket.on("disconnect", () => {
-      socket.to(roomId).emit("user-disconnected", peerId);
-    });
-  });
-});
+// API routes
+import { index_route } from "./server/routes/index_route.js";
+import { concall_route } from "./server/routes/concall_route.js";
+
+app.use(index_route, concall_route);
+
+// Socket.IO routes
+import { liveStreaming } from "./server/routes/socketio_route.js"
+
+const onConnection = (socket) => {
+  liveStreaming(io, socket);
+}
+
+io.on("connection", onConnection);
 
 // Error handling
 app.use(function (err, req, res, next) {
@@ -36,6 +39,6 @@ app.use(function (err, req, res, next) {
   res.status(500).send("Internal Server Error");
 });
 
-server.listen(port, async () => {
-  console.log(`Listening on port: ${port}`);
+server.listen(PORT, async () => {
+  console.log(`Listening on port: ${PORT}`);
 });

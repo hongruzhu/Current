@@ -8,6 +8,5 @@ function generateRandomString(length) {
   return result;
 }
 
-// 產生10個隨機英文字母，當作會議代碼
+// 產生10個隨機英文字母，當作會議代碼 
 const roomId = generateRandomString(10);
-$("#new").attr("href", `./concall.html?roomId=${roomId}`);
