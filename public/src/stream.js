@@ -7,28 +7,34 @@ const myPeer = new Peer(undefined, {
   debug: 2,
 });
 
+// 進入會議房間，建立peer連線，產出自己的peerId
+const urlParams = new URLSearchParams(window.location.search);
+const roomId = urlParams.get("roomId");
+myPeer.on("open", (peerId) => {
+  console.log(`my peerId: ${peerId}`);
+  socket.emit("join-room", roomId, peerId);
+});
+
 // 開啟視訊鏡頭，擷取自己的視訊畫面
 const myVideo = document.createElement("video");
 myVideo.setAttribute("id", "myself");
 myVideo.muted = true;
 
-navigator.mediaDevices
-  .getUserMedia({
-    video: {
-      width: 1280,
-      height: 720,
-      aspectRatio: 1.777777778,
-    },
-    audio: true,
-  })
-  .then((stream) => {
-    myVideo.srcObject = stream;
-    // 把自己的視訊丟給mediapipe進行解析
-    myVideo.onplay = playing;
-    myVideo.addEventListener("loadedmetadata", () => {
-      myVideo.play();
-    });
-  });
+const myWebcamStream = await navigator.mediaDevices.getUserMedia({
+  video: {
+    width: 1280,
+    height: 720,
+    aspectRatio: 1.777777778,
+  },
+  audio: true,
+});
+
+myVideo.srcObject = myWebcamStream;
+// 當webcam stream開始播放時，執行playing function
+myVideo.onplay = playing;
+myVideo.addEventListener("loadedmetadata", () => {
+  myVideo.play();
+});
 
 // 將自己視訊的video stream，轉換成canvas，以利更換背景功能運作
 const canvasElement = document.createElement("canvas");
@@ -79,14 +85,6 @@ async function convertCanvasToStream(canvas) {
   ]);
   return combine;
 }
-
-// 進入會議房間，建立peer連線，產出自己的peerId
-const urlParams = new URLSearchParams(window.location.search);
-const roomId = urlParams.get("roomId");
-myPeer.on("open", (peerId) => {
-  console.log(`my peerId: ${peerId}`);
-  socket.emit("join-room", roomId, peerId);
-});
 
 // 取得自己視訊的stream後，藉由Socket.io和Peer與其他user交換stream
 const myStream = await convertCanvasToStream(canvasElement);
