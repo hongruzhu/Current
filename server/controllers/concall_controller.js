@@ -1,8 +1,9 @@
 import { redis } from "../util/cache.js";
 
 const verifyConfNumber = async (req, res) => {  
-  const checkRoomNumber = await redis.sismember("room", req.query.roomId);
-  if (checkRoomNumber === 1) {
+  const checkRoomId = await redis.hexists("room", req.query.roomId);
+  console.log("test");
+  if (checkRoomId === 1) {
     res.render("concall", {
       roomId: req.query.roomId,
     });
@@ -10,5 +11,7 @@ const verifyConfNumber = async (req, res) => {
   }
   res.render("wrongNumber");
 }
+
+
 
 export { verifyConfNumber };

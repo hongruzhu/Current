@@ -16,18 +16,18 @@ const addConfNumber = async (req, res) => {
   }
 
   let roomId;
-  let checkRoomNumber;
+  let checkRoomId;
   let state = true;
 
   while (state) {
     roomId = generateRandomString(10);
-    checkRoomNumber = await redis.sismember("room", roomId);
-    if (checkRoomNumber === 0) {
+    checkRoomId = await redis.hexists("room", roomId);
+    if (checkRoomId === 0) {
       state = false;
     }
   }
 
-  redis.sadd("room", roomId);
+  redis.hset("room", roomId, 0);
   res.redirect(`./concall?roomId=${roomId}`);
 };
 
