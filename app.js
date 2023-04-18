@@ -24,18 +24,14 @@ import { concall_route } from "./server/routes/concall_route.js";
 
 app.use(index_route, concall_route);
 
-// live streaming
-io.on("connection", (socket) => {
-  socket.on("join-room", (roomId, peerId) => {
-    // User加入此roomId的會議室
-    socket.join(roomId);
-    const newUserSocketId = socket.id;
-    socket.to(roomId).emit("user-connected", peerId, newUserSocketId);
-    socket.on("disconnect", () => {
-      socket.to(roomId).emit("user-disconnected", peerId);
-    });
-  });
-});
+// Socket.IO routes
+import { liveStreaming } from "./server/routes/socketio_route.js"
+
+const onConnection = (socket) => {
+  liveStreaming(io, socket);
+}
+
+io.on("connection", onConnection);
 
 // Error handling
 app.use(function (err, req, res, next) {
