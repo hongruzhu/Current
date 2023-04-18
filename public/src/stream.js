@@ -151,7 +151,6 @@ navigator.mediaDevices
       width: 1280,
       height: 720,
       aspectRatio: 1.777777778,
-      
     },
     audio: true,
   })
