@@ -3,9 +3,9 @@ const liveStreaming = (io, socket) => {
     socket.join(roomId);
     socket.to(roomId).emit("user-connected", peerId);
     
-  });
-  socket.on("disconnect", () => {
+    socket.on("disconnect", () => {
     socket.to(roomId).emit("user-disconnected", peerId);
+  });
   });
 }
 
