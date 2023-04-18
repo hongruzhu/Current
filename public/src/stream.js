@@ -1,20 +1,3 @@
-// Socket.IO and Peer setup
-let socket = io();
-const myPeer = new Peer(undefined, {
-  host: "currentmeet.com", // currentmeet.com
-  port: "443", // 443
-  path: "/myapp",
-  debug: 2,
-});
-
-// 進入會議房間，建立peer連線，產出自己的peerId
-const urlParams = new URLSearchParams(window.location.search);
-const roomId = urlParams.get("roomId");
-myPeer.on("open", (peerId) => {
-  console.log(`my peerId: ${peerId}`);
-  socket.emit("join-room", roomId, peerId);
-});
-
 // 開啟視訊鏡頭，擷取自己的視訊畫面
 const myVideo = document.createElement("video");
 myVideo.setAttribute("id", "myself");
@@ -90,6 +73,23 @@ async function convertCanvasToStream(canvas) {
 // 取得自己視訊的stream後，藉由Socket.io和Peer與其他user交換stream
 const myStream = await convertCanvasToStream(canvasElement);
 console.log("myStream", myStream);
+
+// Socket.IO and Peer setup
+let socket = io();
+const myPeer = new Peer(undefined, {
+  host: "currentmeet.com", // currentmeet.com
+  port: "443", // 443
+  path: "/myapp",
+  debug: 2,
+});
+
+// 進入會議房間，建立peer連線，產出自己的peerId
+const urlParams = new URLSearchParams(window.location.search);
+const roomId = urlParams.get("roomId");
+myPeer.on("open", (peerId) => {
+  console.log(`my peerId: ${peerId}`);
+  socket.emit("join-room", roomId, peerId);
+});
 
 //FIXME: 這邊要排queue
 myPeer.on("call", async (call) => {
