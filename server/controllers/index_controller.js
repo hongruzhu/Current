@@ -4,7 +4,7 @@ const index = async (req, res) => {
   res.render("index");
 };
 
-const addConfNumber = async (req, res) => {
+const getRoomId = async (req, res) => {
   function generateRandomString(length) {
     let result = "";
     const characters = "abcdefghijklmnopqrstuvwxyz";
@@ -31,4 +31,4 @@ const addConfNumber = async (req, res) => {
   res.redirect(`./concall?roomId=${roomId}`);
 };
 
-export { index, addConfNumber };
+export { index, getRoomId };

@@ -20,9 +20,10 @@ app.use(cors());
 
 // API routes
 import { index_route } from "./server/routes/index_route.js";
+import { user_route } from "./server/routes/user_route.js";
 import { concall_route } from "./server/routes/concall_route.js";
 
-app.use(index_route, concall_route);
+app.use(index_route, user_route, concall_route);
 
 // Socket.IO routes
 import { liveStreaming } from "./server/routes/socketio_route.js"
