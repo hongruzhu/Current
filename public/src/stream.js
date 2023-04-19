@@ -1,3 +1,5 @@
+/* ----------------------------- Step 1: 獲取自己視訊畫面stream的code ----------------------------- */
+
 // 開啟視訊鏡頭，擷取自己的視訊畫面
 const myVideo = document.createElement("video");
 myVideo.setAttribute("id", "myself");
@@ -42,8 +44,10 @@ function background_origin() {
 async function playing() {
   // await selfieSegmentation.send({ image: myVideo });
   background_origin();
-  // 當沒有在chrome tab時(最小化 or 不在分頁)，window.requestAnimationFrame()不會執行，會造成其他人看到自己的畫面停格
-  // 改成setTimeout就解決這個問題了！來源：https://github.com/google/mediapipe/issues/3018
+  /**
+   * 當沒有在chrome tab時(最小化 or 不在分頁)，window.requestAnimationFrame()不會執行，會造成其他人看到自己的畫面停格
+   * 改成setTimeout就解決這個問題了！來源：https://github.com/google/mediapipe/issues/3018
+   */
   // window.requestAnimationFrame(playing);
   setTimeout(playing, 0);
 }
@@ -69,9 +73,10 @@ async function convertCanvasToStream(canvas) {
   ]);
   return combine;
 }
-
-// 取得自己視訊的stream後，藉由Socket.io和Peer與其他user交換stream
+// 取得自己視訊的stream後
 const myStream = await convertCanvasToStream(canvasElement);
+
+/* ----------------------------- Step 2: 取得要交換的stream後，開始處理socket.io和peerjs的連線 ----------------------------- */
 
 // Socket.IO and Peer setup
 let socket = io();
@@ -106,7 +111,7 @@ socket.on("user-connected", async (peerId) => {
 
 // 若有user離開，移除他的視訊畫面
 socket.on("user-disconnected", (peerId) => {
-  $(`div[id=${peerId}]`).remove()
+  $(`div[id=${peerId}]`).remove();
   console.log(`Disconnect with ${peerId}`);
 });
 
