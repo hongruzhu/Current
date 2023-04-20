@@ -1,6 +1,11 @@
 import * as dotenv from "dotenv";
 dotenv.config();
 
+// Get __dirname (and __filename) back in ES6
+import * as url from "url";
+const __filename = url.fileURLToPath(import.meta.url);
+const __dirname = url.fileURLToPath(new URL(".", import.meta.url));
+
 // Express Initialization
 import express from "express";
 import cors from "cors";

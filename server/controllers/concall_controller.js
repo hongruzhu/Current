@@ -27,15 +27,30 @@ const getRoomId = async (req, res) => {
   res.redirect(`./concall?roomId=${roomId}`);
 };
 
-const verifyConfNumber = async (req, res) => {
+const verifyRoomId = async (req, res) => {
   const checkRoomId = await redis.hexists("room", req.query.roomId);
-  if (checkRoomId === 1) {
-    res.render("concall", {
-      roomId: req.query.roomId,
-    });
+  if (checkRoomId === 0) {
+    res.render("wrongNumber");
     return;
   }
-  res.render("wrongNumber");
+  res.render("enterRoom", {
+    roomId: req.query.roomId,
+  });
 };
 
-export { getRoomId, verifyConfNumber };
+const enterRoom = async (req, res) => {
+  if (!req.body.name) {
+    res.status(403).json({ err: "請輸入姓名" });
+    return;
+  }
+  const checkRoomId = await redis.hexists("room", req.query.roomId);
+  if (checkRoomId === 0) {
+    res.render("wrongNumber");
+    return;
+  }
+  res.render("concall", {
+    roomId: req.query.roomId,
+  });
+}
+
+export { getRoomId, verifyRoomId, enterRoom };
