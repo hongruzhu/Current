@@ -20,7 +20,9 @@
     <div id="header"></div>
     <div id="main" class="flex items-center justify-center h-[calc(100vh-4rem)] p-20">
       <div id="display" class="w-full f-full grid grid-cols-fluid gap-1 items-center justify-center">
-
+        <div id="myVideo" class="relative pb-[56.25%] overflow-hidden h-0">
+          <canvas id="output" width="1280" height="720" class="absolute w-full h-full t-0 l-0 transform-rotateY-180"></canvas>
+        </div>
       </div>
     </div>
     <div id="function-bar" class="fixed bottom-0 left-0 z-50 grid w-full h-16 grid-cols-1 px-8 bg-white border-t border-gray-200 md:grid-cols-3 dark:bg-gray-700 dark:border-gray-600">

@@ -2,7 +2,6 @@
 
 // 開啟視訊鏡頭，擷取自己的視訊畫面
 const myVideo = document.createElement("video");
-myVideo.setAttribute("id", "myself");
 myVideo.muted = true;
 
 const myWebcamStream = await navigator.mediaDevices.getUserMedia({
@@ -22,14 +21,7 @@ myVideo.addEventListener("loadedmetadata", () => {
 });
 
 // 將自己視訊的video stream，轉換成canvas，以利更換背景功能運作
-const canvasElement = document.createElement("canvas");
-canvasElement.setAttribute("id", "output");
-canvasElement.setAttribute("width", 1280);
-canvasElement.setAttribute("height", 720);
-canvasElement.setAttribute(
-  "class",
-  "absolute w-full h-full t-0 l-0 transform-rotateY-180"
-);
+const canvasElement = document.getElementById("output");
 const canvasCtx = canvasElement.getContext("2d");
 
 function background_origin() {
@@ -53,9 +45,9 @@ async function playing() {
 }
 
 // 把自己的視訊畫面canvas，連同包裝的div，append到html上
-const videoGrid = document.getElementById("display");
-addVideoGridElement("myVideo");
-$("#myVideo").append(canvasElement);
+// const videoGrid = document.getElementById("display");
+// addVideoGridElement("myVideo");
+// $("#myVideo").append(canvasElement);
 
 // PeerJS需傳送stream給其他人，把自己畫面的canvas轉回video stream的function
 async function convertCanvasToStream(canvas) {
@@ -81,8 +73,8 @@ const myStream = await convertCanvasToStream(canvasElement);
 // Socket.IO and Peer setup
 let socket = io();
 const myPeer = new Peer(undefined, {
-  host: "currentmeet.com", // currentmeet.com
-  port: "443", // 443
+  host: "localhost", // currentmeet.com
+  port: "3001", // 443
   path: "/myapp",
   debug: 2,
 });
