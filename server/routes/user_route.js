@@ -6,9 +6,13 @@ import {
   renderSignInPage,
   renderSignUpPage,
   signUp,
+  signIn
 } from "../controllers/user_controller.js";
 
-router.route("/signin").get(wrapAsync(renderSignInPage));
+router
+  .route("/signin")
+  .get(wrapAsync(renderSignInPage))
+  .post(wrapAsync(signIn));
 router
   .route("/signup")
   .get(wrapAsync(renderSignUpPage))

@@ -8,6 +8,8 @@
   <link href="./src/output.css" rel="stylesheet">
   <script src="https://code.jquery.com/jquery-3.6.4.min.js"
     integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/axios@1.1.2/dist/axios.min.js"></script>
+  <script src="https://unpkg.com/validator@latest/validator.min.js"></script>
 </head>
 
 <body>
@@ -614,7 +616,7 @@
         </div>
         <div class="mt-4">
           <label class="block text-gray-700 text-sm font-bold mb-2">Email Address</label>
-          <input
+          <input name="email"
             class="bg-gray-200 text-gray-700 focus:outline-none focus:shadow-outline border border-gray-300 rounded py-2 px-4 block w-full appearance-none"
             type="email">
         </div>
@@ -623,12 +625,12 @@
             <label class="block text-gray-700 text-sm font-bold mb-2">Password</label>
             <!-- <a href="#" class="text-xs text-gray-500">Forget Password?</a> -->
           </div>
-          <input
+          <input name="password"
             class="bg-gray-200 text-gray-700 focus:outline-none focus:shadow-outline border border-gray-300 rounded py-2 px-4 block w-full appearance-none"
             type="password">
         </div>
         <div class="mt-8">
-          <button class="bg-gray-700 text-white font-bold py-2 px-4 w-full rounded hover:bg-gray-600">Login</button>
+          <button id="signin" class="bg-gray-700 text-white font-bold py-2 px-4 w-full rounded hover:bg-gray-600">Login</button>
         </div>
         <div class="mt-4 flex items-center justify-between">
           <span class="border-b w-1/5 md:w-1/4"></span>
@@ -638,4 +640,5 @@
       </div>
     </div>
   </div>
+  <script type="module" src="./src/signin.js"></script>
 </body>

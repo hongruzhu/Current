@@ -1,12 +1,7 @@
-import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
 import { pool } from "../models/mysql_config.js";
-const { TOKEN_EXPIRE, TOKEN_SECRET_KEY } = process.env;
 
-const signUpDb = async (name, email, password) => {
+const signUpDb = async (provider, name, email, password_hash) => {
   try {
-    const provider = "native";
-    const password_hash = await bcrypt.hash(password, 10);
     const [result] = await pool.query(
       `
       INSERT INTO users (provider, name, email, password_hash)
@@ -14,28 +9,33 @@ const signUpDb = async (name, email, password) => {
       `,
       [provider, name, email, password_hash]
     );
-    const payload = {
-      provider,
-      name,
-      email,
-      password_hash,
-    };
-    const accessToken = jwt.sign(payload, TOKEN_SECRET_KEY, {
-      expiresIn: TOKEN_EXPIRE,
-    });
-    const response = {
-      accessToken,
-      TOKEN_EXPIRE,
-      user: {
-        id: result.insertId,
-        provider,
-        name,
-        email,
-      },
-    };
-    return response;
+    const userId = result.insertId;
+    return userId;
   } catch (error) {
     throw new Error(error);
   }
 };
-export { signUpDb };
+
+const checkEmail = async (email) => {
+  const [result] = await pool.query(
+    `
+  SELECT email FROM users
+  WHERE email = ?
+  `,
+    [email]
+  );
+  return result.length === 0 ? false : true;
+};
+
+const getUserInfo = async (email) => {
+  const [result] = await pool.query(
+    `
+  SELECT * FROM users
+  WHERE email = ?
+  `,
+    [email]
+  );
+  return result;
+};
+
+export { signUpDb, checkEmail, getUserInfo };

@@ -1,5 +1,10 @@
+import * as dotenv from "dotenv";
+dotenv.config();
 import validator from "validator";
-import { signUpDb } from "../models/user_model.js";
+import jwt from "jsonwebtoken";
+import bcrypt from "bcrypt";
+import { signUpDb, checkEmail, getUserInfo } from "../models/user_model.js";
+const { TOKEN_EXPIRE, TOKEN_SECRET_KEY } = process.env;
 
 const renderSignInPage = async (req, res) => {
   res.render("signin");
@@ -11,44 +16,58 @@ const renderSignUpPage = async (req, res) => {
 
 const signUp = async (req, res) => {
   let { name, email, password, password_confirmed } = req.body;
-  name = validator.escape(name);
   const state = await signUpValidation(
-    res,
     name,
     email,
     password,
     password_confirmed
   );
-  if (state) return;
-  const result = await signUpDb(name, email, password);
-  res.json(result);
+  if (state) {
+    res.status(state.status).send({ err: state.err });
+    return;
+  }
+  const check = await checkEmail(email);
+  if (check) {
+    res.status(403).send({ err: "此信箱已註冊過，請輸入其他信箱" });
+    return;
+  }
+  const provider = "native";
+  const password_hash = await bcrypt.hash(password, 10);
+  const id = await signUpDb(provider, name, email, password_hash);
+  const response = await generateResponse(id, provider, name, email);
+  res.json(response);
 };
 
-export { renderSignInPage, renderSignUpPage, signUp };
+const signIn = async (req, res) => {
+  let { email, password } = req.body;
+  const state = await signInValidation(email, password);
+  if (state) {
+    res.status(state.status).send({ err: state.err });
+    return;
+  }
+  const result = await getUserInfo(email);
+  if (result.length === 0) {
+    res.status(403).send({ err: "此信箱尚未註冊" });
+    return;
+  }
+  const { id, provider, name, password_hash } = result[0];
+  const checkPassword = await bcrypt.compare(password, password_hash);
+  if (!checkPassword) {
+    res.status(403).send({ err: `密碼輸入錯誤，請重新輸入密碼` });
+    return;
+  }
+  const response = await generateResponse(id, provider, name, email);
+  res.json(response);
+};
 
-const signUpValidation = async (
-  res,
-  name,
-  email,
-  password,
-  password_confirmed
-) => {
-  if (!name) {
-    res.status(400).json({ err: "Please enter your name" });
-    return true;
-  }
-  if (!email) {
-    res.status(400).json({ err: "Please enter your email" });
-    return true;
-  }
-  if (!password) {
-    res.status(400).json({ err: "Please enter your password" });
-    return true;
-  }
-  if (!validator.isLength(password, { min: 8, max: 12 })) {
-    res.status(400).json({ err: "Password length should be between 8 to 12" });
-    return true;
-  }
+export { renderSignInPage, renderSignUpPage, signUp, signIn };
+
+const signUpValidation = async (name, email, password, password_confirmed) => {
+  if (!name) return { status: 400, err: "Please enter your name" };
+  if (!email) return { status: 400, err: "Please enter your email" };
+  if (!password) return { status: 400, err: "Please enter your password" };
+  if (!validator.isLength(password, { min: 8, max: 12 }))
+    return { status: 400, err: "Password length should be between 8 to 12" };
   if (
     !validator.isStrongPassword(password, {
       minLength: 8,
@@ -57,25 +76,64 @@ const signUpValidation = async (
       minNumbers: 1,
       minSymbols: 0,
     })
-  ) {
-    res.status(400).json({
+  )
+    return {
+      status: 400,
       err: "Password should have at least 1 lowercase, 1 number, and 1 uppercase",
-    });
-    return true;
-  }
-  if (!password_confirmed) {
-    res.status(400).json({ err: "Please confirm your password" });
-    return true;
-  }
-  if (!validator.isEmail(email)) {
-    res.status(400).json({ err: "Please enter correct email format" });
-    return true;
-  }
-  if (password !== password_confirmed) {
-    res
-      .status(400)
-      .json({ err: "Confirm password unsuccessfully. Please check again" });
-    return true;
-  }
+    };
+  if (!password_confirmed)
+    return { status: 400, err: "Please confirm your password" };
+  if (!validator.isEmail(email))
+    return { status: 400, err: "Please enter correct email format" };
+  if (password !== password_confirmed)
+    return {
+      status: 400,
+      err: "Confirm password unsuccessfully. Please check again",
+    };
   return false;
+};
+
+const signInValidation = async (email, password) => {
+  if (!email) return { status: 400, err: "Please enter your email" };
+  if (!validator.isEmail(email))
+    return { status: 400, err: "Please enter correct email format" };
+  if (!password) return { status: 400, err: "Please enter your password" };
+  if (!validator.isLength(password, { min: 8, max: 12 }))
+    return { status: 400, err: "Password length should be between 8 to 12" };
+  if (
+    !validator.isStrongPassword(password, {
+      minLength: 8,
+      minUppercase: 1,
+      minLowercase: 1,
+      minNumbers: 1,
+      minSymbols: 0,
+    })
+  )
+    return {
+      status: 400,
+      err: "Password should have at least 1 lowercase, 1 number, and 1 uppercase",
+    };
+  return false;
+};
+
+const generateResponse = async (id, provider, name, email) => {
+  const payload = {
+    provider,
+    name,
+    email,
+  };
+  const accessToken = jwt.sign(payload, TOKEN_SECRET_KEY, {
+    expiresIn: TOKEN_EXPIRE,
+  });
+  const response = {
+    accessToken,
+    TOKEN_EXPIRE,
+    user: {
+      id,
+      provider,
+      name,
+      email,
+    },
+  };
+  return response;
 };
