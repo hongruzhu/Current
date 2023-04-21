@@ -69,7 +69,7 @@ const myStream = await convertCanvasToStream(canvasElement);
 let socket = io();
 const myPeer = new Peer(undefined, {
   host: "currentmeet.com", // currentmeet.com
-  port: "4003", // 443
+  port: "403", // 443
   path: "/myapp",
   debug: 2,
 });
