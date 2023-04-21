@@ -69,7 +69,7 @@ const myStream = await convertCanvasToStream(canvasElement);
 let socket = io();
 const myPeer = new Peer(undefined, {
   host: "currentmeet.com", // currentmeet.com
-  port: "443", // 443
+  port: "4003", // 443
   path: "/myapp",
   debug: 2,
 });
@@ -146,8 +146,8 @@ function addVideoStream(stream, video, peerId) {
   video.srcObject = stream;
   video.addEventListener("loadedmetadata", () => {
     video.play();
-    $(`#${peerId}`).append(video);
   });
+  $(`#${peerId}`).append(video);
 }
 
 // Append user名字
