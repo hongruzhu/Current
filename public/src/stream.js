@@ -99,7 +99,6 @@ myPeer.on("call", async (call) => {
     "absolute w-full h-full t-0 l-0 object-cover transform-rotateY-180"
   );
   call.on("stream", (userVideoStream) => {
-    console.log(userVideoStream);
     addVideoStream(userVideoStream, video, peerId);
   });
   addUserName(name, peerId);
@@ -127,7 +126,6 @@ function connectToNewUser(peerId, name, stream) {
     "absolute w-full h-full t-0 l-0 object-cover transform-rotateY-180"
   );
   call.on("stream", (userVideoStream) => {
-    console.log(userVideoStream);
     addVideoStream(userVideoStream, video, peerId);
   });
   addUserName(name, peerId);
@@ -145,8 +143,10 @@ function addVideoGridElement(peerId) {
 
 // Append視訊畫面到html上的function
 function addVideoStream(stream, video, peerId) {
+  console.log(stream, video, peerId);
   video.srcObject = stream;
   video.addEventListener("loadedmetadata", () => {
+    console.log(video);
     video.play();
   });
   $(`#${peerId}`).append(video);
