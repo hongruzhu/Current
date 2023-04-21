@@ -144,11 +144,12 @@ function addVideoGridElement(peerId) {
 // Append視訊畫面到html上的function
 function addVideoStream(stream, video, peerId) {
   video.srcObject = stream;
-  video.addEventListener("loadedmetadata", () => {
-    $(`div[id=${peerId}]`).append(video);
-    video.play();
-  });
-  console.log(stream);
+  $(`div[id=${peerId}]`).append(video);
+  video.play();
+  // video.addEventListener("loadedmetadata", () => {
+  //   $(`div[id=${peerId}]`).append(video);
+  //   video.play();
+  // });
 }
 
 // Append user名字
