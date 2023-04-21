@@ -17,6 +17,12 @@ const liveStreaming = (io, socket) => {
       }
     });
   });
+  socket.on("hide-camera", (roomId, peerId) => {
+    socket.to(roomId).emit("hide-camera", peerId);
+  });
+  socket.on("show-camera", (roomId, peerId) => {
+    socket.to(roomId).emit("show-camera", peerId);
+  });
 }
 
 export { liveStreaming };

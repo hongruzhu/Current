@@ -78,8 +78,10 @@ const myPeer = new Peer(undefined, {
 const urlParams = new URLSearchParams(window.location.search);
 const roomId = urlParams.get("roomId");
 const myName = localStorage.getItem(`name-${roomId}`);
+let myPeerId;
 
 myPeer.on("open", (peerId) => {
+  myPeerId = peerId;
   console.log(`my peerId: ${peerId}`);
   socket.emit("join-room", roomId, peerId, myName);
 });
@@ -90,10 +92,16 @@ myPeer.on("call", async (call) => {
   console.log(`Connection with ${peerId}`);
   call.answer(myStream);
   addVideoGridElement(peerId);
+  const video = document.createElement("video");
+  video.setAttribute("id", peerId);
+  video.setAttribute(
+    "class",
+    "absolute w-full h-full t-0 l-0 object-cover transform-rotateY-180"
+  );
   call.on("stream", (userVideoStream) => {
-    addVideoStream(userVideoStream, peerId);
-    addUserName(name, peerId);
+    addVideoStream(userVideoStream, video, peerId);
   });
+  addUserName(name, peerId);
 });
 
 socket.on("user-connected", async (peerId, name) => {
@@ -111,10 +119,16 @@ function connectToNewUser(peerId, name, stream) {
   const options = { metadata: { name: myName } };
   const call = myPeer.call(peerId, stream, options);
   addVideoGridElement(peerId);
+  const video = document.createElement("video");
+  video.setAttribute("id", peerId);
+  video.setAttribute(
+    "class",
+    "absolute w-full h-full t-0 l-0 object-cover transform-rotateY-180"
+  );
   call.on("stream", (userVideoStream) => {
-    addVideoStream(userVideoStream, peerId);
-    addUserName(name, peerId);
+    addVideoStream(userVideoStream, video, peerId);
   });
+  addUserName(name, peerId);
   console.log(`Connection with ${peerId}`);
 }
 
@@ -122,24 +136,18 @@ function connectToNewUser(peerId, name, stream) {
 function addVideoGridElement(peerId) {
   const videoGridElement = $("<div>", {
     id: peerId,
-    class: "relative pb-[56.25%] overflow-hidden h-0",
+    class: "relative pb-[56.25%] overflow-hidden h-0 bg-gray-100",
   });
   $("#display").append(videoGridElement);
 }
 
 // Append視訊畫面到html上的function
-function addVideoStream(stream, peerId) {
-  const video = document.createElement("video");
-  video.setAttribute("id", peerId);
-  video.setAttribute(
-    "class",
-    "absolute w-full h-full t-0 l-0 object-cover transform-rotateY-180"
-  );
+function addVideoStream(stream, video, peerId) {
   video.srcObject = stream;
   video.addEventListener("loadedmetadata", () => {
     video.play();
+    $(`#${peerId}`).append(video);
   });
-  $(`#${peerId}`).append(video);
 }
 
 // Append user名字
@@ -151,6 +159,65 @@ function addUserName(name, peerId) {
   });
   $(`div[id=${peerId}]`).append(userName);
 }
+
+/* ----------------------------- Step 2: 其他控制畫面雜項 ----------------------------- */
+
+// 開關視訊鏡頭
+$("#hide-camera").on("click", async () => {
+  const stream = myVideo.srcObject;
+  const streamStatus = myVideo.srcObject.active;
+  if (streamStatus) {
+    socket.emit("hide-camera", roomId, myPeerId);
+    $("canvas[id='output']").addClass("hidden");
+    $("div[id='myVideo']").append(
+      `<img class="hide absolute top-0 right-0 left-0 bottom-0 m-auto h-2/5" width="" src="../images/user-hide-camera.png">`
+    );
+    await stopStream(stream);
+    return;
+  }
+  socket.emit("show-camera", roomId, myPeerId);
+  await startStream();
+  $("div[id='myVideo'] img").remove();
+  $("canvas[id='output']").removeClass("hidden");
+});
+
+async function stopStream(stream) {
+  if (stream) {
+    stream.getTracks().forEach(function (track) {
+      track.stop();
+    });
+    stream = null;
+  }
+}
+async function startStream() {
+  const myWebcamStream = await navigator.mediaDevices.getUserMedia({
+    video: {
+      width: 1280,
+      height: 720,
+      aspectRatio: 1.777777778,
+    },
+    audio: true,
+  });
+  myVideo.srcObject = myWebcamStream;
+  // 當webcam stream開始播放時，執行playing function
+  myVideo.onplay = playing;
+  myVideo.addEventListener("loadedmetadata", () => {
+    myVideo.play();
+  });
+}
+
+socket.on("hide-camera", (peerId) => {
+  $(`video[id=${peerId}]`).addClass("hidden");
+  $(`div[id=${peerId}]`).append(
+    `<img class="hide absolute top-0 right-0 left-0 bottom-0 m-auto h-2/5" width="" src="../images/user-hide-camera.png">`
+  );
+});
+
+socket.on("show-camera", (peerId) => {
+  $(`div[id=${peerId}] img`).remove();
+  $(`video[id=${peerId}]`).removeClass("hidden");
+});
+
 
 // 監聽關閉視訊頁面，並執行一些動作
 window.onbeforeunload = function (e) {

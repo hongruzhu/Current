@@ -20,7 +20,7 @@
     <div id="header"></div>
     <div id="main" class="flex items-center justify-center h-[calc(100vh-4rem)] p-20">
       <div id="display" class="w-full f-full grid grid-cols-fluid gap-1 items-center justify-center">
-        <div id="myVideo" class="relative pb-[56.25%] overflow-hidden h-0">
+        <div id="myVideo" class="relative pb-[56.25%] overflow-hidden h-0 bg-gray-100">
           <canvas id="output" width="1280" height="720" class="absolute w-full h-full t-0 l-0 transform-rotateY-180"></canvas>
           <span id="myName" class="absolute z-10 bottom-0 left-0 px-4 py-3 text-base text-white text-shadow">你</span>
         </div>
@@ -52,7 +52,7 @@
           Mute microphone
           <div class="tooltip-arrow" data-popper-arrow></div>
         </div>
-        <button data-tooltip-target="tooltip-camera" type="button"
+        <button id="hide-camera" data-tooltip-target="tooltip-camera" type="button"
           class="p-2.5 bg-gray-100 group rounded-full hover:bg-gray-200 mr-4 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:bg-gray-600 dark:hover:bg-gray-800">
           <svg class="w-5 h-5 text-gray-500 dark:text-gray-300 group-hover:text-gray-900 dark:group-hover:text-white"
             fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">

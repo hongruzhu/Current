@@ -9,3 +9,7 @@
 .text-shadow {
   text-shadow: black 0.1em 0.1em 0.2em
 }
+
+.transform-center {
+  transform: translate(-50%, -50%);
+}
