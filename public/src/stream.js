@@ -145,9 +145,10 @@ function addVideoGridElement(peerId) {
 function addVideoStream(stream, video, peerId) {
   video.srcObject = stream;
   video.addEventListener("loadedmetadata", () => {
+    $(`div[id=${peerId}]`).append(video);
     video.play();
   });
-  $(`div[id=${peerId}]`).append(video);
+  console.log(stream);
 }
 
 // Append user名字
