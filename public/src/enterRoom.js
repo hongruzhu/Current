@@ -14,9 +14,13 @@ myVideo.addEventListener("loadedmetadata", () => {
 });
 
 $("#enter-room").on("click", async (e) => {
-  if (!$("input[name='name']").val()) {
+  const name = $("input[name='name']").val();
+  if (!name) {
     e.preventDefault();
     alert("請輸入姓名");
     return;
   }
+  const urlParams = new URLSearchParams(window.location.search);
+  const roomId = urlParams.get("roomId");
+  localStorage.setItem(`name-${roomId}`, name);
 })

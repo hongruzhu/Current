@@ -44,11 +44,6 @@ async function playing() {
   setTimeout(playing, 0);
 }
 
-// 把自己的視訊畫面canvas，連同包裝的div，append到html上
-// const videoGrid = document.getElementById("display");
-// addVideoGridElement("myVideo");
-// $("#myVideo").append(canvasElement);
-
 // PeerJS需傳送stream給其他人，把自己畫面的canvas轉回video stream的function
 async function convertCanvasToStream(canvas) {
   // 把canvas的畫面重新轉回stream
@@ -79,26 +74,30 @@ const myPeer = new Peer(undefined, {
   debug: 2,
 });
 
-// 進入會議房間，建立peer連線，產出自己的peerId
+// 進入會議房間，建立peer連線，產出自己的peerId，也把自己的名字丟給其他users
 const urlParams = new URLSearchParams(window.location.search);
 const roomId = urlParams.get("roomId");
+const myName = localStorage.getItem(`name-${roomId}`);
+
 myPeer.on("open", (peerId) => {
   console.log(`my peerId: ${peerId}`);
-  socket.emit("join-room", roomId, peerId);
+  socket.emit("join-room", roomId, peerId, myName);
 });
 
 myPeer.on("call", async (call) => {
   const peerId = call.peer;
+  const name = call.metadata.name;
   console.log(`Connection with ${peerId}`);
   call.answer(myStream);
   addVideoGridElement(peerId);
   call.on("stream", (userVideoStream) => {
     addVideoStream(userVideoStream, peerId);
+    addUserName(name, peerId);
   });
 });
 
-socket.on("user-connected", async (peerId) => {
-  connectToNewUser(peerId, myStream);
+socket.on("user-connected", async (peerId, name) => {
+  connectToNewUser(peerId, name, myStream);
 });
 
 // 若有user離開，移除他的視訊畫面
@@ -108,11 +107,13 @@ socket.on("user-disconnected", (peerId) => {
 });
 
 // 新user加入，建立peer連線的function
-function connectToNewUser(peerId, stream) {
-  const call = myPeer.call(peerId, stream);
+function connectToNewUser(peerId, name, stream) {
+  const options = { metadata: { name: myName } };
+  const call = myPeer.call(peerId, stream, options);
   addVideoGridElement(peerId);
   call.on("stream", (userVideoStream) => {
     addVideoStream(userVideoStream, peerId);
+    addUserName(name, peerId);
   });
   console.log(`Connection with ${peerId}`);
 }
@@ -139,4 +140,19 @@ function addVideoStream(stream, peerId) {
     video.play();
   });
   $(`#${peerId}`).append(video);
+}
+
+// Append user名字
+function addUserName(name, peerId) {
+  const userName = $("<span>", {
+    id: peerId,
+    text: name,
+    class: "absolute z-10 bottom-0 left-0 px-4 py-3 text-base text-white text-shadow",
+  });
+  $(`div[id=${peerId}]`).append(userName);
+}
+
+// 監聽關閉視訊頁面，並執行一些動作
+window.onbeforeunload = function (e) {
+  localStorage.removeItem(`name-${roomId}`);
 }

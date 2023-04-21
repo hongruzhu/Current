@@ -5,3 +5,7 @@
 .transform-rotateY-180 {
   transform: rotateY(180deg);
 }
+
+.text-shadow {
+  text-shadow: black 0.1em 0.1em 0.2em
+}

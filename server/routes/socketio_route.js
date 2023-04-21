@@ -4,9 +4,9 @@ import {
 } from "../controllers/socketio_controller.js";
 
 const liveStreaming = (io, socket) => {
-  socket.on("join-room", (roomId, peerId) => {
+  socket.on("join-room", (roomId, peerId, name) => {
     socket.join(roomId);
-    socket.to(roomId).emit("user-connected", peerId);
+    socket.to(roomId).emit("user-connected", peerId, name);
     reviseRoomUserNumber(roomId, 1);
 
     socket.on("disconnect", async () => {
