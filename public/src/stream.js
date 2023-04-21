@@ -99,6 +99,7 @@ myPeer.on("call", async (call) => {
     "absolute w-full h-full t-0 l-0 object-cover transform-rotateY-180"
   );
   call.on("stream", (userVideoStream) => {
+    console.log(userVideoStream);
     addVideoStream(userVideoStream, video, peerId);
   });
   addUserName(name, peerId);
@@ -126,6 +127,7 @@ function connectToNewUser(peerId, name, stream) {
     "absolute w-full h-full t-0 l-0 object-cover transform-rotateY-180"
   );
   call.on("stream", (userVideoStream) => {
+    console.log(userVideoStream);
     addVideoStream(userVideoStream, video, peerId);
   });
   addUserName(name, peerId);
