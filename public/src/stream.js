@@ -47,17 +47,20 @@ async function playing() {
 // PeerJS需傳送stream給其他人，把自己畫面的canvas轉回video stream的function
 async function convertCanvasToStream(canvas) {
   // 把canvas的畫面重新轉回stream
-  const videoOutput = canvas.captureStream();
+  const videoOutput = await canvas.captureStream();
   // canvas的畫面不會有聲音，另外擷取拼回去！
   const mic = await navigator.mediaDevices.getUserMedia({
     audio: true,
     video: false,
   });
   // Combine both video/audio stream with MediaStream object
-  const combine = new MediaStream([
-    ...videoOutput.getTracks(),
-    ...mic.getTracks(),
-  ]);
+  // const combine = new MediaStream([
+  //   ...videoOutput.getTracks(),
+  //   ...mic.getTracks(),
+  // ]);
+  const combine = new MediaStream();
+  combine.addTrack(await videoOutput.getTracks()[0]);
+  combine.addTrack(await mic.getTracks()[0]);
   return combine;
 }
 // 取得自己視訊的stream後
@@ -92,8 +95,14 @@ myPeer.on("call", async (call) => {
   console.log(`Connection with ${peerId}`);
   call.answer(myStream);
   addVideoGridElement(peerId);
+  const video = document.createElement("video");
+  video.setAttribute("id", peerId);
+  video.setAttribute(
+    "class",
+    "absolute w-full h-full t-0 l-0 object-cover transform-rotateY-180"
+  );
   call.on("stream", (userVideoStream) => {
-    addVideoStream(userVideoStream, peerId);
+    addVideoStream(userVideoStream, video, peerId);
   });
   addUserName(name, peerId);
 });
@@ -113,8 +122,14 @@ function connectToNewUser(peerId, name, stream) {
   const options = { metadata: { name: myName } };
   const call = myPeer.call(peerId, stream, options);
   addVideoGridElement(peerId);
+  const video = document.createElement("video");
+  video.setAttribute("id", peerId);
+  video.setAttribute(
+    "class",
+    "absolute w-full h-full t-0 l-0 object-cover transform-rotateY-180"
+  );
   call.on("stream", (userVideoStream) => {
-    addVideoStream(userVideoStream, peerId);
+    addVideoStream(userVideoStream, video, peerId);
   });
   addUserName(name, peerId);
   console.log(`Connection with ${peerId}`);
@@ -130,13 +145,7 @@ function addVideoGridElement(peerId) {
 }
 
 // Append視訊畫面到html上的function
-function addVideoStream(stream, peerId) {
-  const video = document.createElement("video");
-  video.setAttribute("id", peerId);
-  video.setAttribute(
-    "class",
-    "absolute w-full h-full t-0 l-0 object-cover transform-rotateY-180"
-  );
+function addVideoStream(stream, video, peerId) {
   video.srcObject = stream;
   $(`div[id=${peerId}]`).append(video);
   video.play();
