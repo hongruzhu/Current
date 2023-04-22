@@ -55,9 +55,13 @@ async function convertCanvasToStream(canvas) {
   });
   // Combine both video/audio stream with MediaStream object
   // 這邊要用addTrack的方式，才能順利把stream送出去
-  const combine = new MediaStream();
-  combine.addTrack(videoOutput.getTracks()[0]);
-  combine.addTrack(mic.getTracks()[0]);
+  // const combine = new MediaStream();
+  // combine.addTrack(videoOutput.getTracks()[0]);
+  // combine.addTrack(mic.getTracks()[0]);
+  const combine = new MediaStream([
+    ...videoOutput.getTracks(),
+    ...mic.getTracks(),
+  ]);
   return combine;
 }
 // 取得自己視訊的stream後
