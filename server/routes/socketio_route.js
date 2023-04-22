@@ -23,6 +23,13 @@ const liveStreaming = (io, socket) => {
   socket.on("show-camera", (roomId, peerId) => {
     socket.to(roomId).emit("show-camera", peerId);
   });
+
+  socket.on("mute-mic", (roomId, peerId) => {
+    socket.to(roomId).emit("mute-mic", peerId);
+  })
+  socket.on("unmute-mic", (roomId, peerId) => {
+    socket.to(roomId).emit("unmute-mic", peerId);
+  })
 }
 
 export { liveStreaming };

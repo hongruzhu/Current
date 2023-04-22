@@ -161,7 +161,8 @@ function addUserName(name, peerId) {
   const userName = $("<span>", {
     id: peerId,
     text: name,
-    class: "absolute z-10 bottom-0 left-0 px-4 py-3 text-base text-white text-shadow",
+    class:
+      "absolute z-10 bottom-0 left-0 px-4 py-3 text-base text-white text-shadow",
   });
   $(`div[id=${peerId}]`).append(userName);
 }
@@ -173,6 +174,9 @@ $("#hide-camera").on("click", async () => {
   const stream = myVideo.srcObject;
   if (stream.getVideoTracks()[0].enabled) {
     socket.emit("hide-camera", roomId, myPeerId);
+    $("button[id='hide-camera'] svg")
+      .removeClass("text-green-500 group-hover:text-green-500")
+      .addClass("text-red-500 group-hover:text-red-500");
     $("canvas[id='output']").addClass("hidden");
     $("div[id='myVideo']").append(
       `<img class="hide absolute top-0 right-0 left-0 bottom-0 m-auto h-2/5" width="" src="../images/user-hide-camera.png">`
@@ -181,6 +185,9 @@ $("#hide-camera").on("click", async () => {
     return;
   }
   socket.emit("show-camera", roomId, myPeerId);
+  $("button[id='hide-camera'] svg")
+    .removeClass("text-red-500 group-hover:text-red-500")
+    .addClass("text-green-500 group-hover:text-green-500");
   stream.getVideoTracks()[0].enabled = !stream.getVideoTracks()[0].enabled;
   $("div[id='myVideo'] img").remove();
   $("canvas[id='output']").removeClass("hidden");
@@ -201,14 +208,36 @@ socket.on("show-camera", (peerId) => {
 // 開關麥克風
 $("#mute-mic").on("click", async () => {
   if (myStream.getAudioTracks()[0].enabled) {
+    socket.emit("mute-mic", roomId, myPeerId);
+    $("button[id='mute-mic'] svg")
+      .removeClass("text-green-500 group-hover:text-green-500")
+      .addClass("text-red-500 group-hover:text-red-500");
+    $("div[id='myVideo']").append(`
+      <img src="./images/mute-mic.png" class="absolute top-0 right-0 m-3 h-[10%]" alt="...">
+    `);
     myStream.getAudioTracks()[0].enabled =
       !myStream.getAudioTracks()[0].enabled;
     return;
   }
+  socket.emit("unmute-mic", roomId, myPeerId);
+  $("button[id='mute-mic'] svg")
+    .removeClass("text-red-500 group-hover:text-red-500")
+    .addClass("text-green-500 group-hover:text-green-500");
+  $("div[id='myVideo'] img").remove();
   myStream.getAudioTracks()[0].enabled = !myStream.getAudioTracks()[0].enabled;
+});
+
+socket.on("mute-mic", (peerId) => {
+  $(`div[id=${peerId}]`).append(`
+    <img src="./images/mute-mic.png" class="absolute top-0 right-0 m-3 h-[10%]" alt="...">
+  `);
+});
+
+socket.on("unmute-mic", (peerId) => {
+  $(`div[id=${peerId}] img`).remove();
 });
 
 // 監聽關閉視訊頁面，並執行一些動作
 window.onbeforeunload = function (e) {
   localStorage.removeItem(`name-${roomId}`);
-}
+};
