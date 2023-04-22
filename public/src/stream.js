@@ -92,14 +92,8 @@ myPeer.on("call", async (call) => {
   console.log(`Connection with ${peerId}`);
   call.answer(myStream);
   addVideoGridElement(peerId);
-  const video = document.createElement("video");
-  video.setAttribute("id", peerId);
-  video.setAttribute(
-    "class",
-    "absolute w-full h-full t-0 l-0 object-cover transform-rotateY-180"
-  );
   call.on("stream", (userVideoStream) => {
-    addVideoStream(userVideoStream, video, peerId);
+    addVideoStream(userVideoStream, peerId);
   });
   addUserName(name, peerId);
 });
@@ -119,14 +113,8 @@ function connectToNewUser(peerId, name, stream) {
   const options = { metadata: { name: myName } };
   const call = myPeer.call(peerId, stream, options);
   addVideoGridElement(peerId);
-  const video = document.createElement("video");
-  video.setAttribute("id", peerId);
-  video.setAttribute(
-    "class",
-    "absolute w-full h-full t-0 l-0 object-cover transform-rotateY-180"
-  );
   call.on("stream", (userVideoStream) => {
-    addVideoStream(userVideoStream, video, peerId);
+    addVideoStream(userVideoStream, peerId);
   });
   addUserName(name, peerId);
   console.log(`Connection with ${peerId}`);
@@ -142,7 +130,13 @@ function addVideoGridElement(peerId) {
 }
 
 // Append視訊畫面到html上的function
-function addVideoStream(stream, video, peerId) {
+function addVideoStream(stream, peerId) {
+  const video = document.createElement("video");
+  video.setAttribute("id", peerId);
+  video.setAttribute(
+    "class",
+    "absolute w-full h-full t-0 l-0 object-cover transform-rotateY-180"
+  );
   video.srcObject = stream;
   $(`div[id=${peerId}]`).append(video);
   video.play();
