@@ -170,19 +170,18 @@ function addUserName(name, peerId) {
 
 // 開關視訊鏡頭
 $("#hide-camera").on("click", async () => {
-  const myStream = myVideo.srcObject;
-  if (myStream.getVideoTracks()[0].enabled) {
+  const stream = myVideo.srcObject;
+  if (stream.getVideoTracks()[0].enabled) {
     socket.emit("hide-camera", roomId, myPeerId);
     $("canvas[id='output']").addClass("hidden");
     $("div[id='myVideo']").append(
       `<img class="hide absolute top-0 right-0 left-0 bottom-0 m-auto h-2/5" width="" src="../images/user-hide-camera.png">`
     );
-    myStream.getVideoTracks()[0].enabled =
-      !myStream.getVideoTracks()[0].enabled;
+    stream.getVideoTracks()[0].enabled = !stream.getVideoTracks()[0].enabled;
     return;
   }
   socket.emit("show-camera", roomId, myPeerId);
-  myStream.getVideoTracks()[0].enabled = !myStream.getVideoTracks()[0].enabled;
+  stream.getVideoTracks()[0].enabled = !stream.getVideoTracks()[0].enabled;
   $("div[id='myVideo'] img").remove();
   $("canvas[id='output']").removeClass("hidden");
 });
@@ -200,8 +199,14 @@ socket.on("show-camera", (peerId) => {
 });
 
 // 開關麥克風
-
-
+$("#mute-mic").on("click", async () => {
+  if (myStream.getAudioTracks()[0].enabled) {
+    myStream.getAudioTracks()[0].enabled =
+      !myStream.getAudioTracks()[0].enabled;
+    return;
+  }
+  myStream.getAudioTracks()[0].enabled = !myStream.getAudioTracks()[0].enabled;
+});
 
 // 監聽關閉視訊頁面，並執行一些動作
 window.onbeforeunload = function (e) {
