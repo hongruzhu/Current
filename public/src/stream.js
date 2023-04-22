@@ -1,3 +1,4 @@
+let socket = io();
 /* ----------------------------- Step 1: 獲取自己視訊畫面stream的code ----------------------------- */
 
 // 開啟視訊鏡頭，擷取自己的視訊畫面
@@ -66,25 +67,30 @@ async function convertCanvasToStream(canvas) {
   ]);
   return combine;
 }
-// 取得自己視訊的stream後
-const myStream = await convertCanvasToStream(canvasElement);
-
-/* ----------------------------- Step 2: 取得要交換的stream後，開始處理socket.io和peerjs的連線 ----------------------------- */
-
-// Socket.IO and Peer setup
-let socket = io();
-const myPeer = new Peer(undefined, {
-  host: "currentmeet.com", // currentmeet.com
-  port: "443", // 443
-  path: "/myapp",
-  debug: 2,
-});
+// 取得自己視訊的stream，包含畫面和聲音！
+let myStream = await convertCanvasToStream(canvasElement);
 
 // 進入會議房間，建立peer連線，產出自己的peerId，也把自己的名字丟給其他users
 const urlParams = new URLSearchParams(window.location.search);
 const roomId = urlParams.get("roomId");
 const myName = localStorage.getItem(`name-${roomId}`);
 let myPeerId;
+
+// 根據進入會議室前，開關畫面和麥克風的狀態不同，調整要丟出去的stream
+let myWebcamStatus = localStorage.getItem(`cameraStatus-${roomId}`) === "true";
+let myMicStatus = localStorage.getItem(`micStatus-${roomId}`) === "true";
+if (!myWebcamStatus) stopVideoTrack(myVideo.srcObject);
+if (!myMicStatus) stopMicTrack(myStream);
+
+/* ----------------------------- Step 2: 確定好要交換的stream後，開始處理peerjs的連線 ----------------------------- */
+
+// Peer setup
+const myPeer = new Peer(undefined, {
+  host: "currentmeet.com", // currentmeet.com
+  port: "443", // 443
+  path: "/myapp",
+  debug: 2,
+});
 
 myPeer.on("open", (peerId) => {
   myPeerId = peerId;
@@ -94,7 +100,9 @@ myPeer.on("open", (peerId) => {
 
 myPeer.on("call", async (call) => {
   const peerId = call.peer;
-  const { name, webcamStatus, micStatus } = call.metadata;
+  const { name } = call.metadata;
+  const otherWebcamStatus = call.metadata.myWebcamStatus;
+  const otherMicStatus = call.metadata.myMicStatus;
   console.log(`Connection with ${peerId}`);
   call.answer(myStream);
   addVideoGridElement(peerId);
@@ -108,8 +116,13 @@ myPeer.on("call", async (call) => {
   });
   $(`div[id=${peerId}]`).append(video);
   addUserName(name, peerId);
-  if (!webcamStatus) hideCamera(peerId, "video");
-  if (!micStatus) muteMic(peerId);
+  if (!otherWebcamStatus) hideCamera(peerId, "video");
+  if (!otherMicStatus) muteMic(peerId);
+
+  // 若自己的視訊鏡頭或mic沒開，讓其他user知道，做出相應處理
+  // FIXME:要確認這樣不會出問題欸，其他user包裝new user的video div產生出來了嗎？
+  if (!myWebcamStatus) socket.emit("hide-camera", roomId, myPeerId);
+  if (!myMicStatus) socket.emit("mute-mic", roomId, myPeerId);
 });
 
 socket.on("user-connected", async (peerId, name) => {
@@ -124,7 +137,7 @@ socket.on("user-disconnected", (peerId) => {
 
 // 新user加入，建立peer連線的function
 function connectToNewUser(peerId, name, stream) {
-  const options = { metadata: { name: myName, webcamStatus, micStatus } };
+  const options = { metadata: { name: myName, myWebcamStatus, myMicStatus } };
   const call = myPeer.call(peerId, stream, options);
   addVideoGridElement(peerId);
   const video = document.createElement("video");
@@ -168,19 +181,14 @@ function addUserName(name, peerId) {
 }
 
 /* ----------------------------- Step 2: 其他控制畫面雜項 ----------------------------- */
-let webcamStatus = true;
-let micStatus = true;
+
 // 開關視訊鏡頭
 $("#hide-camera").on("click", async () => {
   const stream = myVideo.srcObject;
   if (stream.getVideoTracks()[0].enabled) {
     socket.emit("hide-camera", roomId, myPeerId);
-    $("button[id='hide-camera'] svg")
-      .removeClass("text-green-500 group-hover:text-green-500")
-      .addClass("text-red-500 group-hover:text-red-500");
-    hideCamera("myVideo", "canvas");
-    stream.getVideoTracks()[0].enabled = !stream.getVideoTracks()[0].enabled;
-    webcamStatus = false;
+    stopVideoTrack(stream);
+    myWebcamStatus = false;
     return;
   }
   socket.emit("show-camera", roomId, myPeerId);
@@ -188,7 +196,7 @@ $("#hide-camera").on("click", async () => {
     .removeClass("text-red-500 group-hover:text-red-500")
     .addClass("text-green-500 group-hover:text-green-500");
   stream.getVideoTracks()[0].enabled = !stream.getVideoTracks()[0].enabled;
-  webcamStatus = true;
+  myWebcamStatus = true;
   showCamera("myVideo", "canvas");
 });
 
@@ -198,6 +206,15 @@ socket.on("hide-camera", (peerId) => {
 socket.on("show-camera", (peerId) => {
   showCamera(peerId, "video");
 });
+
+async function stopVideoTrack(stream) {
+  $("button[id='hide-camera'] svg")
+    .removeClass("text-green-500 group-hover:text-green-500")
+    .addClass("text-red-500 group-hover:text-red-500");
+  hideCamera("myVideo", "canvas");
+  stream.getVideoTracks()[0].enabled = !stream.getVideoTracks()[0].enabled;
+}
+
 function hideCamera(peerId, displayMethod) {
   $(`div[id=${peerId}] ${displayMethod}`).addClass("hidden");
   $(`div[id=${peerId}]`).append(
@@ -213,13 +230,8 @@ function showCamera(peerId, displayMethod) {
 $("#mute-mic").on("click", async () => {
   if (myStream.getAudioTracks()[0].enabled) {
     socket.emit("mute-mic", roomId, myPeerId);
-    $("button[id='mute-mic'] svg")
-      .removeClass("text-green-500 group-hover:text-green-500")
-      .addClass("text-red-500 group-hover:text-red-500");
-    muteMic("myVideo");
-    myStream.getAudioTracks()[0].enabled =
-      !myStream.getAudioTracks()[0].enabled;
-    micStatus = false;
+    stopMicTrack(myStream);
+    myMicStatus = false;
     return;
   }
   socket.emit("unmute-mic", roomId, myPeerId);
@@ -228,15 +240,24 @@ $("#mute-mic").on("click", async () => {
     .addClass("text-green-500 group-hover:text-green-500");
   unmuteMic("myVideo");
   myStream.getAudioTracks()[0].enabled = !myStream.getAudioTracks()[0].enabled;
-  micStatus = true;
+  myMicStatus = true;
 });
 
 socket.on("mute-mic", (peerId) => {
-  muteMic(peerId);  
+  muteMic(peerId);
 });
 socket.on("unmute-mic", (peerId) => {
   unmuteMic(peerId);
 });
+
+async function stopMicTrack(stream) {
+  $("button[id='mute-mic'] svg")
+    .removeClass("text-green-500 group-hover:text-green-500")
+    .addClass("text-red-500 group-hover:text-red-500");
+  muteMic("myVideo");
+  stream.getAudioTracks()[0].enabled = !stream.getAudioTracks()[0].enabled;
+}
+
 function muteMic(peerId) {
   $(`div[id=${peerId}]`).append(`
     <img id="muted-icon" src="./images/mute-mic.png" class="absolute top-0 right-0 m-3 h-[10%]" alt="...">
