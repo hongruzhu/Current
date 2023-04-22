@@ -10,7 +10,7 @@ const myWebcamStream = await navigator.mediaDevices.getUserMedia({
     height: 720,
     aspectRatio: 1.777777778,
   },
-  audio: true,
+  audio: false,
 });
 
 myVideo.srcObject = myWebcamStream;
@@ -54,10 +54,12 @@ async function convertCanvasToStream(canvas) {
     video: false,
   });
   // Combine both video/audio stream with MediaStream object
-  // 這邊要用addTrack的方式，才能順利把stream送出去
-  // const combine = new MediaStream();
-  // combine.addTrack(videoOutput.getTracks()[0]);
-  // combine.addTrack(mic.getTracks()[0]);
+  /**
+   * 這邊不確定是不是一定要用addTrack的方式，先紀著，如果又壞掉再改用addTrack
+   * const combine = new MediaStream();
+   * combine.addTrack(videoOutput.getTracks()[0]);
+   * combine.addTrack(mic.getTracks()[0]);
+   */
   const combine = new MediaStream([
     ...videoOutput.getTracks(),
     ...mic.getTracks(),
@@ -168,47 +170,22 @@ function addUserName(name, peerId) {
 
 // 開關視訊鏡頭
 $("#hide-camera").on("click", async () => {
-  const stream = myVideo.srcObject;
-  const streamStatus = myVideo.srcObject.active;
-  if (streamStatus) {
+  const myStream = myVideo.srcObject;
+  if (myStream.getVideoTracks()[0].enabled) {
     socket.emit("hide-camera", roomId, myPeerId);
     $("canvas[id='output']").addClass("hidden");
     $("div[id='myVideo']").append(
       `<img class="hide absolute top-0 right-0 left-0 bottom-0 m-auto h-2/5" width="" src="../images/user-hide-camera.png">`
     );
-    await stopStream(stream);
+    myStream.getVideoTracks()[0].enabled =
+      !myStream.getVideoTracks()[0].enabled;
     return;
   }
   socket.emit("show-camera", roomId, myPeerId);
-  await startStream();
+  myStream.getVideoTracks()[0].enabled = !myStream.getVideoTracks()[0].enabled;
   $("div[id='myVideo'] img").remove();
   $("canvas[id='output']").removeClass("hidden");
 });
-
-async function stopStream(stream) {
-  if (stream) {
-    stream.getTracks().forEach(function (track) {
-      track.stop();
-    });
-    stream = null;
-  }
-}
-async function startStream() {
-  const myWebcamStream = await navigator.mediaDevices.getUserMedia({
-    video: {
-      width: 1280,
-      height: 720,
-      aspectRatio: 1.777777778,
-    },
-    audio: true,
-  });
-  myVideo.srcObject = myWebcamStream;
-  // 當webcam stream開始播放時，執行playing function
-  myVideo.onplay = playing;
-  myVideo.addEventListener("loadedmetadata", () => {
-    myVideo.play();
-  });
-}
 
 socket.on("hide-camera", (peerId) => {
   $(`video[id=${peerId}]`).addClass("hidden");
@@ -221,6 +198,9 @@ socket.on("show-camera", (peerId) => {
   $(`div[id=${peerId}] img`).remove();
   $(`video[id=${peerId}]`).removeClass("hidden");
 });
+
+// 開關麥克風
+
 
 
 // 監聽關閉視訊頁面，並執行一些動作
