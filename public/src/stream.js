@@ -103,10 +103,13 @@ myPeer.on("call", async (call) => {
     "class",
     "absolute w-full h-full t-0 l-0 object-cover transform-rotateY-180"
   );
-  call.on("stream", (userVideoStream) => {
-    addVideoStream(userVideoStream, video, peerId, webcamStatus, micStatus);
+  call.on("stream", async (userVideoStream) => {
+    await addVideoStream(userVideoStream, video);
   });
+  $(`div[id=${peerId}]`).append(video);
   addUserName(name, peerId);
+  if (!webcamStatus) hideCamera(peerId, "video");
+  if (!micStatus) muteMic(peerId);
 });
 
 socket.on("user-connected", async (peerId, name) => {
@@ -129,9 +132,10 @@ function connectToNewUser(peerId, name, stream) {
     "class",
     "absolute w-full h-full t-0 l-0 object-cover transform-rotateY-180"
   );
-  call.on("stream", (userVideoStream) => {
-    addVideoStream(userVideoStream, video, peerId, true, true);
+  call.on("stream", async (userVideoStream) => {
+    await addVideoStream(userVideoStream, video);
   });
+  $(`div[id=${peerId}]`).append(video);
   addUserName(name, peerId);
   console.log(`Connection with ${peerId}`);
 }
@@ -146,14 +150,11 @@ function addVideoGridElement(peerId) {
 }
 
 // Append視訊畫面到html上的function
-function addVideoStream(stream, video, peerId, webcamStatus, micStatus) {
+async function addVideoStream(stream, video) {
   video.srcObject = stream;
   video.addEventListener("loadedmetadata", () => {
     video.play();
   });
-  $(`div[id=${peerId}]`).append(video);
-  if (!webcamStatus) hideCamera(peerId);
-  if (!micStatus) muteMic(peerId);
 }
 
 // Append user名字
@@ -177,10 +178,7 @@ $("#hide-camera").on("click", async () => {
     $("button[id='hide-camera'] svg")
       .removeClass("text-green-500 group-hover:text-green-500")
       .addClass("text-red-500 group-hover:text-red-500");
-    $("div[id='myVideo'] canvas").addClass("hidden");
-    $("div[id='myVideo']").append(
-      `<img id="user-icon" class="hide absolute top-0 right-0 left-0 bottom-0 m-auto h-2/5" width="" src="../images/user-hide-camera.png">`
-    );
+    hideCamera("myVideo", "canvas");
     stream.getVideoTracks()[0].enabled = !stream.getVideoTracks()[0].enabled;
     webcamStatus = false;
     return;
@@ -191,28 +189,24 @@ $("#hide-camera").on("click", async () => {
     .addClass("text-green-500 group-hover:text-green-500");
   stream.getVideoTracks()[0].enabled = !stream.getVideoTracks()[0].enabled;
   webcamStatus = true;
-  $("div[id='myVideo'] img[id='user-icon']").remove();
-  $("div[id='myVideo'] canvas").removeClass("hidden");
+  showCamera("myVideo", "canvas");
 });
 
 socket.on("hide-camera", (peerId) => {
-  hideCamera(peerId);
+  hideCamera(peerId, "video");
 });
-
 socket.on("show-camera", (peerId) => {
-  showCamera(peerId);
+  showCamera(peerId, "video");
 });
-
-function hideCamera(peerId) {
-  $(`div[id=${peerId}] video`).addClass("hidden");
+function hideCamera(peerId, displayMethod) {
+  $(`div[id=${peerId}] ${displayMethod}`).addClass("hidden");
   $(`div[id=${peerId}]`).append(
     `<img id="user-icon" class="hide absolute top-0 right-0 left-0 bottom-0 m-auto h-2/5" width="" src="../images/user-hide-camera.png">`
   );
 }
-
-function showCamera(peerId) {
+function showCamera(peerId, displayMethod) {
   $(`div[id=${peerId}] img[id='user-icon']`).remove();
-  $(`div[id=${peerId}] video`).removeClass("hidden");
+  $(`div[id=${peerId}] ${displayMethod}`).removeClass("hidden");
 }
 
 // 開關麥克風
@@ -222,9 +216,7 @@ $("#mute-mic").on("click", async () => {
     $("button[id='mute-mic'] svg")
       .removeClass("text-green-500 group-hover:text-green-500")
       .addClass("text-red-500 group-hover:text-red-500");
-    $("div[id='myVideo']").append(`
-      <img id="muted-icon" src="./images/mute-mic.png" class="absolute top-0 right-0 m-3 h-[10%]" alt="...">
-    `);
+    muteMic("myVideo");
     myStream.getAudioTracks()[0].enabled =
       !myStream.getAudioTracks()[0].enabled;
     micStatus = false;
@@ -234,7 +226,7 @@ $("#mute-mic").on("click", async () => {
   $("button[id='mute-mic'] svg")
     .removeClass("text-red-500 group-hover:text-red-500")
     .addClass("text-green-500 group-hover:text-green-500");
-  $("div[id='myVideo'] img[id='muted-icon']").remove();
+  unmuteMic("myVideo");
   myStream.getAudioTracks()[0].enabled = !myStream.getAudioTracks()[0].enabled;
   micStatus = true;
 });
@@ -242,17 +234,14 @@ $("#mute-mic").on("click", async () => {
 socket.on("mute-mic", (peerId) => {
   muteMic(peerId);  
 });
-
 socket.on("unmute-mic", (peerId) => {
   unmuteMic(peerId);
 });
-
 function muteMic(peerId) {
   $(`div[id=${peerId}]`).append(`
     <img id="muted-icon" src="./images/mute-mic.png" class="absolute top-0 right-0 m-3 h-[10%]" alt="...">
   `);
 }
-
 function unmuteMic(peerId) {
   $(`div[id=${peerId}] img[id='muted-icon']`).remove();
 }
