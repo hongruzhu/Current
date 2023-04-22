@@ -179,7 +179,7 @@ $("#hide-camera").on("click", async () => {
       .addClass("text-red-500 group-hover:text-red-500");
     $("canvas[id='output']").addClass("hidden");
     $("div[id='myVideo']").append(
-      `<img class="hide absolute top-0 right-0 left-0 bottom-0 m-auto h-2/5" width="" src="../images/user-hide-camera.png">`
+      `<img id="user-icon" class="hide absolute top-0 right-0 left-0 bottom-0 m-auto h-2/5" width="" src="../images/user-hide-camera.png">`
     );
     stream.getVideoTracks()[0].enabled = !stream.getVideoTracks()[0].enabled;
     return;
@@ -189,7 +189,7 @@ $("#hide-camera").on("click", async () => {
     .removeClass("text-red-500 group-hover:text-red-500")
     .addClass("text-green-500 group-hover:text-green-500");
   stream.getVideoTracks()[0].enabled = !stream.getVideoTracks()[0].enabled;
-  $("div[id='myVideo'] img").remove();
+  $("div[id='myVideo'] img[id='user-icon']").remove();
   $("canvas[id='output']").removeClass("hidden");
 });
 
@@ -213,7 +213,7 @@ $("#mute-mic").on("click", async () => {
       .removeClass("text-green-500 group-hover:text-green-500")
       .addClass("text-red-500 group-hover:text-red-500");
     $("div[id='myVideo']").append(`
-      <img src="./images/mute-mic.png" class="absolute top-0 right-0 m-3 h-[10%]" alt="...">
+      <img id="muted-icon" src="./images/mute-mic.png" class="absolute top-0 right-0 m-3 h-[10%]" alt="...">
     `);
     myStream.getAudioTracks()[0].enabled =
       !myStream.getAudioTracks()[0].enabled;
@@ -223,7 +223,7 @@ $("#mute-mic").on("click", async () => {
   $("button[id='mute-mic'] svg")
     .removeClass("text-red-500 group-hover:text-red-500")
     .addClass("text-green-500 group-hover:text-green-500");
-  $("div[id='myVideo'] img").remove();
+  $("div[id='myVideo'] img[id='muted-icon']").remove();
   myStream.getAudioTracks()[0].enabled = !myStream.getAudioTracks()[0].enabled;
 });
 
