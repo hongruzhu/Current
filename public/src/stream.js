@@ -21,7 +21,7 @@ myVideo.addEventListener("loadedmetadata", () => {
 });
 
 // 將自己視訊的video stream，轉換成canvas，以利更換背景功能運作
-const canvasElement = document.getElementById("output");
+const canvasElement = $("div[id='myVideo'] canvas")[0];
 const canvasCtx = canvasElement.getContext("2d");
 
 function background_origin() {
@@ -99,7 +99,6 @@ myPeer.on("call", async (call) => {
   call.answer(myStream);
   addVideoGridElement(peerId);
   const video = document.createElement("video");
-  video.setAttribute("id", peerId);
   video.setAttribute(
     "class",
     "absolute w-full h-full t-0 l-0 object-cover transform-rotateY-180"
@@ -126,7 +125,6 @@ function connectToNewUser(peerId, name, stream) {
   const call = myPeer.call(peerId, stream, options);
   addVideoGridElement(peerId);
   const video = document.createElement("video");
-  video.setAttribute("id", peerId);
   video.setAttribute(
     "class",
     "absolute w-full h-full t-0 l-0 object-cover transform-rotateY-180"
@@ -161,7 +159,6 @@ function addVideoStream(stream, video, peerId, webcamStatus, micStatus) {
 // Append user名字
 function addUserName(name, peerId) {
   const userName = $("<span>", {
-    id: peerId,
     text: name,
     class:
       "absolute z-10 bottom-0 left-0 px-4 py-3 text-base text-white text-shadow",
@@ -180,7 +177,7 @@ $("#hide-camera").on("click", async () => {
     $("button[id='hide-camera'] svg")
       .removeClass("text-green-500 group-hover:text-green-500")
       .addClass("text-red-500 group-hover:text-red-500");
-    $("canvas[id='output']").addClass("hidden");
+    $("div[id='myVideo'] canvas").addClass("hidden");
     $("div[id='myVideo']").append(
       `<img id="user-icon" class="hide absolute top-0 right-0 left-0 bottom-0 m-auto h-2/5" width="" src="../images/user-hide-camera.png">`
     );
@@ -195,7 +192,7 @@ $("#hide-camera").on("click", async () => {
   stream.getVideoTracks()[0].enabled = !stream.getVideoTracks()[0].enabled;
   webcamStatus = true;
   $("div[id='myVideo'] img[id='user-icon']").remove();
-  $("canvas[id='output']").removeClass("hidden");
+  $("div[id='myVideo'] canvas").removeClass("hidden");
 });
 
 socket.on("hide-camera", (peerId) => {
@@ -207,7 +204,7 @@ socket.on("show-camera", (peerId) => {
 });
 
 function hideCamera(peerId) {
-  $(`video[id=${peerId}]`).addClass("hidden");
+  $(`div[id=${peerId}] video`).addClass("hidden");
   $(`div[id=${peerId}]`).append(
     `<img id="user-icon" class="hide absolute top-0 right-0 left-0 bottom-0 m-auto h-2/5" width="" src="../images/user-hide-camera.png">`
   );
@@ -215,7 +212,7 @@ function hideCamera(peerId) {
 
 function showCamera(peerId) {
   $(`div[id=${peerId}] img[id='user-icon']`).remove();
-  $(`video[id=${peerId}]`).removeClass("hidden");
+  $(`div[id=${peerId}] video`).removeClass("hidden");
 }
 
 // 開關麥克風
