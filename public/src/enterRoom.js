@@ -10,6 +10,7 @@ const myWebcamStream = await navigator.mediaDevices.getUserMedia({
 const myVideo = $("#myVideo video")[0];
 myVideo.srcObject = myWebcamStream;
 myVideo.addEventListener("loadedmetadata", () => {
+  $("#alert").remove()
   myVideo.play();
 });
 
