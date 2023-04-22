@@ -54,13 +54,10 @@ async function convertCanvasToStream(canvas) {
     video: false,
   });
   // Combine both video/audio stream with MediaStream object
-  // const combine = new MediaStream([
-  //   ...videoOutput.getTracks(),
-  //   ...mic.getTracks(),
-  // ]);
+  // 這邊要用addTrack的方式，才能順利把stream送出去
   const combine = new MediaStream();
-  combine.addTrack(await videoOutput.getTracks()[0]);
-  combine.addTrack(await mic.getTracks()[0]);
+  combine.addTrack(videoOutput.getTracks()[0]);
+  combine.addTrack(mic.getTracks()[0]);
   return combine;
 }
 // 取得自己視訊的stream後
@@ -147,12 +144,10 @@ function addVideoGridElement(peerId) {
 // Append視訊畫面到html上的function
 function addVideoStream(stream, video, peerId) {
   video.srcObject = stream;
-  $(`div[id=${peerId}]`).append(video);
-  video.play();
-  // video.addEventListener("loadedmetadata", () => {
-  //   $(`div[id=${peerId}]`).append(video);
-  //   video.play();
-  // });
+  video.addEventListener("loadedmetadata", () => {
+    $(`div[id=${peerId}]`).append(video);
+    video.play();
+  });
 }
 
 // Append user名字
