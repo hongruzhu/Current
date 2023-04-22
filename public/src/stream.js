@@ -94,7 +94,7 @@ myPeer.on("open", (peerId) => {
 
 myPeer.on("call", async (call) => {
   const peerId = call.peer;
-  const name = call.metadata.name;
+  const { name, webcamStatus, micStatus } = call.metadata;
   console.log(`Connection with ${peerId}`);
   call.answer(myStream);
   addVideoGridElement(peerId);
@@ -105,7 +105,7 @@ myPeer.on("call", async (call) => {
     "absolute w-full h-full t-0 l-0 object-cover transform-rotateY-180"
   );
   call.on("stream", (userVideoStream) => {
-    addVideoStream(userVideoStream, video, peerId);
+    addVideoStream(userVideoStream, video, peerId, webcamStatus, micStatus);
   });
   addUserName(name, peerId);
 });
@@ -122,7 +122,7 @@ socket.on("user-disconnected", (peerId) => {
 
 // 新user加入，建立peer連線的function
 function connectToNewUser(peerId, name, stream) {
-  const options = { metadata: { name: myName } };
+  const options = { metadata: { name: myName, webcamStatus, micStatus } };
   const call = myPeer.call(peerId, stream, options);
   addVideoGridElement(peerId);
   const video = document.createElement("video");
@@ -132,7 +132,7 @@ function connectToNewUser(peerId, name, stream) {
     "absolute w-full h-full t-0 l-0 object-cover transform-rotateY-180"
   );
   call.on("stream", (userVideoStream) => {
-    addVideoStream(userVideoStream, video, peerId);
+    addVideoStream(userVideoStream, video, peerId, true, true);
   });
   addUserName(name, peerId);
   console.log(`Connection with ${peerId}`);
@@ -148,12 +148,14 @@ function addVideoGridElement(peerId) {
 }
 
 // Append視訊畫面到html上的function
-function addVideoStream(stream, video, peerId) {
+function addVideoStream(stream, video, peerId, webcamStatus, micStatus) {
   video.srcObject = stream;
   video.addEventListener("loadedmetadata", () => {
-    $(`div[id=${peerId}]`).append(video);
     video.play();
   });
+  $(`div[id=${peerId}]`).append(video);
+  if (!webcamStatus) hideCamera(peerId);
+  if (!micStatus) muteMic(peerId);
 }
 
 // Append user名字
@@ -168,7 +170,8 @@ function addUserName(name, peerId) {
 }
 
 /* ----------------------------- Step 2: 其他控制畫面雜項 ----------------------------- */
-
+let webcamStatus = true;
+let micStatus = true;
 // 開關視訊鏡頭
 $("#hide-camera").on("click", async () => {
   const stream = myVideo.srcObject;
@@ -182,6 +185,7 @@ $("#hide-camera").on("click", async () => {
       `<img id="user-icon" class="hide absolute top-0 right-0 left-0 bottom-0 m-auto h-2/5" width="" src="../images/user-hide-camera.png">`
     );
     stream.getVideoTracks()[0].enabled = !stream.getVideoTracks()[0].enabled;
+    webcamStatus = false;
     return;
   }
   socket.emit("show-camera", roomId, myPeerId);
@@ -189,21 +193,30 @@ $("#hide-camera").on("click", async () => {
     .removeClass("text-red-500 group-hover:text-red-500")
     .addClass("text-green-500 group-hover:text-green-500");
   stream.getVideoTracks()[0].enabled = !stream.getVideoTracks()[0].enabled;
+  webcamStatus = true;
   $("div[id='myVideo'] img[id='user-icon']").remove();
   $("canvas[id='output']").removeClass("hidden");
 });
 
 socket.on("hide-camera", (peerId) => {
-  $(`video[id=${peerId}]`).addClass("hidden");
-  $(`div[id=${peerId}]`).append(
-    `<img class="hide absolute top-0 right-0 left-0 bottom-0 m-auto h-2/5" width="" src="../images/user-hide-camera.png">`
-  );
+  hideCamera(peerId);
 });
 
 socket.on("show-camera", (peerId) => {
-  $(`div[id=${peerId}] img`).remove();
-  $(`video[id=${peerId}]`).removeClass("hidden");
+  showCamera(peerId);
 });
+
+function hideCamera(peerId) {
+  $(`video[id=${peerId}]`).addClass("hidden");
+  $(`div[id=${peerId}]`).append(
+    `<img id="user-icon" class="hide absolute top-0 right-0 left-0 bottom-0 m-auto h-2/5" width="" src="../images/user-hide-camera.png">`
+  );
+}
+
+function showCamera(peerId) {
+  $(`div[id=${peerId}] img[id='user-icon']`).remove();
+  $(`video[id=${peerId}]`).removeClass("hidden");
+}
 
 // 開關麥克風
 $("#mute-mic").on("click", async () => {
@@ -217,6 +230,7 @@ $("#mute-mic").on("click", async () => {
     `);
     myStream.getAudioTracks()[0].enabled =
       !myStream.getAudioTracks()[0].enabled;
+    micStatus = false;
     return;
   }
   socket.emit("unmute-mic", roomId, myPeerId);
@@ -225,17 +239,26 @@ $("#mute-mic").on("click", async () => {
     .addClass("text-green-500 group-hover:text-green-500");
   $("div[id='myVideo'] img[id='muted-icon']").remove();
   myStream.getAudioTracks()[0].enabled = !myStream.getAudioTracks()[0].enabled;
+  micStatus = true;
 });
 
 socket.on("mute-mic", (peerId) => {
-  $(`div[id=${peerId}]`).append(`
-    <img src="./images/mute-mic.png" class="absolute top-0 right-0 m-3 h-[10%]" alt="...">
-  `);
+  muteMic(peerId);  
 });
 
 socket.on("unmute-mic", (peerId) => {
-  $(`div[id=${peerId}] img`).remove();
+  unmuteMic(peerId);
 });
+
+function muteMic(peerId) {
+  $(`div[id=${peerId}]`).append(`
+    <img id="muted-icon" src="./images/mute-mic.png" class="absolute top-0 right-0 m-3 h-[10%]" alt="...">
+  `);
+}
+
+function unmuteMic(peerId) {
+  $(`div[id=${peerId}] img[id='muted-icon']`).remove();
+}
 
 // 監聽關閉視訊頁面，並執行一些動作
 window.onbeforeunload = function (e) {
