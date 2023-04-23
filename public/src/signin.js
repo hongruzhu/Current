@@ -32,9 +32,15 @@ async function signIn() {
     localStorage.setItem("userName", result.data.user.name);
     localStorage.setItem("userEmail", result.data.user.email);
     alert("登入成功！");
-    window.location.href = document.referrer;
+    const roomReady = localStorage.getItem("room-ready");
+    if (roomReady) {
+      localStorage.removeItem("room-ready");
+      window.location.href = `./concall?roomId=${roomReady}`;
+    } else {
+      window.location.href = "./";
+    }
   } catch (e) {
-    alert(e.response.data.err);
+    alert(e);
   }
 }
 
@@ -70,3 +76,7 @@ async function signInValidation(email, password) {
     return true;
   }
 }
+
+window.onbeforeunload = function (e) {
+  localStorage.removeItem("room-ready");
+};
