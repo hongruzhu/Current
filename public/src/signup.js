@@ -41,7 +41,13 @@ async function signUp() {
     localStorage.setItem("userName", result.data.user.name);
     localStorage.setItem("userEmail", result.data.user.email);
     alert("註冊成功！");
-    window.location.href = "./";
+    const roomReady = localStorage.getItem("room-ready");
+    if (roomReady) {
+      localStorage.removeItem("room-ready");
+      window.location.href = `./concall?roomId=${roomReady}`;
+    } else {
+      window.location.href = "./";
+    }
   } catch (e) {
     if (e.response.data.err) {
       alert(e.response.data.err);

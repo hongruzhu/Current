@@ -81,7 +81,3 @@ async function signInValidation(email, password) {
     return true;
   }
 }
-
-window.onbeforeunload = function (e) {
-  localStorage.removeItem("room-ready");
-};
