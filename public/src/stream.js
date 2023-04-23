@@ -1,5 +1,5 @@
 let socket = io();
-/* ----------------------------- Step 1: 獲取自己視訊畫面stream的code ----------------------------- */
+/* ----------------------------- Step 1: 獲取自己視訊畫面的stream ----------------------------- */
 
 // 開啟視訊鏡頭，擷取自己的視訊畫面
 const myVideo = document.createElement("video");
@@ -82,7 +82,7 @@ let myMicStatus = localStorage.getItem(`micStatus-${roomId}`) === "true";
 if (!myWebcamStatus) stopVideoTrack(myVideo.srcObject);
 if (!myMicStatus) stopMicTrack(myStream);
 
-/* ----------------------------- Step 2: 確定好要交換的stream後，開始處理peerjs的連線 ----------------------------- */
+/* ----------------------------- Step 2: 確定好要交換的stream後，開始處理peerjs連線，進行stream交換 ----------------------------- */
 
 // Peer setup
 const myPeer = new Peer(undefined, {
@@ -214,7 +214,7 @@ function adjustLayout() {
   }
 }
 
-/* ----------------------------- Step 2: 其他控制畫面雜項 ----------------------------- */
+/* ----------------------------- Other: 其他控制畫面雜項 ----------------------------- */
 
 // 開關視訊鏡頭
 $("#hide-camera").on("click", async () => {
@@ -301,7 +301,7 @@ function unmuteMic(peerId) {
   $(`div[id=${peerId}] img[id='muted-icon']`).remove();
 }
 
-// 監聽關閉視訊頁面，並執行一些動作
+// 監聽關閉頁面時，把存在localStorage的相關資料刪除
 window.onbeforeunload = function (e) {
   localStorage.removeItem(`name-${roomId}`);
   localStorage.removeItem(`cameraStatus-${roomId}`);

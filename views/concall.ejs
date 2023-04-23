@@ -18,11 +18,61 @@
   </head>
   <body>
     <div id="header"></div>
-    <div id="main" class="flex items-center justify-center h-[calc(100vh-4rem)] p-20">
-      <div id="display" class="w-full f-full grid grid-cols-fluid-l gap-1 items-center justify-center">
+    <div id="main" class="flex items-center justify-center h-[calc(100vh-4rem)] p-2">
+      <div id="display" class="w-4/5 f-full grid grid-cols-fluid-l gap-1 items-center justify-center">
         <div id="myVideo" class="relative pb-[56.25%] overflow-hidden h-0 bg-gray-100">
           <canvas width="1280" height="720" class="absolute w-full h-full t-0 l-0 transform-rotateY-180"></canvas>
           <span class="absolute z-10 bottom-0 left-0 px-4 py-3 text-base text-white text-shadow">你</span>
+        </div>
+      </div>
+      <div id="right-block" class="hidden w-1/4 h-full ml-2">
+        <div id="chat-room" class="relative w-full h-full bg-gray-200 rounded-lg drop-shadow-md">
+          <div id="messenges" class="absolute top-0 w-full p-1.5">
+            <div class="chat chat-start">
+              <div class="chat-header">
+                Obi-Wan Kenobi
+                <time class="text-xs opacity-50">2 hours ago</time>
+              </div>
+              <div class="chat-bubble">You were the Chosen One!</div>
+            </div>
+            <div class="chat chat-start">
+              <div class="chat-header">
+                Obi-Wan Kenobi
+                <time class="text-xs opacity-50">2 hour ago</time>
+              </div>
+              <div class="chat-bubble">I loved you.</div>
+            </div>
+          </div>
+          <div id="chatroom-input" class="absolute bottom-0 w-full p-1.5">
+            <form>
+              <label for="chat" class="sr-only">Your message</label>
+              <div class="flex items-center px-1 py-2 rounded-lg bg-gray-100 dark:bg-gray-700">
+                <button type="button"
+                  class="inline-flex justify-center p-2 text-gray-500 rounded-lg cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600">
+                  <svg aria-hidden="true" class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd"
+                      d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z"
+                      clip-rule="evenodd"></path>
+                  </svg>
+                  <span class="sr-only">Upload image</span>
+                </button>
+                <textarea id="messenge-input" rows="1"
+                  class="resize-none block mx-1 p-2.5 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  placeholder="Your message..."></textarea>
+                <button type="submit"
+                  class="inline-flex justify-center p-2 text-blue-600 rounded-full cursor-pointer hover:bg-blue-100 dark:text-blue-500 dark:hover:bg-gray-600">
+                  <svg aria-hidden="true" class="w-6 h-6 rotate-90" fill="currentColor" viewBox="0 0 20 20"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path
+                      d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z">
+                    </path>
+                  </svg>
+                  <span class="sr-only">Send message</span>
+                </button>
+              </div>
+            </form>
+          </div>
         </div>
       </div>
     </div>
@@ -38,7 +88,7 @@
       </div>
       <div class="flex items-center justify-center mx-auto">
         <button id="mute-mic" data-tooltip-target="tooltip-microphone" type="button"
-          class="p-2.5 group bg-gray-100 rounded-full hover:bg-gray-200 mr-4 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:bg-gray-600 dark:hover:bg-gray-800">
+          class="p-2.5 group bg-gray-100 rounded-full hover:bg-gray-200 mr-4 dark:bg-gray-600 dark:hover:bg-gray-800">
           <svg class="w-5 h-5 text-green-500 dark:text-gray-300 group-hover:text-green-500 dark:group-hover:text-white"
             fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
             <path clip-rule="evenodd" fill-rule="evenodd"
@@ -53,7 +103,7 @@
           <div class="tooltip-arrow" data-popper-arrow></div>
         </div>
         <button id="hide-camera" data-tooltip-target="tooltip-camera" type="button"
-          class="p-2.5 bg-gray-100 group rounded-full hover:bg-gray-200 mr-4 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:bg-gray-600 dark:hover:bg-gray-800">
+          class="p-2.5 bg-gray-100 group rounded-full hover:bg-gray-200 mr-4 dark:bg-gray-600 dark:hover:bg-gray-800">
           <svg class="w-5 h-5 text-green-500 dark:text-gray-300 group-hover:text-green-500 dark:group-hover:text-white"
             fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
             <path
@@ -149,15 +199,15 @@
           Show participants
           <div class="tooltip-arrow" data-popper-arrow></div>
         </div>
-        <button data-tooltip-target="tooltip-volume" type="button"
-          class="p-2.5 group rounded-full hover:bg-gray-100 mr-1 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-600 dark:hover:bg-gray-600">
+        <button id="chat-room-btn" data-tooltip-target="tooltip-volume" type="button"
+          class="p-2.5 group rounded-full hover:bg-gray-100 mr-1 dark:hover:bg-gray-600">
           <svg class="w-5 h-5 text-gray-500 dark:text-gray-300 group-hover:text-gray-900 dark:group-hover:text-white"
             fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <path clip-rule="evenodd" fill-rule="evenodd"
-              d="M9.383 3.076A1 1 0 0110 4v12a1 1 0 01-1.707.707L4.586 13H2a1 1 0 01-1-1V8a1 1 0 011-1h2.586l3.707-3.707a1 1 0 011.09-.217zM14.657 2.929a1 1 0 011.414 0A9.972 9.972 0 0119 10a9.972 9.972 0 01-2.929 7.071 1 1 0 01-1.414-1.414A7.971 7.971 0 0017 10c0-2.21-.894-4.208-2.343-5.657a1 1 0 010-1.414zm-2.829 2.828a1 1 0 011.415 0A5.983 5.983 0 0115 10a5.984 5.984 0 01-1.757 4.243 1 1 0 01-1.415-1.415A3.984 3.984 0 0013 10a3.983 3.983 0 00-1.172-2.828 1 1 0 010-1.415z">
-            </path>
+            <path fill-rule="evenodd"
+              d="M10 2c-2.236 0-4.43.18-6.57.524C1.993 2.755 1 4.014 1 5.426v5.148c0 1.413.993 2.67 2.43 2.902 1.168.188 2.352.327 3.55.414.28.02.521.18.642.413l1.713 3.293a.75.75 0 001.33 0l1.713-3.293a.783.783 0 01.642-.413 41.102 41.102 0 003.55-.414c1.437-.231 2.43-1.49 2.43-2.902V5.426c0-1.413-.993-2.67-2.43-2.902A41.289 41.289 0 0010 2zM6.75 6a.75.75 0 000 1.5h6.5a.75.75 0 000-1.5h-6.5zm0 2.5a.75.75 0 000 1.5h3.5a.75.75 0 000-1.5h-3.5z"
+              clip-rule="evenodd" />
           </svg>
-          <span class="sr-only">Adjust volume</span>
+          <span class="sr-only">Chat room</span>
         </button>
         <div id="tooltip-volume" role="tooltip"
           class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
@@ -182,5 +232,6 @@
       </div>
     </div>
     <script type="module" src="./src/stream.js"></script>
+    <script type="module" src="./src/chatroom.js"></script>
   </body>
 </html>
