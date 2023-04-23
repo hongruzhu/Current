@@ -40,7 +40,9 @@ async function signIn() {
       window.location.href = "./";
     }
   } catch (e) {
-    alert(e);
+    if (e.response.data.err) alert(e.response.data.err);
+    alert("Something Wrong!");
+    console.log(e);
   }
 }
 

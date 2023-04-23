@@ -41,9 +41,11 @@ async function signUp() {
     localStorage.setItem("userName", result.data.user.name);
     localStorage.setItem("userEmail", result.data.user.email);
     alert("註冊成功！");
-    window.location.href = document.referrer;
+    window.location.href = "./";
   } catch (e) {
-    alert(e.response.data.err);
+    if (e.response.data.err) alert(e.response.data.err);
+    alert("Something Wrong!")
+    console.log(e);
   }
 }
 
