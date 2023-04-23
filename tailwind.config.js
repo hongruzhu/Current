@@ -9,7 +9,9 @@ export default {
   theme: {
     extend: {
       gridTemplateColumns: {
-        fluid: "repeat(auto-fit, minmax(20vw, 1fr))",
+        "fluid-l": "repeat(auto-fit, minmax(40%, 1fr))",
+        "fluid-m": "repeat(auto-fit, minmax(30%, 1fr))",
+        "fluid-s": "repeat(auto-fit, minmax(20%, 1fr))",
       },
     },
   },
@@ -24,6 +26,6 @@ export default {
     rtl: false,
     prefix: "",
     darkTheme: "dark",
-  }
+  },
 };
 

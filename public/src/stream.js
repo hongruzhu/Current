@@ -116,6 +116,7 @@ myPeer.on("call", async (call) => {
   });
   $(`div[id=${peerId}]`).append(video);
   addUserName(name, peerId);
+  adjustLayout();
   if (!otherWebcamStatus) hideCamera(peerId, "video");
   if (!otherMicStatus) muteMic(peerId);
 
@@ -132,6 +133,7 @@ socket.on("user-connected", async (peerId, name) => {
 // 若有user離開，移除他的視訊畫面
 socket.on("user-disconnected", (peerId) => {
   $(`div[id=${peerId}]`).remove();
+  adjustLayout();
   console.log(`Disconnect with ${peerId}`);
 });
 
@@ -150,6 +152,7 @@ function connectToNewUser(peerId, name, stream) {
   });
   $(`div[id=${peerId}]`).append(video);
   addUserName(name, peerId);
+  adjustLayout();
   console.log(`Connection with ${peerId}`);
 }
 
@@ -178,6 +181,37 @@ function addUserName(name, peerId) {
       "absolute z-10 bottom-0 left-0 px-4 py-3 text-base text-white text-shadow",
   });
   $(`div[id=${peerId}]`).append(userName);
+}
+
+// 偵測現在有會議有幾個畫面，並調整layout
+function adjustLayout() {
+  const count = $("#display div").length;
+  if (count < 5) {
+    if ($(".grid-cols-fluid-m").length === 1) {
+      $("#display")
+        .removeClass("grid-cols-fluid-m")
+        .addClass("grid-cols-fluid-l");
+    }
+  }
+  if (count > 4 && count < 10) {
+    if ($(".grid-cols-fluid-l").length === 1) {
+      $("#display")
+        .removeClass("grid-cols-fluid-l")
+        .addClass("grid-cols-fluid-m");
+    }
+    if ($(".grid-cols-fluid-s").length === 1) {
+      $("#display")
+        .removeClass("grid-cols-fluid-s")
+        .addClass("grid-cols-fluid-m");
+    }
+  } 
+  if (count > 9) {
+    if ($(".grid-cols-fluid-m").length === 1) {
+      $("#display")
+        .removeClass("grid-cols-fluid-m")
+        .addClass("grid-cols-fluid-s");
+    }
+  }
 }
 
 /* ----------------------------- Step 2: 其他控制畫面雜項 ----------------------------- */
