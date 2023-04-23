@@ -10,6 +10,8 @@ if (accessToken) {
   `);
   $("#signout").click(() => {
     localStorage.removeItem("accessToken");
+    localStorage.removeItem("userName");
+    localStorage.removeItem("userEmail");
   })
 } else {
   $("#navbar").append(`    

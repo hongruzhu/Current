@@ -270,4 +270,6 @@ function unmuteMic(peerId) {
 // 監聽關閉視訊頁面，並執行一些動作
 window.onbeforeunload = function (e) {
   localStorage.removeItem(`name-${roomId}`);
+  localStorage.removeItem(`cameraStatus-${roomId}`);
+  localStorage.removeItem(`micStatus-${roomId}`);
 };

@@ -38,8 +38,10 @@ async function signUp() {
       data,
     });
     localStorage.setItem("accessToken", result.data.accessToken);
+    localStorage.setItem("userName", result.data.user.name);
+    localStorage.setItem("userEmail", result.data.user.email);
     alert("註冊成功！");
-    window.location.href = "./";
+    window.location.href = document.referrer;
   } catch (e) {
     alert(e.response.data.err);
   }
