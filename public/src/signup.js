@@ -43,7 +43,10 @@ async function signUp() {
     alert("註冊成功！");
     window.location.href = "./";
   } catch (e) {
-    if (e.response.data.err) alert(e.response.data.err);
+    if (e.response.data.err) {
+      alert(e.response.data.err);
+      return;
+    }
     alert("Something Wrong!")
     console.log(e);
   }

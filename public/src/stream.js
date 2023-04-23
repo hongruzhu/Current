@@ -86,8 +86,8 @@ if (!myMicStatus) stopMicTrack(myStream);
 
 // Peer setup
 const myPeer = new Peer(undefined, {
-  host: "currentmeet.com", // currentmeet.com
-  port: "443", // 443
+  host: "localhost", // currentmeet.com
+  port: "3001", // 443
   path: "/myapp",
   debug: 2,
 });
