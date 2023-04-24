@@ -11,7 +11,13 @@ const socket = io();
 // 若是創建新會議來到這，把url改成正常樣子
 if (createStatus) {
   const domain = window.location.host;
-  history.replaceState(null, "", `http://${domain}/concall?roomId=${roomId}`);
+  const protocol = window.location.protocol;
+  console.log(domain, protocol);
+  history.replaceState(
+    null,
+    "",
+    `${protocol}//${domain}/concall?roomId=${roomId}`
+  );
 }
 
 // 會議計時功能
