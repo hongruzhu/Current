@@ -2,20 +2,21 @@ const accessToken = localStorage.getItem("accessToken");
 
 if (accessToken) {
   $("#navbar").append(`
-    <div class="px-2">
+    <div class="px-2 ml-auto">
       <a id="signout" type="button" href="./"
         class="text-orange-700 hover:text-white border border-orange-700 hover:bg-orange-800 focus:ring-4 focus:outline-none focus:ring-orange-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-orange-500 dark:focus:ring-orange-800">登出</a>
     </div>
-    <a class="bg-[url('../images/user.png')] w-[50px] h-[50px] ml-auto bg-contain" href=""></a>
+    <a class="bg-[url('../images/user.png')] w-[50px] h-[50px] bg-contain" href=""></a>
   `);
   $("#signout").click(() => {
     localStorage.removeItem("accessToken");
+    localStorage.removeItem("userId");
     localStorage.removeItem("userName");
     localStorage.removeItem("userEmail");
-  })
+  });
 } else {
   $("#navbar").append(`    
-    <div class="px-1">
+    <div class="px-1 ml-auto">
       <a id="signin" type="button" href="./signin"
         class="text-orange-700 hover:text-white border border-orange-700 hover:bg-orange-800 focus:ring-4 focus:outline-none focus:ring-orange-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-orange-500 dark:focus:ring-orange-800">登入</a>
     </div>
@@ -26,18 +27,31 @@ if (accessToken) {
   `);
 }
 
-$("#get-roomid").click(() => {
+$("#get-roomid").click(async () => {
   if (!accessToken) {
-    alert("請先登入，未有帳號請先註冊！")
-    window.location.href= "./signin";
+    alert("請先登入，未有帳號請先註冊！");
+    window.location.href = "./signin";
     return;
   }
-  window.location.href = "./getRoomId";
-})
+  const headers = {
+    Authorization: `Bearer ${accessToken}`,
+  };
+  try {
+    const result = await axios({
+      method: "get",
+      url: "./getRoomId",
+      headers,
+    });
+    window.location.href = result.request.responseURL;
+  } catch (e) {
+    alert("something worong")
+    console.log(e);
+  }
+});
 
 $("#signin").on("click", () => {
   localStorage.removeItem("room-ready");
-})
+});
 
 $("#signon").on("click", () => {
   localStorage.removeItem("room-ready");

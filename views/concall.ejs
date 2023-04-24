@@ -25,30 +25,15 @@
           <span class="absolute z-10 bottom-0 left-0 px-4 py-3 text-base text-white text-shadow">你</span>
         </div>
       </div>
-      <div id="right-block" class="hidden w-1/4 h-full ml-2">
+      <div id="right-block" class="hidden w-1/4 h-full ml-2 min-w-[250px]">
         <div id="chat-room" class="relative w-full h-full bg-gray-200 rounded-lg drop-shadow-md">
-          <div id="messenges" class="absolute top-0 w-full p-1.5">
-            <div class="chat chat-start">
-              <div class="chat-header">
-                Obi-Wan Kenobi
-                <time class="text-xs opacity-50">2 hours ago</time>
-              </div>
-              <div class="chat-bubble">You were the Chosen One!</div>
-            </div>
-            <div class="chat chat-start">
-              <div class="chat-header">
-                Obi-Wan Kenobi
-                <time class="text-xs opacity-50">2 hour ago</time>
-              </div>
-              <div class="chat-bubble">I loved you.</div>
-            </div>
-          </div>
+          <div id="messenges" class="absolute top-0 w-full p-1.5"></div>
           <div id="chatroom-input" class="absolute bottom-0 w-full p-1.5">
-            <form>
+            <form id="chat">
               <label for="chat" class="sr-only">Your message</label>
               <div class="flex items-center px-1 py-2 rounded-lg bg-gray-100 dark:bg-gray-700">
                 <button type="button"
-                  class="inline-flex justify-center p-2 text-gray-500 rounded-lg cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600">
+                  class="hidden inline-flex justify-center p-2 text-gray-500 rounded-lg cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600">
                   <svg aria-hidden="true" class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"
                     xmlns="http://www.w3.org/2000/svg">
                     <path fill-rule="evenodd"
@@ -57,9 +42,7 @@
                   </svg>
                   <span class="sr-only">Upload image</span>
                 </button>
-                <textarea id="messenge-input" rows="1"
-                  class="resize-none block mx-1 p-2.5 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                  placeholder="Your message..."></textarea>
+                <textarea id="messenge-input" rows="1" class="resize-none block mx-1 p-2.5 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Your message..."></textarea>
                 <button type="submit"
                   class="inline-flex justify-center p-2 text-blue-600 rounded-full cursor-pointer hover:bg-blue-100 dark:text-blue-500 dark:hover:bg-gray-600">
                   <svg aria-hidden="true" class="w-6 h-6 rotate-90" fill="currentColor" viewBox="0 0 20 20"
@@ -84,7 +67,7 @@
             d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z">
           </path>
         </svg>
-        <span class="text-sm">12:43 PM</span>
+        <span id="timer" class="text-sm"></span>
       </div>
       <div class="flex items-center justify-center mx-auto">
         <button id="mute-mic" data-tooltip-target="tooltip-microphone" type="button"
@@ -231,6 +214,7 @@
         </div>
       </div>
     </div>
+    <script type="module" src="./src/constant.js"></script>
     <script type="module" src="./src/stream.js"></script>
     <script type="module" src="./src/chatroom.js"></script>
   </body>

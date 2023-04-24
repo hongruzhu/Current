@@ -1,4 +1,6 @@
-let socket = io();
+// 引入共用的變數
+import { roomId, myName, socket, startTime } from "./constant.js";
+
 /* ----------------------------- Step 1: 獲取自己視訊畫面的stream ----------------------------- */
 
 // 開啟視訊鏡頭，擷取自己的視訊畫面
@@ -71,9 +73,6 @@ async function convertCanvasToStream(canvas) {
 let myStream = await convertCanvasToStream(canvasElement);
 
 // 進入會議房間，建立peer連線，產出自己的peerId，也把自己的名字丟給其他users
-const urlParams = new URLSearchParams(window.location.search);
-const roomId = urlParams.get("roomId");
-const myName = localStorage.getItem(`name-${roomId}`);
 let myPeerId;
 
 // 根據進入會議室前，開關畫面和麥克風的狀態不同，調整要丟出去的stream
@@ -82,8 +81,7 @@ let myMicStatus = localStorage.getItem(`micStatus-${roomId}`) === "true";
 if (!myWebcamStatus) stopVideoTrack(myVideo.srcObject);
 if (!myMicStatus) stopMicTrack(myStream);
 
-/* ----------------------------- Step 2: 確定好要交換的stream後，開始處理peerjs連線，進行stream交換 ----------------------------- */
-
+/* ----------------------------- Step 2: 確定好要交換的stream後，開始處理Peer和Socket.IO連線，進行stream交換 ----------------------------- */
 // Peer setup
 const myPeer = new Peer(undefined, {
   host: "currentmeet.com", // currentmeet.com
@@ -126,8 +124,10 @@ myPeer.on("call", async (call) => {
   if (!myMicStatus) socket.emit("mute-mic", roomId, myPeerId);
 });
 
-socket.on("user-connected", async (peerId, name) => {
+socket.on("user-connected", async (peerId, name, socketId) => {
   connectToNewUser(peerId, name, myStream);
+  // TODO:如果是host，傳現在的時間戳記給new user
+  
 });
 
 // 若有user離開，移除他的視訊畫面

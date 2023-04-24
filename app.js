@@ -26,15 +26,17 @@ app.use(cors());
 // API routes
 import { index_route } from "./server/routes/index_route.js";
 import { user_route } from "./server/routes/user_route.js";
-import { concall_route } from "./server/routes/concall_route.js";
+import { enter_route } from "./server/routes/enter_route.js";
 
-app.use(index_route, user_route, concall_route);
+app.use(index_route, user_route, enter_route);
 
 // Socket.IO routes
-import { liveStreaming } from "./server/routes/socketio_route.js"
+import { conferenceCall } from "./server/routes/concall_route.js";
+import { chat } from "./server/routes/chat_route.js";
 
 const onConnection = (socket) => {
-  liveStreaming(io, socket);
+  conferenceCall(io, socket);
+  chat(io, socket);
 }
 
 io.on("connection", onConnection);

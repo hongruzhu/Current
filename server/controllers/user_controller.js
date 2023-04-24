@@ -118,6 +118,7 @@ const signInValidation = async (email, password) => {
 
 const generateResponse = async (id, provider, name, email) => {
   const payload = {
+    id,
     provider,
     name,
     email,

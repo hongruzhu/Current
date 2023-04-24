@@ -38,6 +38,7 @@ async function signUp() {
       data,
     });
     localStorage.setItem("accessToken", result.data.accessToken);
+    localStorage.setItem("userId", result.data.user.id);
     localStorage.setItem("userName", result.data.user.name);
     localStorage.setItem("userEmail", result.data.user.email);
     alert("註冊成功！");
@@ -51,6 +52,7 @@ async function signUp() {
   } catch (e) {
     if (e.response.data.err) {
       alert(e.response.data.err);
+      console.log(e);
       return;
     }
     alert("Something Wrong!")

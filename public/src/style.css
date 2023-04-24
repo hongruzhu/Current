@@ -13,3 +13,11 @@
 .transform-center {
   transform: translate(-50%, -50%);
 }
+
+#invite-url-copy:focus::after {
+  content: '複製成功';
+}
+
+#invite-code-copy:focus::after {
+  content: '複製成功';
+}
