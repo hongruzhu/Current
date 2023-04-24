@@ -1,7 +1,18 @@
+window.addEventListener("load", () => {
+  $("#loading").remove();
+});
+
 const urlParams = new URLSearchParams(window.location.search);
+const createStatus = urlParams.get("create");
 const roomId = urlParams.get("roomId");
 const myName = localStorage.getItem(`name-${roomId}`);
 const socket = io();
+
+// 若是創建新會議來到這，把url改成正常樣子
+if (createStatus) {
+  const domain = window.location.host;
+  history.replaceState(null, "", `http://${domain}/concall?roomId=${roomId}`);
+}
 
 // 會議計時功能
 let startTime;
@@ -35,4 +46,3 @@ export { roomId, myName, socket, startTime };
 //   elapsedTime += Date.now() - startTime;
 //   document.getElementById("clock").textContent = "00:00:00";
 // }
-

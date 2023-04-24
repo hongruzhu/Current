@@ -11,7 +11,6 @@ import {
 } from "../controllers/enter_controller.js";
 
 router.route("/getRoomId").get(authenticateJWT, wrapAsync(getRoomId));
-router.route("/concall").get(wrapAsync(verifyRoomId));
 router
   .route("/createRoom")
   .get(wrapAsync(createRoomPage))
@@ -20,5 +19,6 @@ router
   .route("/enterRoom")
   .get(wrapAsync(verifyRoomId))
   .post(wrapAsync(enterRoom));
+router.route("/concall").get(wrapAsync(verifyRoomId));
 
 export { router as enter_route };

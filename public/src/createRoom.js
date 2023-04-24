@@ -1,6 +1,10 @@
+window.addEventListener("load", () => {
+  $("#loading").remove();
+});
+
 const accessToken = localStorage.getItem("accessToken");
 const userName = localStorage.getItem("userName");
- $("input[name='name']").val(userName).addClass("hidden");
+$("input[name='name']").val(userName).addClass("hidden");
 
 const myWebcamStream = await navigator.mediaDevices.getUserMedia({
   video: {
@@ -70,7 +74,7 @@ $("#enter-room").on("click", async (e) => {
 });
 
 $("#create-room").on("submit", async (e) => {
-  e.preventDefault(); 
+  e.preventDefault();
   const name = $("input[name='name']").val();
   localStorage.setItem(`name-${roomId}`, name);
   localStorage.setItem(`cameraStatus-${roomId}`, cameraStatus);
@@ -102,12 +106,12 @@ $("#create-room").on("submit", async (e) => {
     alert("Something Wrong!");
     console.log(e);
   }
-})
+});
 
 // 一鍵複製
 $("#invite-code-copy").on("click", () => {
   navigator.clipboard.writeText($("#invite-code").text());
-})
+});
 $("#invite-url-copy").on("click", () => {
   navigator.clipboard.writeText($("#invite-url").text());
 });

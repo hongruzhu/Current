@@ -4,12 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Current - <%= roomId %></title>
+    <link href="./src/style.css" rel="stylesheet">
     <link href="./src/output.css" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"
       integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios@1.1.2/dist/axios.min.js"></script>
   </head>
   <body>
+    <div id="loading" class="fixed h-screen w-screen top-0 left-0 flex items-center justify-center z-10 bg-gray-500 bg-opacity-25">
+      <span class="loader"></span>
+    </div>
     <div id="navbar" class="relative flex top-0 left-0 h-24 w-full px-[32px] py-[16px] bg-white items-center">
       <a class="flex-none bg-[url('../images/logo.png')] w-[190px] h-[48px] bg-contain" href="./"></a>
       <div id="sign" class="flex-1 text-right text-lg">

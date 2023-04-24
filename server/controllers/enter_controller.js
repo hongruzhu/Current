@@ -28,19 +28,8 @@ const getRoomId = async (req, res) => {
   res.redirect(`./createRoom?roomId=${roomId}`);
 };
 
-const createRoomPage = async (req,res) => {
+const createRoomPage = async (req, res) => {
   res.render("createRoom", {
-    roomId: req.query.roomId,
-  });
-}
-
-const verifyRoomId = async (req, res) => {
-  const checkRoomId = await redis.hexists("room", req.query.roomId);
-  if (checkRoomId === 0) {
-    res.render("wrongNumber");
-    return;
-  }
-  res.render("enterRoom", {
     roomId: req.query.roomId,
   });
 };
@@ -55,7 +44,7 @@ const createRoom = async (req, res) => {
     res.render("wrongNumber");
     return;
   }
-  res.redirect(`./concall?roomId=${roomId}`);
+  res.redirect(`./concall?roomId=${roomId}&create=true`);
 };
 
 const enterRoom = async (req, res) => {
@@ -70,10 +59,25 @@ const enterRoom = async (req, res) => {
     res.render("wrongNumber");
     return;
   }
-  
+
   res.render("concall", {
     roomId: req.query.roomId,
   });
-}
+};
+
+const verifyRoomId = async (req, res) => {
+  console.log(req.query);
+  const { roomId, create } = req.query;
+  const checkRoomId = await redis.hexists("room", roomId);
+  if (checkRoomId === 0) {
+    res.render("wrongNumber");
+    return;
+  }
+  if (create === "true") {
+    res.render("concall", { roomId });
+    return;
+  }
+  res.render("enterRoom", { roomId });
+};
 
 export { getRoomId, createRoomPage, createRoom, verifyRoomId, enterRoom };

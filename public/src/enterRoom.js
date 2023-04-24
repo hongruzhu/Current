@@ -1,3 +1,7 @@
+window.addEventListener("load", () => {
+  $("#loading").remove();
+});
+
 const accessToken = localStorage.getItem("accessToken");
 if (accessToken) {
   $("input[name='accessToken']").val(accessToken);
@@ -15,6 +19,20 @@ if (accessToken) {
     `<a id="signin" type="button" href="./signin" class="text-orange-700 hover:text-white border border-orange-700 hover:bg-orange-800 focus:ring-4 focus:outline-none focus:ring-orange-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-orange-500 dark:focus:ring-orange-800">登入</a>`
   );
 }
+
+const urlParams = new URLSearchParams(window.location.search);
+const roomId = urlParams.get("roomId");
+$("#enter-room").on("click", (e) => {
+  const name = $("input[name='name']").val();
+  if (!name) {
+    e.preventDefault();
+    alert("請輸入姓名");
+    return;
+  }
+  localStorage.setItem(`name-${roomId}`, name);
+  localStorage.setItem(`cameraStatus-${roomId}`, cameraStatus);
+  localStorage.setItem(`micStatus-${roomId}`, micStatus);
+});
 
 const myWebcamStream = await navigator.mediaDevices.getUserMedia({
   video: {
@@ -72,20 +90,6 @@ $("#mute-mic").on("click", () => {
     .removeClass("bg-red-600")
     .addClass("bg-transparent border border-white hover:bg-white");
   micStatus = true;
-});
-
-const urlParams = new URLSearchParams(window.location.search);
-const roomId = urlParams.get("roomId");
-$("#enter-room").on("click", (e) => {
-  const name = $("input[name='name']").val();
-  if (!name) {
-    e.preventDefault();
-    alert("請輸入姓名");
-    return;
-  }
-  localStorage.setItem(`name-${roomId}`, name);
-  localStorage.setItem(`cameraStatus-${roomId}`, cameraStatus);
-  localStorage.setItem(`micStatus-${roomId}`, micStatus);
 });
 
 $("#signin").click(() => {
