@@ -35,7 +35,7 @@ const createRoomPage = async (req, res) => {
 };
 
 const createRoom = async (req, res) => {
-  // TODO:存會議資料
+  // TODO:存會議資料到database
   // console.log(req.body, req.payload);
   const roomId = req.query.roomId;
   const title = req.body.title;
@@ -59,14 +59,12 @@ const enterRoom = async (req, res) => {
     res.render("wrongNumber");
     return;
   }
-
   res.render("concall", {
     roomId: req.query.roomId,
   });
 };
 
 const verifyRoomId = async (req, res) => {
-  console.log(req.query);
   const { roomId, create } = req.query;
   const checkRoomId = await redis.hexists("room", roomId);
   if (checkRoomId === 0) {
@@ -74,6 +72,8 @@ const verifyRoomId = async (req, res) => {
     return;
   }
   if (create === "true") {
+    const startTime = Date.now();
+    redis.hset("startTime", roomId, startTime);
     res.render("concall", { roomId });
     return;
   }

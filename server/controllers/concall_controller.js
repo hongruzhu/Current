@@ -9,4 +9,14 @@ const deleteRoomId = (roomId) => {
   redis.hdel("room", roomId);
 }
 
-export { reviseRoomUserNumber, deleteRoomId };
+const deleteStartTime = (roomId) => {
+  redis.hdel("startTime", roomId);
+}
+
+const getStartTime = async (req, res) => {
+  const { roomId } = req.query;
+  const startTime = await redis.hget("startTime", roomId);
+  res.send(startTime);
+};
+
+export { reviseRoomUserNumber, deleteRoomId, getStartTime, deleteStartTime };

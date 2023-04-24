@@ -27,8 +27,9 @@ app.use(cors());
 import { index_route } from "./server/routes/index_route.js";
 import { user_route } from "./server/routes/user_route.js";
 import { enter_route } from "./server/routes/enter_route.js";
+import { concall_route } from "./server/routes/concall_route.js";
 
-app.use(index_route, user_route, enter_route);
+app.use(index_route, user_route, enter_route, concall_route);
 
 // Socket.IO routes
 import { conferenceCall } from "./server/routes/concall_route.js";

@@ -1,5 +1,5 @@
 // 引入共用的變數
-import { roomId, myName, socket, startTime } from "./constant.js";
+import { roomId, myName, socket } from "./constant.js";
 
 /* ----------------------------- Step 1: 獲取自己視訊畫面的stream ----------------------------- */
 

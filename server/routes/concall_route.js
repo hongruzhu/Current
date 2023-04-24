@@ -1,6 +1,11 @@
+import express from "express";
+const router = express.Router();
+import { wrapAsync } from "../util/util.js";
 import {
   reviseRoomUserNumber,
   deleteRoomId,
+  getStartTime,
+  deleteStartTime,
 } from "../controllers/concall_controller.js";
 
 const conferenceCall = (io, socket) => {
@@ -15,6 +20,7 @@ const conferenceCall = (io, socket) => {
       const count = await reviseRoomUserNumber(roomId, -1);
       if (count === 0) {
         deleteRoomId(roomId);
+        deleteStartTime(roomId);
       }
     });
   });
@@ -27,10 +33,13 @@ const conferenceCall = (io, socket) => {
 
   socket.on("mute-mic", (roomId, peerId) => {
     socket.to(roomId).emit("mute-mic", peerId);
-  })
+  });
   socket.on("unmute-mic", (roomId, peerId) => {
     socket.to(roomId).emit("unmute-mic", peerId);
-  })
-}
+  });
+};
+
+router.route("/getStartTime").get(wrapAsync(getStartTime));
 
 export { conferenceCall };
+export { router as concall_route };
