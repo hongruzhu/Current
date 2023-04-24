@@ -12,7 +12,6 @@ const socket = io();
 if (createStatus) {
   const domain = window.location.host;
   const protocol = window.location.protocol;
-  console.log(domain, protocol);
   history.replaceState(
     null,
     "",
