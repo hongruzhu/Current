@@ -17,7 +17,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation/selfie_segmentation.js"
       crossorigin="anonymous"></script>
   </head>
-  <body>
+  <body class="bg-white">
     <div id="loading"
       class="fixed h-screen w-screen top-0 left-0 flex items-center justify-center z-10 bg-gray-500 bg-opacity-25">
       <span class="loader"></span>
@@ -30,14 +30,17 @@
           <span class="absolute z-10 bottom-0 left-0 px-4 py-3 text-base text-white text-shadow">你</span>
         </div>
       </div>
+      <div id="share-screen">
+
+      </div>
       <div id="right-block" class="hidden w-1/4 h-full ml-2 min-w-[250px]">
         <div id="chat-room" class="relative w-full h-full bg-gray-200 rounded-lg drop-shadow-md overflow-hidden">
           <div id="messenges" class="absolute top-0 w-full h-[calc(100%-70px)] p-1.5 overflow-y-scroll"></div>
           <form id="chat" class="absolute bottom-0 w-full p-1.5">
             <label for="chat" class="sr-only">Your message</label>
-            <div class="flex items-center px-1 py-2 rounded-lg bg-gray-100 dark:bg-gray-700">
+            <div class="flex items-center px-1 py-2 rounded-lg bg-gray-100">
               <button type="button"
-                class="hidden inline-flex justify-center p-2 text-gray-500 rounded-lg cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600">
+                class="hidden inline-flex justify-center p-2 text-gray-500 rounded-lg cursor-pointer hover:text-gray-900 hover:bg-gray-100">
                 <svg aria-hidden="true" class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"
                   xmlns="http://www.w3.org/2000/svg">
                   <path fill-rule="evenodd"
@@ -46,9 +49,9 @@
                 </svg>
                 <span class="sr-only">Upload image</span>
               </button>
-              <textarea id="messenge-input" rows="1" class="resize-none block mx-1 p-2.5 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Your message..."></textarea>
+              <textarea id="messenge-input" rows="1" class="resize-none block mx-1 p-2.5 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500" placeholder="Your message..."></textarea>
               <button type="submit"
-                class="inline-flex justify-center p-2 text-blue-600 rounded-full cursor-pointer hover:bg-blue-100 dark:text-blue-500 dark:hover:bg-gray-600">
+                class="inline-flex justify-center p-2 text-blue-600 rounded-full cursor-pointer hover:bg-blue-100">
                 <svg aria-hidden="true" class="w-6 h-6 rotate-90" fill="currentColor" viewBox="0 0 20 20"
                   xmlns="http://www.w3.org/2000/svg">
                   <path
@@ -62,8 +65,8 @@
         </div>
       </div>
     </div>
-    <div id="function-bar" class="fixed bottom-0 left-0 z-50 grid w-full h-16 grid-cols-1 px-8 bg-white border-t border-gray-200 md:grid-cols-3 dark:bg-gray-700 dark:border-gray-600">
-      <div class="items-center justify-center hidden mr-auto text-gray-500 dark:text-gray-400 md:flex">
+    <div id="function-bar" class="fixed bottom-0 left-0 z-50 grid w-full h-16 grid-cols-1 px-8 bg-white border-t border-gray-200 md:grid-cols-3">
+      <div class="items-center justify-center hidden mr-auto text-gray-500 md:flex">
         <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"
           aria-hidden="true">
           <path clip-rule="evenodd" fill-rule="evenodd"
@@ -74,8 +77,8 @@
       </div>
       <div class="flex items-center justify-center mx-auto">
         <button id="mute-mic" data-tooltip-target="tooltip-microphone" type="button"
-          class="p-2.5 group bg-gray-100 rounded-full hover:bg-gray-200 mr-4 dark:bg-gray-600 dark:hover:bg-gray-800">
-          <svg class="w-5 h-5 text-green-500 dark:text-gray-300 group-hover:text-green-500 dark:group-hover:text-white"
+          class="p-2.5 group bg-gray-100 rounded-full hover:bg-gray-200 mr-4">
+          <svg class="w-5 h-5 text-green-500 group-hover:text-green-500"
             fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
             <path clip-rule="evenodd" fill-rule="evenodd"
               d="M7 4a3 3 0 016 0v4a3 3 0 11-6 0V4zm4 10.93A7.001 7.001 0 0017 8a1 1 0 10-2 0A5 5 0 015 8a1 1 0 00-2 0 7.001 7.001 0 006 6.93V17H6a1 1 0 100 2h8a1 1 0 100-2h-3v-2.07z">
@@ -84,13 +87,13 @@
           <span class="sr-only">Mute microphone</span>
         </button>
         <div id="tooltip-microphone" role="tooltip"
-          class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+          class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip">
           Mute microphone
           <div class="tooltip-arrow" data-popper-arrow></div>
         </div>
         <button id="hide-camera" data-tooltip-target="tooltip-camera" type="button"
-          class="p-2.5 bg-gray-100 group rounded-full hover:bg-gray-200 mr-4 dark:bg-gray-600 dark:hover:bg-gray-800">
-          <svg class="w-5 h-5 text-green-500 dark:text-gray-300 group-hover:text-green-500 dark:group-hover:text-white"
+          class="p-2.5 bg-gray-100 group rounded-full hover:bg-gray-200 mr-4">
+          <svg class="w-5 h-5 text-green-500 group-hover:text-green-500"
             fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
             <path
               d="M2 6a2 2 0 012-2h6a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V6zM14.553 7.106A1 1 0 0014 8v4a1 1 0 00.553.894l2 1A1 1 0 0018 13V7a1 1 0 00-1.447-.894l-2 1z">
@@ -99,13 +102,13 @@
           <span class="sr-only">Hide camera</span>
         </button>
         <div id="tooltip-camera" role="tooltip"
-          class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+          class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip">
           Hide camera
           <div class="tooltip-arrow" data-popper-arrow></div>
         </div>
         <button data-tooltip-target="tooltip-feedback" type="button"
-          class="p-2.5 bg-gray-100 group rounded-full hover:bg-gray-200 mr-4 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:bg-gray-600 dark:hover:bg-gray-800">
-          <svg class="w-5 h-5 text-gray-500 dark:text-gray-300 group-hover:text-gray-900 dark:group-hover:text-white"
+          class="p-2.5 bg-gray-100 group rounded-full hover:bg-gray-200 mr-4 focus:outline-none focus:ring-4 focus:ring-gray-200">
+          <svg class="w-5 h-5 text-gray-500 group-hover:text-gray-900"
             fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
             <path fill-rule="evenodd"
               d="M2 4.25A2.25 2.25 0 014.25 2h11.5A2.25 2.25 0 0118 4.25v8.5A2.25 2.25 0 0115.75 15h-3.105a3.501 3.501 0 001.1 1.677A.75.75 0 0113.26 18H6.74a.75.75 0 01-.484-1.323A3.501 3.501 0 007.355 15H4.25A2.25 2.25 0 012 12.75v-8.5zm1.5 0a.75.75 0 01.75-.75h11.5a.75.75 0 01.75.75v7.5a.75.75 0 01-.75.75H4.25a.75.75 0 01-.75-.75v-7.5z"
@@ -114,8 +117,8 @@
           <span class="sr-only">Share screen</span>
         </button>
         <button data-tooltip-target="tooltip-feedback" type="button"
-          class="p-2.5 bg-gray-100 group rounded-full hover:bg-gray-200 mr-4 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:bg-gray-600 dark:hover:bg-gray-800">
-          <svg class="w-5 h-5 text-gray-500 dark:text-gray-300 group-hover:text-gray-900 dark:group-hover:text-white"
+          class="p-2.5 bg-gray-100 group rounded-full hover:bg-gray-200 mr-4 focus:outline-none focus:ring-4 focus:ring-gray-200">
+          <svg class="w-5 h-5 text-gray-500 group-hover:text-gray-900"
             fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
             <path clip-rule="evenodd" fill-rule="evenodd"
               d="M10 18a8 8 0 100-16 8 8 0 000 16zM7 9a1 1 0 100-2 1 1 0 000 2zm7-1a1 1 0 11-2 0 1 1 0 012 0zm-.464 5.535a1 1 0 10-1.415-1.414 3 3 0 01-4.242 0 1 1 0 00-1.415 1.414 5 5 0 007.072 0z">
@@ -124,13 +127,13 @@
           <span class="sr-only">Share feedback</span>
         </button>
         <div id="tooltip-feedback" role="tooltip"
-          class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+          class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip">
           Share feedback
           <div class="tooltip-arrow" data-popper-arrow></div>
         </div>
         <button data-tooltip-target="tooltip-settings" type="button"
-          class="p-2.5 bg-gray-100 group rounded-full mr-4 md:mr-0 hover:bg-gray-200 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:bg-gray-600 dark:hover:bg-gray-800">
-          <svg class="w-5 h-5 text-gray-500 dark:text-gray-300 group-hover:text-gray-900 dark:group-hover:text-white"
+          class="p-2.5 bg-gray-100 group rounded-full mr-4 md:mr-0 hover:bg-gray-200 focus:outline-none focus:ring-4 focus:ring-gray-200">
+          <svg class="w-5 h-5 text-gray-500 group-hover:text-gray-900"
             fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
             <path
               d="M5 4a1 1 0 00-2 0v7.268a2 2 0 000 3.464V16a1 1 0 102 0v-1.268a2 2 0 000-3.464V4zM11 4a1 1 0 10-2 0v1.268a2 2 0 000 3.464V16a1 1 0 102 0V8.732a2 2 0 000-3.464V4zM16 3a1 1 0 011 1v7.268a2 2 0 010 3.464V16a1 1 0 11-2 0v-1.268a2 2 0 010-3.464V4a1 1 0 011-1z">
@@ -139,31 +142,31 @@
           <span class="sr-only">Video settings</span>
         </button>
         <div id="tooltip-settings" role="tooltip"
-          class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+          class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip">
           Video settings
           <div class="tooltip-arrow" data-popper-arrow></div>
         </div>
         <button id="moreOptionsDropdownButton" data-dropdown-toggle="moreOptionsDropdown" type="button"
-          class="p-2.5 bg-gray-100 md:hidden group rounded-full hover:bg-gray-200 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:bg-gray-600 dark:hover:bg-gray-800">
-          <svg class="w-5 h-5 text-gray-500 dark:text-gray-300 group-hover:text-gray-900 dark:group-hover:text-white"
+          class="p-2.5 bg-gray-100 md:hidden group rounded-full hover:bg-gray-200 focus:outline-none focus:ring-4 focus:ring-gray-200">
+          <svg class="w-5 h-5 text-gray-500 group-hover:text-gray-900"
             fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
             <path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z"></path>
           </svg>
           <span class="sr-only">Show options</span>
         </button>
         <div id="moreOptionsDropdown"
-          class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600">
-          <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="moreOptionsDropdownButton">
+          class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44">
+          <ul class="py-2 text-sm text-gray-700" aria-labelledby="moreOptionsDropdownButton">
             <li>
-              <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Show
+              <a href="#" class="block px-4 py-2 hover:bg-gray-100">Show
                 participants</a>
             </li>
             <li>
-              <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Adjust
+              <a href="#" class="block px-4 py-2 hover:bg-gray-100">Adjust
                 volume</a>
             </li>
             <li>
-              <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Show
+              <a href="#" class="block px-4 py-2 hover:bg-gray-100">Show
                 information</a>
             </li>
           </ul>
@@ -171,8 +174,8 @@
       </div>
       <div class="items-center justify-center hidden ml-auto md:flex">
         <button data-tooltip-target="tooltip-participants" type="button"
-          class="p-2.5 group rounded-full hover:bg-gray-100 mr-1 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-600 dark:hover:bg-gray-600">
-          <svg class="w-5 h-5 text-gray-500 dark:text-gray-300 group-hover:text-gray-900 dark:group-hover:text-white"
+          class="p-2.5 group rounded-full hover:bg-gray-100 mr-1 focus:outline-none focus:ring-4 focus:ring-gray-200">
+          <svg class="w-5 h-5 text-gray-500 group-hover:text-gray-900"
             fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
             <path
               d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z">
@@ -181,13 +184,13 @@
           <span class="sr-only">Show participants</span>
         </button>
         <div id="tooltip-participants" role="tooltip"
-          class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+          class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip">
           Show participants
           <div class="tooltip-arrow" data-popper-arrow></div>
         </div>
         <button id="chat-room-btn" data-tooltip-target="tooltip-volume" type="button"
-          class="p-2.5 group rounded-full hover:bg-gray-100 mr-1 dark:hover:bg-gray-600">
-          <svg class="w-5 h-5 text-gray-500 dark:text-gray-300 group-hover:text-gray-900 dark:group-hover:text-white"
+          class="p-2.5 group rounded-full hover:bg-gray-100 mr-1">
+          <svg class="w-5 h-5 text-gray-500 group-hover:text-gray-900"
             fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
             <path fill-rule="evenodd"
               d="M10 2c-2.236 0-4.43.18-6.57.524C1.993 2.755 1 4.014 1 5.426v5.148c0 1.413.993 2.67 2.43 2.902 1.168.188 2.352.327 3.55.414.28.02.521.18.642.413l1.713 3.293a.75.75 0 001.33 0l1.713-3.293a.783.783 0 01.642-.413 41.102 41.102 0 003.55-.414c1.437-.231 2.43-1.49 2.43-2.902V5.426c0-1.413-.993-2.67-2.43-2.902A41.289 41.289 0 0010 2zM6.75 6a.75.75 0 000 1.5h6.5a.75.75 0 000-1.5h-6.5zm0 2.5a.75.75 0 000 1.5h3.5a.75.75 0 000-1.5h-3.5z"
@@ -196,13 +199,13 @@
           <span class="sr-only">Chat room</span>
         </button>
         <div id="tooltip-volume" role="tooltip"
-          class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+          class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip">
           Adjust volume
           <div class="tooltip-arrow" data-popper-arrow></div>
         </div>
         <button data-tooltip-target="tooltip-information" type="button"
-          class="p-2.5 group rounded-full hover:bg-gray-100 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-600 dark:hover:bg-gray-600">
-          <svg class="w-5 h-5 text-gray-500 dark:text-gray-300 group-hover:text-gray-900 dark:group-hover:text-white"
+          class="p-2.5 group rounded-full hover:bg-gray-100 focus:outline-none focus:ring-4 focus:ring-gray-200">
+          <svg class="w-5 h-5 text-gray-500 group-hover:text-gray-900"
             fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
             <path clip-rule="evenodd" fill-rule="evenodd"
               d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z">
@@ -211,7 +214,7 @@
           <span class="sr-only">Show information</span>
         </button>
         <div id="tooltip-information" role="tooltip"
-          class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+          class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip">
           Show information
           <div class="tooltip-arrow" data-popper-arrow></div>
         </div>

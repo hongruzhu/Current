@@ -20,11 +20,11 @@ socket.on("chat-message", (name, msg) => {
 function addMessage(name, msg, time) {
   $("#messenges").append(`
     <div class="chat chat-start">
-      <div class="chat-header">
+      <div class="chat-header text-black">
         ${name}
         <time class="text-xs opacity-50">${time}</time>
       </div>
-      <div class="chat-bubble">${msg}</div>
+      <div class="chat-bubble text-white">${msg}</div>
     </div>
   `);
   // 隨時顯示最新訊息

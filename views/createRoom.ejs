@@ -10,7 +10,7 @@
       integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios@1.1.2/dist/axios.min.js"></script>
   </head>
-  <body>
+  <body class="h-screen w-screen bg-white">
     <div id="loading"
       class="fixed h-screen w-screen top-0 left-0 flex items-center justify-center z-10 bg-gray-500 bg-opacity-25">
       <span class="loader"></span>
@@ -29,8 +29,8 @@
           <div id="myVideo" class="relative flex justify-center items-center">
             <video class="transform-rotateY-180"></video>
             <button id="hide-camera" data-tooltip-target="tooltip-camera" type="button"
-              class="absolute bottom-5 right-[42%] p-[2%] bg-transparent border border-white group rounded-full hover:bg-white hover:bg-opacity-50 dark:bg-gray-600 dark:hover:bg-gray-800">
-              <svg class="w-6 h-6 text-white dark:text-gray-300 dark:group-hover:text-white"
+              class="absolute bottom-5 right-[42%] p-[2%] bg-transparent border border-white group rounded-full hover:bg-white hover:bg-opacity-50">
+              <svg class="w-6 h-6 text-white"
                 fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                 <path
                   d="M2 6a2 2 0 012-2h6a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V6zM14.553 7.106A1 1 0 0014 8v4a1 1 0 00.553.894l2 1A1 1 0 0018 13V7a1 1 0 00-1.447-.894l-2 1z">
@@ -39,8 +39,8 @@
               <span class="sr-only">Hide camera</span>
             </button>
             <button id="mute-mic" data-tooltip-target="tooltip-microphone" type="button"
-              class="absolute bottom-5 left-[42%] p-[2%] group bg-transparent border border-white rounded-full hover:bg-white hover:bg-opacity-50 dark:bg-gray-600 dark:hover:bg-gray-800">
-              <svg class="w-6 h-6 text-white dark:text-gray-300 dark:group-hover:text-white"
+              class="absolute bottom-5 left-[42%] p-[2%] group bg-transparent border border-white rounded-full hover:bg-white hover:bg-opacity-50">
+              <svg class="w-6 h-6 text-white"
                 fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                 <path clip-rule="evenodd" fill-rule="evenodd"
                   d="M7 4a3 3 0 016 0v4a3 3 0 11-6 0V4zm4 10.93A7.001 7.001 0 0017 8a1 1 0 10-2 0A5 5 0 015 8a1 1 0 00-2 0 7.001 7.001 0 006 6.93V17H6a1 1 0 100 2h8a1 1 0 100-2h-3v-2.07z">
@@ -53,29 +53,29 @@
         <div class="col-span-1 flex justify-center items-center flex-col">
           <form id="create-room" class="flex flex-col justify-center items-center" action="./createRoom?roomId=<%= roomId %>" method="post" >
             <input type="text" name="name">
-            <label for="large-input" class="block mb-2 text-xl font-medium text-gray-900 text-center dark:text-white">請輸入會議名稱 (可選)</label>
+            <label for="large-input" class="block mb-2 text-xl font-medium text-gray-900 text-center">請輸入會議名稱 (可選)</label>
             <input type="text" name="title"
-              class="block w-full p-4 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-md focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+              class="block w-full p-4 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-md focus:ring-blue-500 focus:border-blue-500">
             <label for="large-input"
-              class="block mt-6 mb-2 text-xl font-medium text-gray-900 text-center dark:text-white">需要幫您儲存會議資料嗎？</label>
-            <div class="form-control">
-              <label class="label cursor-pointer">
-                <span class="label-text mr-3">是</span>
-                <input type="radio" name="store-status" value="true" class="radio checked:bg-green-500 mr-3" checked />
-                <span class="label-text mr-3">否</span>
-                <input type="radio" name="store-status" value="false" class="radio checked:bg-red-500" checked />
-              </label>
+              class="block mt-6 mb-2 text-xl font-medium text-gray-900 text-center">需要幫您儲存會議資料嗎？</label>
+            <div class="flex items-center justify-center m-2">
+              <input id="default-radio-1" type="radio" value="true" name="store-status"
+                class="w-5 h-5 text-green-600 bg-gray-100 border-gray-300 focus:ring-green-500 focus:ring-2">
+              <label for="default-radio-1" class="ml-2 text-lg font-medium text-gray-900">是</label>
+              <input checked id="default-radio-2" type="radio" value="false" name="store-status"
+                class="ml-6 w-5 h-5 text-red-600 bg-gray-100 border-gray-300 focus:ring-red-500 focus:ring-2">
+              <label for="default-radio-2" class="ml-2 text-lg font-medium text-gray-900">否</label>
             </div>
             <button type="submit" id="enter-room"
-              class="text-white bg-yellow-400 hover:bg-yellow-500 focus:outline-none focus:ring-4 focus:ring-yellow-300 font-medium rounded-full text-sm px-5 py-2.5 text-center m-4 dark:focus:ring-yellow-900">創建會議</button>
+              class="text-white bg-yellow-400 hover:bg-yellow-500 focus:outline-none focus:ring-4 focus:ring-yellow-300 font-medium rounded-full text-lg px-5 py-2.5 text-center m-4">創建會議</button>
           </form>
           <label for="large-input"
-              class="block m-2 text-lg font-medium text-gray-900 text-center dark:text-white">會議邀請碼</label>
-          <div class="w-full flex items-center justify-center px-3 py-2 rounded-lg dark:bg-gray-700">
+              class="block m-2 text-lg font-medium text-gray-900 text-center">會議邀請碼</label>
+          <div class="w-full flex items-center justify-center px-3 py-2 rounded-lg">
             <span id="invite-code"
-              class="text-center h-auto block mx-2 p-2.5 w-[30%] text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"><%= roomId %></span>
+              class="text-center h-auto block mx-2 p-2.5 w-[30%] text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500"><%= roomId %></span>
             <button id="invite-code-copy"
-              class="inline-flex justify-center p-2 text-blue-600 rounded-lg cursor-pointer bg-gray-200 hover:bg-blue-100 dark:text-blue-500 dark:hover:bg-gray-600">
+              class="inline-flex justify-center p-2 text-blue-600 rounded-lg cursor-pointer bg-gray-200 hover:bg-blue-100">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5">
                 <path
                   d="M7 3.5A1.5 1.5 0 018.5 2h3.879a1.5 1.5 0 011.06.44l3.122 3.12A1.5 1.5 0 0117 6.622V12.5a1.5 1.5 0 01-1.5 1.5h-1v-3.379a3 3 0 00-.879-2.121L10.5 5.379A3 3 0 008.379 4.5H7v-1z" />
@@ -85,12 +85,12 @@
             </button>
           </div>
           <label for="large-input"
-            class="block m-2 text-lg font-medium text-gray-900 text-center dark:text-white">會議邀請連結</label>
-          <div class="w-full flex items-center justify-center px-3 py-2 rounded-lg dark:bg-gray-700">
+            class="block m-2 text-lg font-medium text-gray-900 text-center">會議邀請連結</label>
+          <div class="w-full flex items-center justify-center px-3 py-2 rounded-lg">
             <span id="invite-url"
-              class="inline-block text-center block mx-2 p-2.5 w-[60%] text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">https://currentmeet.com/enterRoom?roomId=<%= roomId %></span>
+              class="inline-block text-center block mx-2 p-2.5 w-[60%] text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500">https://currentmeet.com/enterRoom?roomId=<%= roomId %></span>
             <button id="invite-url-copy"
-              class="relative inline-flex justify-center p-2 text-blue-600 rounded-lg cursor-pointer bg-gray-200 hover:bg-blue-100 dark:text-blue-500 dark:hover:bg-gray-600">
+              class="relative inline-flex justify-center p-2 text-blue-600 rounded-lg cursor-pointer bg-gray-200 hover:bg-blue-100">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5">
                 <path
                   d="M7 3.5A1.5 1.5 0 018.5 2h3.879a1.5 1.5 0 011.06.44l3.122 3.12A1.5 1.5 0 0117 6.622V12.5a1.5 1.5 0 01-1.5 1.5h-1v-3.379a3 3 0 00-.879-2.121L10.5 5.379A3 3 0 008.379 4.5H7v-1z" />
