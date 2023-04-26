@@ -81,7 +81,7 @@ let myMicStatus = localStorage.getItem(`micStatus-${roomId}`) === "true";
 if (!myWebcamStatus) stopVideoTrack(myVideo.srcObject);
 if (!myMicStatus) stopMicTrack(myStream);
 
-/* ----------------------------- Step 2: 確定好要交換的stream後，開始處理Peer和Socket.IO連線，進行stream交換 ----------------------------- */
+/* ----------------------------- Step 2: 確定好要交換的stream後，開始處理Peer連線，進行stream交換 ----------------------------- */
 // Peer setup
 const myPeer = new Peer(undefined, {
   host: "currentmeet.com", // currentmeet.com
