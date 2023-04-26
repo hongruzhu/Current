@@ -1,17 +1,42 @@
 // 引入共用的變數
 import { roomId, myName, socket } from "./constant.js";
 
-/* ----------------------------- Step 1: 點選分享螢幕按鈕，獲取自己螢幕畫面的stream ----------------------------- */
+/* ----------------------------- Part 1: 點選分享螢幕按鈕，獲取自己螢幕畫面的stream ----------------------------- */
 $("#entire").on("click", async () => {
+  shareScreen("monitor");
+});
+
+$("#window").on("click", async () => {
+  shareScreen("window");
+});
+
+$("#paging").on("click", async () => {
+  shareScreen("browser");
+});
+
+async function shareScreen(surface) {
+  if ($("#share-screen video").length === 1) {
+    alert("現在有人分享螢幕，不能分享");
+    return;
+  }
+  socket.on("already-share-screen", (status) => {
+    if (status) alert("現在有人分享螢幕，不能分享");
+  });
+
+  let shareScreenStatus = true;
+
   closeShareScreenList();
   const myScreenStream = await navigator.mediaDevices.getDisplayMedia({
-    video: { cursor: "always" },
-    audio: true,
+    video: { cursor: "always", displaySurface: surface },
+    audio: true
   });
 
   const myScreen = document.createElement("video");
   myScreen.setAttribute("id", "myScreen");
-  myScreen.setAttribute("class", "h-full object-cover object-center");
+  myScreen.setAttribute(
+    "class",
+    "h-full aspect-video object-cover object-center"
+  );
   shareScreenLayout();
   $("#who-share-screen").text("你正在與所有人分享螢幕畫面");
   $("#share-screen-reminder").append(
@@ -19,21 +44,42 @@ $("#entire").on("click", async () => {
   );
   addShareScreen(myScreen, myScreenStream);
 
-  // Step 3: 結束分享螢幕的按鈕在開始分享後才會append上來，所以偵測點擊結束按鈕需append完的地方，不然不會載入
+  socket.emit("start-share-screen", roomId);
+  socket.on("give-peerScreenId", (peerId) => {
+    const options = {
+      metadata: { name: myName },
+    };
+    myPeerScreen.call(peerId, myScreenStream, options);
+  });
+
+  // Part 3: 結束分享螢幕的按鈕在開始分享後才會append上來，所以偵測點擊結束按鈕需append完的地方，不然不會載入
   $("#stop-share-screen").on("click", () => {
     socket.emit("stop-share-screen", roomId);
     originLayout();
     const myScreen = $("#share-screen video")[0];
     removeShareScreen(myScreen);
   });
-  
-  socket.emit("start-share-screen", roomId, myName);
-  socket.on("give-peerScreenId", (peerId) => {
-    myPeerScreen.call(peerId, myScreenStream);
-  });
-});
 
-/* ----------------------------- Step 2: 確定好要交換的stream後，開始處理Peer連線，進行stream交換 ----------------------------- */
+  // Part 3: 偵測瀏覽器內建的停止分享按鈕，以及分享的頁面被關閉，做出相對應的行爲
+  myScreenStream.getVideoTracks()[0].onended = () => {
+    socket.emit("stop-share-screen", roomId);
+    originLayout();
+    const myScreen = $("#share-screen video")[0];
+    removeShareScreen(myScreen);
+  };
+
+  // 若接收到新user進來的通知，自己是分享螢幕的人的話，傳送screen stream給user
+  socket.on("new-give-peerScreenId", (peerId) => {
+    if (shareScreenStatus) {
+      const options = {
+        metadata: { name: myName },
+      };
+      myPeerScreen.call(peerId, myScreenStream, options);
+    }
+  });
+}
+
+/* ----------------------------- Part 2: 確定好要交換的stream後，開始處理Peer連線，進行stream交換 ----------------------------- */
 
 const myPeerScreen = new Peer(undefined, {
   host: "currentmeet.com", // currentmeet.com
@@ -45,23 +91,30 @@ const myPeerScreen = new Peer(undefined, {
 let myPeerScreenId;
 myPeerScreen.on("open", (peerId) => {
   myPeerScreenId = peerId;
+  // 新user進來，傳送自己的myPeerScreenId給聊天室所有人
+  socket.emit("new-give-peerScreenId", roomId, myPeerScreenId);
 });
 
 myPeerScreen.on("call", (call) => {
   call.answer();
+  // 抓取分享user的名字
+  const { name } = call.metadata;
+  $("#who-share-screen").text(`${name}正在與所有人分享螢幕畫面`);
   const shareUserPeerId = call.peer;
   const userScreen = document.createElement("video");
   userScreen.setAttribute("id", shareUserPeerId);
-  userScreen.setAttribute("class", "h-full object-cover object-center");
+  userScreen.setAttribute(
+    "class",
+    "h-[80%] aspect-video object-cover object-center"
+  );
   call.on("stream", (stream) => {
     shareScreenLayout();
     addShareScreen(userScreen, stream);
   });
 });
 
-socket.on("start-share-screen", (socketId, name) => {
+socket.on("start-share-screen", (socketId) => {
   socket.emit("give-peerScreenId", socketId, myPeerScreenId);
-  $("#who-share-screen").text(`${name}正在與所有人分享螢幕畫面`);
 });
 
 // 把共享螢幕append到html上的function
@@ -90,14 +143,7 @@ function shareScreenLayout() {
     .addClass("relative w-[20%] aspect-video overflow-hidden bg-gray-100");
 }
 
-/* ----------------------------- Step 3: 點選停止螢幕按鈕，回到原始畫面的function們 ----------------------------- */
-// $("#stop-share-screen").on("click", () => {
-//   socket.emit("stop-share-screen", roomId);
-//   originLayout();
-//   const myScreen = $("#share-screen video")[0];
-//   removeShareScreen(myScreen);
-// });
-
+/* ----------------------------- Part 3: 點選停止螢幕按鈕，回到原始畫面的function們 ----------------------------- */
 socket.on("stop-share-screen", () => {
   originLayout();
   const userScreen = $("#share-screen video")[0];
@@ -111,7 +157,6 @@ function removeShareScreen(screen) {
   screen.srcObject = null;
   $("#share-screen video").remove();
   $("#who-share-screen").text("");
-  console.log($("#stop-share-screen").length);
   if ($("#stop-share-screen").length === 1) {
     $("#stop-share-screen").remove();
   }

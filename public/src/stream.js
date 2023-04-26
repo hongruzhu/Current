@@ -126,8 +126,6 @@ myPeer.on("call", async (call) => {
 
 socket.on("user-connected", async (peerId, name, socketId) => {
   connectToNewUser(peerId, name, myStream);
-  // TODO:如果是host，傳現在的時間戳記給new user
-  
 });
 
 // 若有user離開，移除他的視訊畫面
@@ -158,10 +156,19 @@ function connectToNewUser(peerId, name, stream) {
 
 // Append包裹視訊的div到html上的function
 function addVideoGridElement(peerId) {
-  const videoGridElement = $("<div>", {
-    id: peerId,
-    class: "relative pb-[56.25%] overflow-hidden h-0 bg-gray-100",
-  });
+  let videoGridElement;
+  // 如果處於分享螢幕狀態，新user的視訊畫面css需調整
+  if ($("#share-screen video").length === 1) {
+    videoGridElement = $("<div>", {
+      id: peerId,
+      class: "relative w-[20%] aspect-video overflow-hidden bg-gray-100",
+    });
+  } else {
+    videoGridElement = $("<div>", {
+      id: peerId,
+      class: "relative pb-[56.25%] overflow-hidden h-0 bg-gray-100",
+    });
+  }
   $("#display").append(videoGridElement);
 }
 

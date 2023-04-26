@@ -13,10 +13,20 @@ const deleteStartTime = (roomId) => {
   redis.hdel("startTime", roomId);
 }
 
+const deleteShareScreenStatus = (roomId) => {
+  redis.hdel("shareScreenStatus", roomId);
+};
+
 const getStartTime = async (req, res) => {
   const { roomId } = req.query;
   const startTime = await redis.hget("startTime", roomId);
   res.send(startTime);
 };
 
-export { reviseRoomUserNumber, deleteRoomId, getStartTime, deleteStartTime };
+export {
+  reviseRoomUserNumber,
+  deleteRoomId,
+  getStartTime,
+  deleteStartTime,
+  deleteShareScreenStatus,
+};
