@@ -105,7 +105,7 @@ myPeerScreen.on("call", (call) => {
   userScreen.setAttribute("id", shareUserPeerId);
   userScreen.setAttribute(
     "class",
-    "h-[80%] aspect-video object-cover object-center"
+    "h-full aspect-video object-cover object-center"
   );
   call.on("stream", (stream) => {
     shareScreenLayout();
