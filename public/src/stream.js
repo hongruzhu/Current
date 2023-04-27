@@ -157,7 +157,7 @@ function connectToNewUser(peerId, name, stream) {
 // Append包裹視訊的div到html上的function
 function addVideoGridElement(peerId) {
   let videoGridElement;
-  // 如果處於分享螢幕狀態，新user的視訊畫面css需調整
+  // FIXME:不能以偵測分享螢幕渲染了沒當基準，渲染常常比append視訊要慢
   if ($("#share-screen video").length === 1) {
     videoGridElement = $("<div>", {
       id: peerId,

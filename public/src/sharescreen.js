@@ -35,7 +35,7 @@ async function shareScreen(surface) {
   myScreen.setAttribute("id", "myScreen");
   myScreen.setAttribute(
     "class",
-    "h-full aspect-video object-cover object-center"
+    "h-full aspect-video"
   );
   shareScreenLayout();
   $("#who-share-screen").text("你正在與所有人分享螢幕畫面");
@@ -105,7 +105,7 @@ myPeerScreen.on("call", (call) => {
   userScreen.setAttribute("id", shareUserPeerId);
   userScreen.setAttribute(
     "class",
-    "h-full aspect-video object-cover object-center"
+    "h-full aspect-video"
   );
   call.on("stream", (stream) => {
     shareScreenLayout();
