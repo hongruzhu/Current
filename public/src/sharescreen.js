@@ -38,7 +38,7 @@ async function shareScreen(surface) {
   myScreen.setAttribute("id", "myScreen");
   myScreen.setAttribute(
     "class",
-    "h-[calc(100%-6.75rem)] aspect-video"
+    "absolute max-w-full max-h-full w-auto h-auto top-1/2 left-1/2 transform-center"
   );
   shareScreenLayout();
   $("#who-share-screen").text("你正在與所有人分享螢幕畫面");
@@ -108,7 +108,10 @@ myPeerScreen.on("call", (call) => {
   const shareUserPeerId = call.peer;
   const userScreen = document.createElement("video");
   userScreen.setAttribute("id", shareUserPeerId);
-  userScreen.setAttribute("class", "h-[calc(100%-6.75rem)] aspect-video");
+  userScreen.setAttribute(
+    "class",
+    "absolute max-w-full max-h-full w-auto h-auto top-1/2 left-1/2 transform-center"
+  );
   call.on("stream", (stream) => {
     shareScreenLayout();
     addShareScreen(userScreen, stream);
@@ -125,7 +128,7 @@ function addShareScreen(video, stream) {
   video.addEventListener("loadedmetadata", () => {
     video.play();
     // FIXME:只有可以順利加載metadata的stream，video tag才會被append到網頁上，這樣便可以阻檔已經結束的share screen
-    $("#share-screen").append(video);
+    $("#share-screen-video").append(video);
   });
 }
 
@@ -137,7 +140,7 @@ function shareScreenLayout() {
   $("#left-block").addClass("h-full");
   $("#display")
     .removeClass("w-full h-full grid grid-cols-fluid-l gap-1 items-center")
-    .addClass("w-[90%] flex flex-grow gap-1 items-center mb-2");
+    .addClass("w-[90%] flex gap-1 items-center justify-center mb-2");
   $("#display div")
     .removeClass("relative pb-[56.25%] overflow-hidden h-0 bg-gray-100")
     .addClass("relative w-[20%] aspect-video overflow-hidden bg-gray-100");
@@ -168,10 +171,8 @@ function originLayout() {
   // 還原視訊部分css
   $("#left-block").removeClass("h-full");
   $("#display")
-    .removeClass("w-[90%] flex gap-1 items-center mb-2")
-    .addClass(
-      "w-full h-full grid grid-cols-fluid-l gap-1 items-center"
-    );
+    .removeClass("w-[90%] flex gap-1 items-center justify-center mb-2")
+    .addClass("w-full h-full grid grid-cols-fluid-l gap-1 items-center");
   $("#display div")
     .removeClass("relative w-[20%] aspect-video overflow-hidden bg-gray-100")
     .addClass("relative pb-[56.25%] overflow-hidden h-0 bg-gray-100");
