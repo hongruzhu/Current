@@ -1,6 +1,28 @@
 const accessToken = localStorage.getItem("accessToken");
+const headers = {
+  Authorization: `Bearer ${accessToken}`,
+};
 
-if (accessToken) {
+let logInStatus;
+try {
+  const result = await axios({
+    method: "get",
+    url: "./checkAccessToken",
+    headers,
+  });
+  console.log(result.data);
+  logInStatus = true;
+} catch(e) {
+  console.log(e.response.data);
+  localStorage.removeItem("accessToken");
+  localStorage.removeItem("userId");
+  localStorage.removeItem("userName");
+  localStorage.removeItem("userEmail");
+  logInStatus = false;
+}
+
+
+if (logInStatus) {
   $("#navbar").append(`
     <div class="px-2 ml-auto">
       <a id="signout" type="button" href="./"
