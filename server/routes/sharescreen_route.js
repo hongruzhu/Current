@@ -1,4 +1,9 @@
+import express from "express";
+const router = express.Router();
+import { wrapAsync } from "../util/util.js";
 import { redis } from "../util/cache.js";
+import { getShareScreenStatus } from "../controllers/sharescreen_controller.js";
+
 
 const shareScreen = (io, socket) => {
   socket.on("start-share-screen", async (roomId) => {
@@ -6,7 +11,7 @@ const shareScreen = (io, socket) => {
     if (status === "true") {
       socket.emit("already-share-screen", status);
       return;
-    } 
+    }
     redis.hset("shareScreenStatus", roomId, "true");
     const shareUserSocketId = socket.id;
     socket.to(roomId).emit("start-share-screen", shareUserSocketId);
@@ -26,4 +31,7 @@ const shareScreen = (io, socket) => {
   });
 };
 
+router.route("/getShareScreenStatus").post(wrapAsync(getShareScreenStatus));
+
 export { shareScreen };
+export { router as shareScreen_route };

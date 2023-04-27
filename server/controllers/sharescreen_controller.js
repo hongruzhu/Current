@@ -1,3 +1,9 @@
 import { redis } from "../util/cache.js";
 
-const setShareScreenStatus = async
+const getShareScreenStatus = async (req, res) => {
+  const { roomId } = req.body;
+  const status = await redis.hget("shareScreenStatus", roomId);
+  res.send(status);
+};
+
+export { getShareScreenStatus };

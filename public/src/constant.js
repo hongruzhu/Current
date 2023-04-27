@@ -8,6 +8,10 @@ const roomId = urlParams.get("roomId");
 const myName = localStorage.getItem(`name-${roomId}`);
 const socket = io();
 
+// 抓取會議室分享螢幕的狀態
+const result = await axios.post("./getShareScreenStatus", { roomId });
+const roomShareScreenStatus = result.data;
+
 // 若是創建新會議來到這，把url改成正常樣子
 if (createStatus) {
   const domain = window.location.host;
@@ -52,7 +56,7 @@ try {
   console.log(e);
 }
 
-export { roomId, myName, socket };
+export { roomId, myName, socket, roomShareScreenStatus };
 
 // function stopTimer() {
 //   cancelAnimationFrame(timerInterval);

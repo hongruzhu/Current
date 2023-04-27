@@ -1,6 +1,9 @@
 // 引入共用的變數
 import { roomId, myName, socket } from "./constant.js";
 
+// 自己分享螢幕的狀態
+let myShareScreenStatus;
+
 /* ----------------------------- Part 1: 點選分享螢幕按鈕，獲取自己螢幕畫面的stream ----------------------------- */
 $("#entire").on("click", async () => {
   shareScreen("monitor");
@@ -23,7 +26,7 @@ async function shareScreen(surface) {
     if (status) alert("現在有人分享螢幕，不能分享");
   });
 
-  let shareScreenStatus = true;
+  myShareScreenStatus = true;
 
   closeShareScreenList();
   const myScreenStream = await navigator.mediaDevices.getDisplayMedia({
@@ -58,6 +61,7 @@ async function shareScreen(surface) {
     originLayout();
     const myScreen = $("#share-screen video")[0];
     removeShareScreen(myScreen);
+    myShareScreenStatus = false;
   });
 
   // Part 3: 偵測瀏覽器內建的停止分享按鈕，以及分享的頁面被關閉，做出相對應的行爲
@@ -66,11 +70,12 @@ async function shareScreen(surface) {
     originLayout();
     const myScreen = $("#share-screen video")[0];
     removeShareScreen(myScreen);
+    myShareScreenStatus = false;
   };
 
   // 若接收到新user進來的通知，自己是分享螢幕的人的話，傳送screen stream給user
   socket.on("new-give-peerScreenId", (peerId) => {
-    if (shareScreenStatus) {
+    if (myShareScreenStatus) {
       const options = {
         metadata: { name: myName },
       };
