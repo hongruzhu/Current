@@ -38,7 +38,7 @@ async function shareScreen(surface) {
   myScreen.setAttribute("id", "myScreen");
   myScreen.setAttribute(
     "class",
-    "h-full aspect-video"
+    "h-[calc(100%-6.75rem)] aspect-video"
   );
   shareScreenLayout();
   $("#who-share-screen").text("你正在與所有人分享螢幕畫面");
@@ -108,10 +108,7 @@ myPeerScreen.on("call", (call) => {
   const shareUserPeerId = call.peer;
   const userScreen = document.createElement("video");
   userScreen.setAttribute("id", shareUserPeerId);
-  userScreen.setAttribute(
-    "class",
-    "h-full aspect-video"
-  );
+  userScreen.setAttribute("class", "h-[calc(100%-6.75rem)] aspect-video");
   call.on("stream", (stream) => {
     shareScreenLayout();
     addShareScreen(userScreen, stream);
@@ -139,10 +136,8 @@ function shareScreenLayout() {
   // 一點選分享螢幕，整個視訊部分css跟著大改
   $("#left-block").addClass("h-full");
   $("#display")
-    .removeClass(
-      "w-full h-full grid grid-cols-fluid-l gap-1 items-center justify-center"
-    )
-    .addClass("w-[90%] flex gap-1 items-center justify-center mb-2");
+    .removeClass("w-full h-full grid grid-cols-fluid-l gap-1 items-center")
+    .addClass("w-[90%] flex flex-grow gap-1 items-center mb-2");
   $("#display div")
     .removeClass("relative pb-[56.25%] overflow-hidden h-0 bg-gray-100")
     .addClass("relative w-[20%] aspect-video overflow-hidden bg-gray-100");
@@ -173,9 +168,9 @@ function originLayout() {
   // 還原視訊部分css
   $("#left-block").removeClass("h-full");
   $("#display")
-    .removeClass("w-[90%] flex gap-1 items-center justify-center mb-2")
+    .removeClass("w-[90%] flex gap-1 items-center mb-2")
     .addClass(
-      "w-full h-full grid grid-cols-fluid-l gap-1 items-center justify-center"
+      "w-full h-full grid grid-cols-fluid-l gap-1 items-center"
     );
   $("#display div")
     .removeClass("relative w-[20%] aspect-video overflow-hidden bg-gray-100")
