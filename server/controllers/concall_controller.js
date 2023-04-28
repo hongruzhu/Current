@@ -17,6 +17,10 @@ const deleteShareScreenStatus = (roomId) => {
   redis.hdel("shareScreenStatus", roomId);
 };
 
+const deleteWhiteboardStatus = (roomId) => {
+  redis.hdel("whiteboardStatus", roomId);
+};
+
 const getStartTime = async (req, res) => {
   const { roomId } = req.query;
   const startTime = await redis.hget("startTime", roomId);
@@ -29,4 +33,5 @@ export {
   getStartTime,
   deleteStartTime,
   deleteShareScreenStatus,
+  deleteWhiteboardStatus
 };

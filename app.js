@@ -29,8 +29,16 @@ import { user_route } from "./server/routes/user_route.js";
 import { enter_route } from "./server/routes/enter_route.js";
 import { concall_route } from "./server/routes/concall_route.js";
 import { shareScreen_route } from "./server/routes/sharescreen_route.js"; 
+import { whiteboard_route } from "./server/routes/whiteboard_route.js";
 
-app.use(index_route, user_route, enter_route, concall_route, shareScreen_route);
+app.use(
+  index_route,
+  user_route,
+  enter_route,
+  concall_route,
+  shareScreen_route,
+  whiteboard_route
+);
 
 // Socket.IO routes
 import { conferenceCall } from "./server/routes/concall_route.js";

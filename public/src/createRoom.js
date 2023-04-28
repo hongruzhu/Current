@@ -1,7 +1,3 @@
-window.addEventListener("load", () => {
-  $("#loading").remove();
-});
-
 const accessToken = localStorage.getItem("accessToken");
 const userName = localStorage.getItem("userName");
 $("input[name='name']").val(userName).addClass("hidden");
@@ -21,6 +17,7 @@ try {
   myVideo.addEventListener("loadedmetadata", async () => {
     await myVideo.play();
     $("#alert").remove();
+    $("#loading").remove();
   });
 
   let cameraStatus = true;

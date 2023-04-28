@@ -1,7 +1,3 @@
-window.addEventListener("load", () => {
-  $("#loading").remove();
-});
-
 const accessToken = localStorage.getItem("accessToken");
 const headers = {
   Authorization: `Bearer ${accessToken}`,
@@ -58,6 +54,7 @@ try {
   myVideo.addEventListener("loadedmetadata", () => {
     myVideo.play();
     $("#alert").remove();
+    $("#loading").remove();
   });
 
   const urlParams = new URLSearchParams(window.location.search);

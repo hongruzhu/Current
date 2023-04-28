@@ -1,5 +1,5 @@
 // 引入共用的變數
-import { roomId, myName, socket, roomShareScreenStatus } from "./constant.js";
+import { roomId, myName, socket, roomShareScreenStatus, roomWhiteboardStatus } from "./constant.js";
 
 /* ----------------------------- Step 1: 獲取自己視訊畫面的stream ----------------------------- */
 
@@ -158,7 +158,17 @@ function connectToNewUser(peerId, name, stream) {
 function addVideoGridElement(peerId) {
   let videoGridElement;
   // FIXME:不能只以偵測分享螢幕渲染了沒當基準，加上去redis抓分享螢幕狀態，才可以確保新user的渲染畫面正確
-  if (roomShareScreenStatus || $("#share-screen video").length === 1) {
+  if (roomShareScreenStatus === "true" || $("#share-screen video").length === 1) {
+    videoGridElement = $("<div>", {
+      id: peerId,
+      class: "relative w-[20%] aspect-video overflow-hidden bg-gray-100",
+    });
+  } else if (
+    (roomWhiteboardStatus !== "false" &&
+      roomWhiteboardStatus !== "" &&
+      roomWhiteboardStatus) ||
+    $("#whiteboard-reminder span").length === 1
+  ) {
     videoGridElement = $("<div>", {
       id: peerId,
       class: "relative w-[20%] aspect-video overflow-hidden bg-gray-100",

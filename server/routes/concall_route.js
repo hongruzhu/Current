@@ -6,7 +6,8 @@ import {
   deleteRoomId,
   getStartTime,
   deleteStartTime,
-  deleteShareScreenStatus
+  deleteShareScreenStatus,
+  deleteWhiteboardStatus,
 } from "../controllers/concall_controller.js";
 
 const conferenceCall = (io, socket) => {
@@ -23,6 +24,7 @@ const conferenceCall = (io, socket) => {
         deleteRoomId(roomId);
         deleteStartTime(roomId);
         deleteShareScreenStatus(roomId);
+        deleteWhiteboardStatus(roomId);
       }
     });
   });

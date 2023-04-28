@@ -1,18 +1,56 @@
 // 引入共用的變數
-import { roomId, myName, socket, roomShareScreenStatus } from "./constant.js";
+import { roomId, myName, socket, roomWhiteboardStatus } from "./constant.js";
 
 // 開啟小白板
 $("#start-whiteboard").on("click", async () => {
+  // 若有人分享小白版或螢幕，則不能分享
+  if ($("#whiteboard-reminder span").length === 1) {
+    alert("目前有人正在分享小白版，不能分享");
+    return;
+  }
+  if ($("#share-screen-video video").length === 1) {
+    alert("目前有人正在分享螢幕，不能分享小白版");
+    return;
+  }
   // 通知會議室其他人開啟小白版
-  socket.emit("start-whiteboard", roomId);
+  socket.emit("start-whiteboard", roomId, myName);
+  $("#whiteboard-reminder").append(`<span>&emsp;你正在共享小白版&emsp;</span>`);
+  $("#whiteboard").append(`          
+      <div id="whiteboard-stop-btn" class="absolute top-2 right-2 bg-gray-300 rounded-lg h-8 flex items-center">
+        <span class="text-yellow-800 hover:text-yellow-600 hover:cursor-pointer">&emsp;停止共享&emsp;</span>
+      </div>
+    `);
+  $("#whiteboard-stop-btn").on("click", () => {
+    socket.emit("stop-whiteboard", roomId)
+    originLayout();
+    $("#whiteboard-stop-btn").remove();
+  })
   await whiteboardLayout();
   await startWhiteboard();
 });
 
-socket.on("start-whiteboard", async () => {
+socket.on("start-whiteboard", async (name) => {
+  $("#whiteboard-reminder").append(`<span>&emsp;${name}正在共享小白版&emsp;</span>`);
   await whiteboardLayout();
   await startWhiteboard();
 });
+
+socket.on("stop-whiteboard", async () => {
+  originLayout();
+});
+
+// 新user剛進會議室時，偵測會議室是否已開啟小白版
+if (
+  roomWhiteboardStatus !== "false" &&
+  roomWhiteboardStatus !== "" &&
+  roomWhiteboardStatus
+) {
+  $("#whiteboard-reminder").append(
+    `<span>&emsp;${roomWhiteboardStatus}正在共享小白版&emsp;</span>`
+  );
+  await whiteboardLayout();
+  await startWhiteboard();
+}
 
 async function startWhiteboard() {
   // 抓取包裹canvas的div的寬，依16:9的比例設置div的長
@@ -22,7 +60,7 @@ async function startWhiteboard() {
   $("#my-whiteboard").attr("width", whiteboardWidth);
   $("#my-whiteboard").attr("height", whiteboardHeight);
 
-  // TODO:若包裹canvas的div的長寬變了，canvas的長寬要動態調整，但這想蠻細的，要實現非常有難度，先pending
+  // TODO:若包裹canvas的div的長寬變了，canvas的長寬要動態調整，但這蠻細的，要實現非常有難度，先pending
 
   // 開始畫畫
   const canvas = document.getElementById("my-whiteboard");
@@ -176,4 +214,21 @@ async function whiteboardLayout() {
   $("#display div")
     .removeClass("relative pb-[56.25%] overflow-hidden h-0 bg-gray-100")
     .addClass("relative w-[20%] aspect-video overflow-hidden bg-gray-100");
+}
+
+async function originLayout() {
+  // 還原canavs的長和寬，以及包裹canavs的div的長
+  $("#whiteboard").removeAttr("width");
+  $("#my-whiteboard").removeAttr("width height");
+  // 還原視訊部分css跟著大改
+  $("#whiteboard-reminder span").remove();
+  $("#display div")
+    .removeClass("relative w-[20%] aspect-video overflow-hidden bg-gray-100")
+    .addClass("relative pb-[56.25%] overflow-hidden h-0 bg-gray-100");
+  $("#display")
+    .removeClass("w-[90%] flex gap-1 items-center justify-center mb-2")
+    .addClass("w-full h-full grid grid-cols-fluid-l gap-1 items-center");
+  $("#left-block").removeClass("h-full");
+  // 隱藏小白板部分
+  $("#whiteboard").addClass("hidden");
 }

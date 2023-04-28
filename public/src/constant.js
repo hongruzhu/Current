@@ -9,8 +9,12 @@ const myName = localStorage.getItem(`name-${roomId}`);
 const socket = io();
 
 // 抓取會議室分享螢幕的狀態
-const result = await axios.post("./getShareScreenStatus", { roomId });
-const roomShareScreenStatus = result.data;
+const shareScreenResult = await axios.post("./getShareScreenStatus", { roomId });
+const roomShareScreenStatus = shareScreenResult.data;
+
+// 抓取會議室分享小白版的狀態
+const whiteboardResult = await axios.post("./getWhiteboardStatus", { roomId });
+const roomWhiteboardStatus = whiteboardResult.data;
 
 // 若是創建新會議來到這，把url改成正常樣子
 if (createStatus) {
@@ -56,7 +60,7 @@ try {
   console.log(e);
 }
 
-export { roomId, myName, socket, roomShareScreenStatus };
+export { roomId, myName, socket, roomShareScreenStatus, roomWhiteboardStatus };
 
 // function stopTimer() {
 //   cancelAnimationFrame(timerInterval);
