@@ -26,7 +26,7 @@
     </div>
     
     <div id="main" class="flex items-center justify-center h-[calc(100vh-4rem)] p-2">
-      <div id="left-block" class="w-[80%] flex flex-col items-center">
+      <div id="left-block" class="w-[78%] flex flex-col items-center">
         <div id="display" class="w-full h-full grid grid-cols-fluid-l gap-1 items-center">
           <div id="myVideo" class="relative pb-[56.25%] overflow-hidden h-0 bg-gray-100">
             <canvas width="1280" height="720" class="absolute w-full h-full t-0 l-0 transform-rotateY-180"></canvas>
@@ -40,11 +40,11 @@
           <div id="share-screen-video" class="relative w-full flex-[1_0_auto]">
           </div>
         </div>
-        <div id="whiteboard" class="hidden flex-[1_0_auto] relative w-full border-black border rounded-xl">
-          <canvas id="my-whiteboard"></canvas>
+        <div id="whiteboard" class="hidden flex-[1_0_auto] relative w-full flex justify-center">
+          <canvas id="my-whiteboard" class="border-black border rounded-xl"></canvas>
         </div>
       </div>
-      <div id="right-block" class="hidden w-1/4 h-full ml-2 min-w-[250px]">
+      <div id="right-block" class="hidden w-[22%] h-full pl-2 min-w-[250px]">
         <div id="chat-room" class="relative w-full h-full bg-gray-200 rounded-lg drop-shadow-md overflow-hidden">
           <div id="messenges" class="absolute top-0 w-full h-[calc(100%-70px)] p-1.5 overflow-y-scroll"></div>
           <form id="chat" class="absolute bottom-0 w-full p-1.5">

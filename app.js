@@ -36,11 +36,13 @@ app.use(index_route, user_route, enter_route, concall_route, shareScreen_route);
 import { conferenceCall } from "./server/routes/concall_route.js";
 import { chat } from "./server/routes/chat_route.js";
 import { shareScreen } from "./server/routes/sharescreen_route.js";
+import { whiteboard } from "./server/routes/whiteboard_route.js";
 
 const onConnection = (socket) => {
   conferenceCall(io, socket);
   chat(io, socket);
   shareScreen(io, socket);
+  whiteboard(io, socket);
 }
 
 io.on("connection", onConnection);
