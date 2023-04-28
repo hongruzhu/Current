@@ -18,15 +18,18 @@ socket.on("chat-message", (name, msg) => {
 
 // 增加訊息到聊天室
 function addMessage(name, msg, time) {
-  $("#messenges").append(`
-    <div class="chat chat-start">
-      <div class="chat-header text-black">
-        ${name}
-        <time class="text-xs opacity-50">${time}</time>
-      </div>
-      <div class="chat-bubble text-white">${msg}</div>
+  const item = $(`    
+  <div class="chat chat-start">
+    <div class="chat-header text-black">
+      ${name}
+      <time class="text-xs opacity-50">${time}</time>
     </div>
+  </div>
   `);
+  const messenge = $(`<div class="chat-bubble text-white">$</div>`).text(msg);
+  item.append(messenge);
+  $("#messenges").append(item);
+
   // 隨時顯示最新訊息
   $("#messenges")[0].scrollTop = $("#messenges")[0].scrollHeight;
 }
