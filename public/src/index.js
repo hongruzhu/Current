@@ -50,7 +50,7 @@ if (logInStatus) {
 }
 
 $("#get-roomid").click(async () => {
-  if (!accessToken) {
+  if (!logInStatus) {
     alert("請先登入，未有帳號請先註冊！");
     window.location.href = "./signin";
     return;
