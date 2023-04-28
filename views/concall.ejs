@@ -40,8 +40,14 @@
           <div id="share-screen-video" class="relative w-full flex-[1_0_auto]">
           </div>
         </div>
-        <div id="whiteboard" class="hidden flex-[1_0_auto] relative w-full flex justify-center">
+        <div id="whiteboard" class="hidden flex-[1_0_auto] relative flex justify-center">
           <canvas id="my-whiteboard" class="border-black border rounded-xl"></canvas>
+          <div id="whiteboard-reminder" class="absolute top-0 left-0 w-[20%]">
+            <span>你正在共享小白版</span>
+          </div>
+          <div id="whiteboard-stop-btn">
+            <span class="absolute top-0 right-0">停止共享</span>
+          </div>
         </div>
       </div>
       <div id="right-block" class="hidden w-[22%] h-full pl-2 min-w-[250px]">

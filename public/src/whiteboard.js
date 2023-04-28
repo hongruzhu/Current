@@ -15,9 +15,10 @@ socket.on("start-whiteboard", async () => {
 });
 
 async function startWhiteboard() {
-  // 抓取包裹canvas的div的寬，依16:9的比例設置canvas的長寬
+  // 抓取包裹canvas的div的寬，依16:9的比例設置div的長
   const whiteboardHeight = $("#whiteboard").height();
   const whiteboardWidth = whiteboardHeight * 16 / 9;
+  $("#whiteboard").attr("width", whiteboardWidth);
   $("#my-whiteboard").attr("width", whiteboardWidth);
   $("#my-whiteboard").attr("height", whiteboardHeight);
 
