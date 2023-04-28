@@ -101,6 +101,7 @@ try {
 } catch (e) {
   alert("請允許Current存取您的攝影機和麥克風，否則無法進入會議室");
   console.log(e);
+  $("#loading").remove();
   $("#create-room").on("submit", async (e) => {
     e.preventDefault();
     alert("請允許Current存取您的攝影機和麥克風，否則無法進入會議室");
