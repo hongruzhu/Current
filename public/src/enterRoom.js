@@ -30,7 +30,7 @@ if (logInStatus) {
   const userName = localStorage.getItem("userName");
   $("#name-label").text("準備好加入了嗎？");
   $("#name-label").after(
-    `<span class="text-xl font-medium text-gray-900 text-center m-3">${userName}</span>`
+    `<span class="text-2xl font-medium text-gray-900 text-center m-3">${userName}</span>`
   );
   $("input[name='name']").val(userName).addClass("hidden");
 } else {
