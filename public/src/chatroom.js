@@ -26,7 +26,9 @@ function addMyMessage(name, msg, time) {
     </div>
   </div>
   `);
-  const messenge = $(`<div class="chat-bubble text-white">$</div>`).text(msg);
+  const messenge = $(
+    `<div class="chat-bubble bg-yellow-600 text-white">$</div>`
+  ).text(msg);
   item.append(messenge);
   $("#messenges").append(item);
 
@@ -44,7 +46,9 @@ function addUserMessage(name, msg, time) {
     </div>
   </div>
   `);
-  const messenge = $(`<div class="chat-bubble text-white">$</div>`).text(msg);
+  const messenge = $(
+    `<div class="chat-bubble text-black bg-gray-100">$</div>`
+  ).text(msg);
   item.append(messenge);
   $("#messenges").append(item);
 
