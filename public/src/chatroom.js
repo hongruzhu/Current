@@ -6,18 +6,36 @@ $("#chat").on("submit", (e) => {
     const msg = $("#messenge-input").val();
     socket.emit("chat-message", roomId, myName, msg);
     const time = getTime();
-    addMessage(myName, msg, time);
+    addMyMessage(myName, msg, time);
     $("#messenge-input").val("");
   }
 });
 
 socket.on("chat-message", (name, msg) => {
   const time = getTime()
-  addMessage(name, msg, time);
+  addUserMessage(name, msg, time);
 });
 
-// 增加訊息到聊天室
-function addMessage(name, msg, time) {
+// 增加自己的訊息到聊天室
+function addMyMessage(name, msg, time) {
+  const item = $(`    
+  <div class="chat chat-end">
+    <div class="chat-header text-black">
+      ${name}
+      <time class="text-xs opacity-50">${time}</time>
+    </div>
+  </div>
+  `);
+  const messenge = $(`<div class="chat-bubble text-white">$</div>`).text(msg);
+  item.append(messenge);
+  $("#messenges").append(item);
+
+  // 隨時顯示最新訊息
+  $("#messenges")[0].scrollTop = $("#messenges")[0].scrollHeight;
+}
+
+// 增加其他user訊息到聊天室
+function addUserMessage(name, msg, time) {
   const item = $(`    
   <div class="chat chat-start">
     <div class="chat-header text-black">
