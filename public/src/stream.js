@@ -167,7 +167,7 @@ function addVideoGridElement(peerId) {
     (roomWhiteboardStatus !== "false" &&
       roomWhiteboardStatus !== "" &&
       roomWhiteboardStatus) ||
-    $("#whiteboard-reminder span").length === 1
+    $("#left-items span").length === 1
   ) {
     videoGridElement = $("<div>", {
       id: peerId,

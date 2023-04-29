@@ -1,10 +1,12 @@
 // 引入共用的變數
 import { roomId, myName, socket, roomWhiteboardStatus } from "./constant.js";
 
+let openWhiteboardStatus;
 // 開啟小白板
 $("#start-whiteboard").on("click", async () => {
+  openWhiteboardStatus = true;
   // 若有人分享小白版或螢幕，則不能分享
-  if ($("#whiteboard-reminder span").length === 1) {
+  if ($("#left-items span").length === 1) {
     alert("目前有人正在分享小白版，不能分享");
     return;
   }
@@ -14,29 +16,50 @@ $("#start-whiteboard").on("click", async () => {
   }
   // 通知會議室其他人開啟小白版
   socket.emit("start-whiteboard", roomId, myName);
-  $("#whiteboard-reminder").append(`<span>&emsp;你正在共享小白版&emsp;</span>`);
-  $("#whiteboard").append(`          
-      <div id="whiteboard-stop-btn" class="absolute top-2 right-2 bg-gray-300 rounded-lg h-8 flex items-center">
-        <span class="text-yellow-800 hover:text-yellow-600 hover:cursor-pointer">&emsp;停止共享&emsp;</span>
-      </div>
-    `);
+  $("#left-items").append(
+    `<span class="flex items-center bg-gray-300 rounded-lg h-full mt-2 ml-2">&emsp;你正在共享小白版&emsp;</span>`
+  );
+
+  $("#right-items").append(`          
+    <span id="clean-whiteboard" class="flex items-center h-full bg-gray-300 rounded-lg text-yellow-800 mt-2 mr-2 hover:text-yellow-600 hover:cursor-pointer">&emsp;清空白板&emsp;</span>
+  `);
+
+  $("#right-items").append(`          
+    <span id="whiteboard-stop-btn" class="flex items-center h-full bg-gray-300 rounded-lg text-yellow-800 mt-2 mr-2 hover:text-yellow-600 hover:cursor-pointer">&emsp;停止共享&emsp;</span>
+  `);
+
+  await whiteboardLayout();
+  const { canvas, startDrawing, move, stopDrawing } = await startWhiteboard();
+  // 關閉小白版的按鈕
   $("#whiteboard-stop-btn").on("click", () => {
-    socket.emit("stop-whiteboard", roomId)
+    openWhiteboardStatus = false;
+    socket.emit("stop-whiteboard", roomId);
     originLayout();
     $("#whiteboard-stop-btn").remove();
-  })
-  await whiteboardLayout();
-  await startWhiteboard();
+    // 取消畫布的監聽
+    canvas.removeEventListener("mousedown", startDrawing);
+    canvas.removeEventListener("mousemove", move);
+    canvas.removeEventListener("mouseup", stopDrawing);
+  });
 });
 
 socket.on("start-whiteboard", async (name) => {
-  $("#whiteboard-reminder").append(`<span>&emsp;${name}正在共享小白版&emsp;</span>`);
+  $("#left-items").append(
+    `<span class="flex items-center bg-gray-300 rounded-lg h-full mt-2 ml-2">&emsp;${name}正在共享小白版&emsp;</span>`
+  );
+  $("#right-items").append(`          
+    <span class="flex items-center h-full bg-gray-300 rounded-lg text-yellow-800 mt-2 mr-2 hover:text-yellow-600 hover:cursor-pointer">&emsp;清空白板&emsp;</span>
+  `);
   await whiteboardLayout();
-  await startWhiteboard();
-});
+  const { canvas, startDrawing, move, stopDrawing } = await startWhiteboard();
 
-socket.on("stop-whiteboard", async () => {
-  originLayout();
+  socket.on("stop-whiteboard", async () => {
+    originLayout();
+    // 取消畫布的監聽
+    canvas.removeEventListener("mousedown", startDrawing);
+    canvas.removeEventListener("mousemove", move);
+    canvas.removeEventListener("mouseup", stopDrawing);
+  });
 });
 
 // 新user剛進會議室時，偵測會議室是否已開啟小白版
@@ -45,17 +68,30 @@ if (
   roomWhiteboardStatus !== "" &&
   roomWhiteboardStatus
 ) {
-  $("#whiteboard-reminder").append(
-    `<span>&emsp;${roomWhiteboardStatus}正在共享小白版&emsp;</span>`
+  $("#left-items").append(
+    `<span class="flex items-center bg-gray-300 rounded-lg h-full mt-2 ml-2">&emsp;${roomWhiteboardStatus}正在共享小白版&emsp;</span>`
   );
+  $("#right-items").append(`          
+    <span class="flex items-center h-full bg-gray-300 rounded-lg text-yellow-800 mt-2 mr-2 hover:text-yellow-600 hover:cursor-pointer">&emsp;清空白板&emsp;</span>
+  `);
   await whiteboardLayout();
-  await startWhiteboard();
+  const { canvas, startDrawing, move, stopDrawing } = await startWhiteboard();
+  // 傳送會議室小白版的畫布狀態給新user
+  socket.emit("new-user-whiteboard", roomId);
+
+  socket.on("stop-whiteboard", async () => {
+    originLayout();
+    // 取消畫布的監聽
+    canvas.removeEventListener("mousedown", startDrawing);
+    canvas.removeEventListener("mousemove", move);
+    canvas.removeEventListener("mouseup", stopDrawing);
+  });
 }
 
 async function startWhiteboard() {
   // 抓取包裹canvas的div的寬，依16:9的比例設置div的長
   const whiteboardHeight = $("#whiteboard").height();
-  const whiteboardWidth = whiteboardHeight * 16 / 9;
+  const whiteboardWidth = (whiteboardHeight * 16) / 9;
   $("#whiteboard").attr("width", whiteboardWidth);
   $("#my-whiteboard").attr("width", whiteboardWidth);
   $("#my-whiteboard").attr("height", whiteboardHeight);
@@ -65,8 +101,79 @@ async function startWhiteboard() {
   // 開始畫畫
   const canvas = document.getElementById("my-whiteboard");
   const context = canvas.getContext("2d");
-  let eraser = false;
-  let pen = "black";
+
+  const brushMini = $("#brush-mini div").width();
+  const brushSmall = $("#brush-small div").width();
+  const brushMedium = $("#brush-medium div").width();
+  const brushBig = $("#brush-big div").width();
+
+  let color = "#000000";
+  let lineWidth = brushMini;
+
+  // 選取畫畫工具列
+  // 顏色和橡皮擦部分
+  $("#black").on("click", () => {
+    color = "#000000";
+    $(".pen-color").removeClass("border-2 border-black");
+    $("#color #black").addClass("border-2 border-black");
+  });
+  $("#yellow").on("click", () => {
+    color = "#FCD34D";
+    $(".pen-color").removeClass("border-2 border-black");
+    $("#color #yellow").addClass("border-2 border-black");
+  });
+  $("#red").on("click", () => {
+    color = "#DC2626";
+    $(".pen-color").removeClass("border-2 border-black");
+    $("#color #red").addClass("border-2 border-black");
+  });
+  $("#purple").on("click", () => {
+    color = "#7C3AED";
+    $(".pen-color").removeClass("border-2 border-black");
+    $("#color #purple").addClass("border-2 border-black");
+  });
+  $("#blue").on("click", () => {
+    color = "#2563EB";
+    $(".pen-color").removeClass("border-2 border-black");
+    $("#color #blue").addClass("border-2 border-black");
+  });
+  $("#green").on("click", () => {
+    color = "#059669";
+    $(".pen-color").removeClass("border-2 border-black");
+    $("#color #green").addClass("border-2 border-black");
+  });
+  $("#eraser").on("click", () => {
+    color = "#ffffff";
+    $(".pen-color").removeClass("border-2 border-black");
+    $("#eraser .pen-color").addClass("border-2 border-black");
+  });
+  // 筆刷部分
+  $("#brush-mini").on("click", () => {
+    lineWidth = brushMini;
+    $(".pen-brush").removeClass("border-2 border-black");
+    $("#brush-mini").addClass("border-2 border-black");
+  });
+  $("#brush-small").on("click", () => {
+    lineWidth = brushSmall;
+    $(".pen-brush").removeClass("border-2 border-black");
+    $("#brush-small").addClass("border-2 border-black");
+  });
+  $("#brush-medium").on("click", () => {
+    lineWidth = brushMedium;
+    $(".pen-brush").removeClass("border-2 border-black");
+    $("#brush-medium").addClass("border-2 border-black");
+  });
+  $("#brush-big").on("click", () => {
+    lineWidth = brushBig;
+    $(".pen-brush").removeClass("border-2 border-black");
+    $("#brush-big").addClass("border-2 border-black");
+  });
+
+  // 清空小白版
+  $("#right-items span").on("click", () => {
+    step.push("clear-whiteboard");
+    socket.emit("clear-whiteboard", roomId);
+  });
 
   let step = [];
   let isDrawing = false;
@@ -97,12 +204,13 @@ async function startWhiteboard() {
       lastY,
       x,
       y,
-      eraser,
-      pen,
+      color,
+      lineWidth,
       whiteboardWidth,
       whiteboardHeight
     );
-    step.push([lastX, lastY, x, y, eraser, pen]);
+    console.log([lastX, lastY, x, y, color, lineWidth]);
+    step.push([lastX, lastY, x, y, color, lineWidth]);
 
     lastX = x;
     lastY = y;
@@ -114,20 +222,10 @@ async function startWhiteboard() {
     lastY = 0;
   }
 
-  function draw(lastX, lastY, x, y, eraser, pen) {
-    if (eraser) {
-      context.strokeStyle = "#FFFFFF";
-      context.lineWidth = 30;
-      context.lineCap = "round";
-    } else if (pen === "black") {
-      context.strokeStyle = "#000000";
-      context.lineWidth = 5;
-      context.lineCap = "round";
-    } else if (pen === "blue") {
-      context.strokeStyle = "#0080FF";
-      context.lineWidth = 5;
-      context.lineCap = "round";
-    }
+  function draw(lastX, lastY, x, y, color, lineWidth) {
+    context.strokeStyle = color;
+    context.lineWidth = lineWidth;
+    context.lineCap = "round";
 
     context.beginPath();
     context.moveTo(lastX, lastY);
@@ -147,8 +245,8 @@ async function startWhiteboard() {
         img,
         0,
         0,
-        canvas.width,
-        canvas.height,
+        img.width,
+        img.height,
         0,
         0,
         canvas.width,
@@ -166,10 +264,10 @@ async function startWhiteboard() {
   function drawEventLoop() {
     if (step.length > 0) {
       const task = step.shift();
-      if (task === "clear") {
+      if (task === "clear-whiteboard") {
         clear();
       }
-      if (task[0] === "restore") {
+      if (task[0] === "restore-whiteboard") {
         restore(task[1]);
       }
       draw(task[0], task[1], task[2], task[3], task[4], task[5]);
@@ -180,27 +278,34 @@ async function startWhiteboard() {
 
   // Socket.IO互動
   // 接受其他人的繪畫軌跡，比依螢幕大小不同比例調整
-  socket.on("move", (lastX, lastY, x, y, eraser, pen, userWidth, userHeight) => {
-    lastX = (lastX * whiteboardWidth) / userWidth;
-    lastY = (lastY * whiteboardHeight) / userHeight;
-    x = (x * whiteboardWidth) / userWidth;
-    y = (y * whiteboardHeight) / userHeight;
-    step.push([lastX, lastY, x, y, eraser, pen]);
+  socket.on(
+    "move",
+    (lastX, lastY, x, y, color, lineWidth, userWidth, userHeight) => {
+      lastX = (lastX * whiteboardWidth) / userWidth;
+      lastY = (lastY * whiteboardHeight) / userHeight;
+      x = (x * whiteboardWidth) / userWidth;
+      y = (y * whiteboardHeight) / userHeight;
+      step.push([lastX, lastY, x, y, color, lineWidth]);
+    }
+  );
+
+  socket.on("clear-whiteboard", () => {
+    step.push("clear-whiteboard");
   });
 
-  // socket.on("clearCanvas", () => {
-  //   step.push("clear");
-  // });
+  // 當有新user加入時，擷圖目前畫布，傳送給他
+  socket.on("new-user-whiteboard", async (socketId) => {
+    if (openWhiteboardStatus) {
+      const state = canvas.toDataURL();
+      socket.emit("whiteboard-state", state, socketId);
+    }
+  });
 
-  // socket.on("user-connected", (userId, newUserSocketId) => {
-  //   // 當有新user加入時，擷圖目前畫布，傳送到server
-  //   const state = canvas.toDataURL();
-  //   socket.emit("state", state, newUserSocketId);
-  // });
+  socket.on("whiteboard-state", (state) => {
+    step.push(["restore-whiteboard", state]);
+  });
 
-  // socket.on("drawState", (state) => {
-  //   step.push(["restore", state]);
-  // });
+  return { canvas, startDrawing, move, stopDrawing };
 }
 
 async function whiteboardLayout() {
@@ -231,4 +336,10 @@ async function originLayout() {
   $("#left-block").removeClass("h-full");
   // 隱藏小白板部分
   $("#whiteboard").addClass("hidden");
+  // 還原小白版畫筆顏色
+  $(".pen-color").removeClass("border-2 border-black");
+  $("#color #black").addClass("border-2 border-black");
+  // 還原小白版筆刷
+  $(".pen-brush").removeClass("border-2 border-black");
+  $("#brush-mini").addClass("border-2 border-black");
 }

@@ -22,7 +22,7 @@ async function shareScreen(surface) {
     alert("現在有人分享螢幕，不能分享");
     return;
   }
-  if ($("#whiteboard-reminder span").length === 1) {
+  if ($("#left-items span").length === 1) {
     alert("目前有人正在分享小白版，不能分享");
     return;
   }

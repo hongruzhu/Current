@@ -42,10 +42,59 @@
         </div>
         <div id="whiteboard" class="hidden flex-[1_0_auto] relative flex justify-center">
           <canvas id="my-whiteboard" class="border-black border rounded-xl"></canvas>
-          <div id="whiteboard-reminder" class="absolute top-2 left-2 bg-gray-300 rounded-lg h-8 flex items-center">
+          <div id="whiteboard-reminder" class="absolute w-full h-8 flex justify-between">
+            <div id="left-items" class="order-1">
+
+            </div>
+            <div id="right-items" class="order-2 flex">
+
+            </div>
           </div>
-          <div id="whiteboard-toolbar" class="absolute bg-gray-300 rounded-lg h-8">
-            
+          <div id="whiteboard-toolbar" class="absolute flex flex-col bg-gray-300 rounded-3xl w-[3%] left-4 top-[25%]">
+            <div id="color" class="flex flex-col items-center mt-2 mb-1">
+              <div id="black" class="pen-color flex justify-center items-center w-[80%] aspect-square top-1 rounded-full hover:bg-gray-200 border-2 border-black">
+                <div class="rounded-full bg-black w-[60%] aspect-square"></div>
+              </div>
+              <div id="yellow" class="pen-color flex justify-center items-center w-[80%] aspect-square top-1 rounded-full hover:bg-gray-200">
+                <div class="rounded-full bg-yellow-300 w-[60%] aspect-square"></div>
+              </div>
+              <div id="red" class="pen-color flex justify-center items-center w-[80%] aspect-square top-1 rounded-full hover:bg-gray-200">
+                <div class="rounded-full bg-red-600 w-[60%] aspect-square"></div>
+              </div>
+              <div id="purple" class="pen-color flex justify-center items-center w-[80%] aspect-square top-1 rounded-full hover:bg-gray-200">
+                <div class="rounded-full bg-purple-600 w-[60%] aspect-square"></div>
+              </div>
+              <div id="blue" class="pen-color flex justify-center items-center w-[80%] aspect-square top-1 rounded-full hover:bg-gray-200">
+                <div class="rounded-full bg-blue-600 w-[60%] aspect-square"></div>
+              </div>
+              <div id="green" class="pen-color flex justify-center items-center w-[80%] aspect-square top-1 rounded-full hover:bg-gray-200">
+                <div class="rounded-full bg-green-600 w-[60%] aspect-square"></div>
+              </div>
+            </div>
+            <div id="eraser" class="flex flex-col items-center">
+              <div class="w-[80%] aspect-square border-t-2 border-black border-b-2">
+                <div class="pen-color flex justify-center items-center top-1 w-full aspect-square rounded-full hover:bg-gray-200">
+                  <svg class="" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd">
+                    <path
+                      d="M5.662 23l-5.369-5.365c-.195-.195-.293-.45-.293-.707 0-.256.098-.512.293-.707l14.929-14.928c.195-.194.451-.293.707-.293.255 0 .512.099.707.293l7.071 7.073c.196.195.293.451.293.708 0 .256-.097.511-.293.707l-11.216 11.219h5.514v2h-12.343zm3.657-2l-5.486-5.486-1.419 1.414 4.076 4.072h2.829zm6.605-17.581l-10.677 10.68 5.658 5.659 10.676-10.682-5.657-5.657z" />
+                  </svg>
+                </div>
+              </div>
+            </div>
+            <div id="brush" class="flex flex-col items-center mt-1 mb-2">
+              <div id="brush-mini" class="pen-brush flex justify-center items-center w-[80%] aspect-square top-1 rounded-full hover:bg-gray-200 border-2 border-black">
+                <div class="rounded-full bg-gray-800 w-[10%] aspect-square"></div>
+              </div>
+              <div id="brush-small" class="pen-brush flex justify-center items-center w-[80%] aspect-square top-1 rounded-full hover:bg-gray-200">
+                <div class="rounded-full bg-gray-800 w-[20%] aspect-square"></div>
+              </div>
+              <div id="brush-medium" class="pen-brush flex justify-center items-center w-[80%] aspect-square top-1 rounded-full hover:bg-gray-200">
+                <div class="rounded-full bg-gray-800 w-[35%] aspect-square"></div>
+              </div>
+              <div id="brush-big" class="pen-brush flex justify-center items-center w-[80%] aspect-square top-1 rounded-full hover:bg-gray-200">
+                <div class="rounded-full bg-gray-800 w-[55%] aspect-square"></div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
