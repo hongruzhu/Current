@@ -16,6 +16,14 @@ const roomShareScreenStatus = shareScreenResult.data;
 const whiteboardResult = await axios.post("./getWhiteboardStatus", { roomId });
 const roomWhiteboardStatus = whiteboardResult.data;
 
+export {
+  roomId,
+  myName,
+  socket,
+  roomShareScreenStatus,
+  roomWhiteboardStatus
+};
+
 // 若是創建新會議來到這，把url改成正常樣子
 if (createStatus) {
   const domain = window.location.host;
@@ -59,8 +67,6 @@ try {
   alert("Something wrong")
   console.log(e);
 }
-
-export { roomId, myName, socket, roomShareScreenStatus, roomWhiteboardStatus };
 
 // function stopTimer() {
 //   cancelAnimationFrame(timerInterval);

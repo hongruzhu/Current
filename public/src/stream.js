@@ -1,5 +1,11 @@
 // 引入共用的變數
-import { roomId, myName, socket, roomShareScreenStatus, roomWhiteboardStatus } from "./constant.js";
+import {
+  roomId,
+  myName,
+  socket,
+  roomShareScreenStatus,
+  roomWhiteboardStatus
+} from "./constant.js";
 
 /* ----------------------------- Step 1: 獲取自己視訊畫面的stream ----------------------------- */
 
@@ -159,26 +165,45 @@ function addVideoGridElement(peerId) {
   let videoGridElement;
   // FIXME:不能只以偵測分享螢幕渲染了沒當基準，加上去redis抓分享螢幕狀態，才可以確保新user的渲染畫面正確
   if (roomShareScreenStatus === "true" || $("#share-screen video").length === 1) {
-    videoGridElement = $("<div>", {
-      id: peerId,
-      class: "relative w-[20%] aspect-video overflow-hidden bg-gray-100",
-    });
-  } else if (
+    if($("#display div").length >= 5) {
+      videoGridElement = $("<div>", {
+        id: peerId,
+        class: "hidden relative w-[20%] aspect-video overflow-hidden bg-gray-100",
+      });
+    } else {
+      videoGridElement = $("<div>", {
+        id: peerId,
+        class: "relative w-[20%] aspect-video overflow-hidden bg-gray-100",
+      });
+    }
+    $("#display").append(videoGridElement);
+    return;
+  } 
+  if (
     (roomWhiteboardStatus !== "false" &&
       roomWhiteboardStatus !== "" &&
       roomWhiteboardStatus) ||
     $("#left-items span").length === 1
   ) {
-    videoGridElement = $("<div>", {
-      id: peerId,
-      class: "relative w-[20%] aspect-video overflow-hidden bg-gray-100",
-    });
-  } else {
-    videoGridElement = $("<div>", {
-      id: peerId,
-      class: "relative pb-[56.25%] overflow-hidden h-0 bg-gray-100",
-    });
-  }
+    if ($("#display div").length >= 5) {
+      videoGridElement = $("<div>", {
+        id: peerId,
+        class:
+          "hidden relative w-[20%] aspect-video overflow-hidden bg-gray-100",
+      });
+    } else {
+      videoGridElement = $("<div>", {
+        id: peerId,
+        class: "relative w-[20%] aspect-video overflow-hidden bg-gray-100",
+      });
+    }
+    $("#display").append(videoGridElement);
+    return;
+  } 
+  videoGridElement = $("<div>", {
+    id: peerId,
+    class: "relative pb-[56.25%] overflow-hidden h-0 bg-gray-100",
+  });
   $("#display").append(videoGridElement);
 }
 

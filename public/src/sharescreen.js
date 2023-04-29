@@ -143,8 +143,9 @@ function shareScreenLayout() {
   // 一點選分享螢幕，整個視訊部分css跟著大改
   $("#left-block").addClass("h-full");
   $("#display")
-    .removeClass("w-full h-full grid grid-cols-fluid-l gap-1 items-center")
+    .removeClass("w-full h-full grid gap-1 items-center")
     .addClass("w-[90%] flex gap-1 items-center justify-center mb-2");
+  $("#display div:gt(4)").addClass("hidden");
   $("#display div")
     .removeClass("relative pb-[56.25%] overflow-hidden h-0 bg-gray-100")
     .addClass("relative w-[20%] aspect-video overflow-hidden bg-gray-100");
@@ -176,9 +177,9 @@ function originLayout() {
   $("#left-block").removeClass("h-full");
   $("#display")
     .removeClass("w-[90%] flex gap-1 items-center justify-center mb-2")
-    .addClass("w-full h-full grid grid-cols-fluid-l gap-1 items-center");
+    .addClass("w-full h-full grid gap-1 items-center");
   $("#display div")
-    .removeClass("relative w-[20%] aspect-video overflow-hidden bg-gray-100")
+    .removeClass("hidden relative w-[20%] aspect-video overflow-hidden bg-gray-100")
     .addClass("relative pb-[56.25%] overflow-hidden h-0 bg-gray-100");
 }
 

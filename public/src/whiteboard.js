@@ -1,5 +1,10 @@
 // 引入共用的變數
-import { roomId, myName, socket, roomWhiteboardStatus } from "./constant.js";
+import {
+  roomId,
+  myName,
+  socket,
+  roomWhiteboardStatus  
+} from "./constant.js";
 
 let openWhiteboardStatus;
 // 開啟小白板
@@ -209,7 +214,6 @@ async function startWhiteboard() {
       whiteboardWidth,
       whiteboardHeight
     );
-    console.log([lastX, lastY, x, y, color, lineWidth]);
     step.push([lastX, lastY, x, y, color, lineWidth]);
 
     lastX = x;
@@ -314,8 +318,9 @@ async function whiteboardLayout() {
   // 一點選小白版，整個視訊部分css跟著大改
   $("#left-block").addClass("h-full");
   $("#display")
-    .removeClass("w-full h-full grid grid-cols-fluid-l gap-1 items-center")
+    .removeClass("w-full h-full grid gap-1 items-center")
     .addClass("w-[90%] flex gap-1 items-center justify-center mb-2");
+  $("#display div:gt(4)").addClass("hidden");
   $("#display div")
     .removeClass("relative pb-[56.25%] overflow-hidden h-0 bg-gray-100")
     .addClass("relative w-[20%] aspect-video overflow-hidden bg-gray-100");
@@ -328,11 +333,11 @@ async function originLayout() {
   // 還原視訊部分css跟著大改
   $("#whiteboard-reminder span").remove();
   $("#display div")
-    .removeClass("relative w-[20%] aspect-video overflow-hidden bg-gray-100")
+    .removeClass("hidden relative w-[20%] aspect-video overflow-hidden bg-gray-100")
     .addClass("relative pb-[56.25%] overflow-hidden h-0 bg-gray-100");
   $("#display")
     .removeClass("w-[90%] flex gap-1 items-center justify-center mb-2")
-    .addClass("w-full h-full grid grid-cols-fluid-l gap-1 items-center");
+    .addClass("w-full h-full grid gap-1 items-center");
   $("#left-block").removeClass("h-full");
   // 隱藏小白板部分
   $("#whiteboard").addClass("hidden");
