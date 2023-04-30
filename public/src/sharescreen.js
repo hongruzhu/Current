@@ -58,12 +58,13 @@ async function shareScreen(surface) {
     "class",
     "absolute max-w-full max-h-full w-auto h-auto top-1/2 left-1/2 transform-center"
   );
-  shareScreenLayout();
+  // shareScreenLayout();
   $("#who-share-screen").text("你正在與所有人分享螢幕畫面");
   $("#share-screen-reminder").append(
     `<span id="stop-share-screen" class="mr-2 text-yellow-800 hover:text-yellow-600 hover:cursor-pointer">停止分享螢幕</span>`
   );
   addShareScreen(myScreen, myScreenStream);
+  shareScreenLayout();
 
   socket.emit("start-share-screen", roomId, myPeerScreenId);
   socket.on("give-peerScreenId", (peerId) => {
@@ -102,21 +103,7 @@ async function shareScreen(surface) {
   });
 }
 
-/* ----------------------------- Part 2: 確定好要交換的stream後，開始處理Peer連線，進行stream交換 ----------------------------- */
-
-// const myPeerScreen = new Peer(undefined, {
-//   host: "localhost", // currentmeet.com
-//   port: "3001", // 443
-//   path: "/myapp",
-//   debug: 2,
-// });
-
-// let myPeerScreenId;
-// myPeerScreen.on("open", (peerId) => {
-//   myPeerScreenId = peerId;
-//   // 新user進來，傳送自己的myPeerScreenId給聊天室所有人
-//   socket.emit("new-give-peerScreenId", roomId, myPeerScreenId);
-// });
+/* ----------------------------- Part 2: 確定好要交換的stream後，進行stream交換 ----------------------------- */
 
 myPeerScreen.on("call", (call) => {
   call.answer();
