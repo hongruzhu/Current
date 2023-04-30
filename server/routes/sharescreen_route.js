@@ -6,15 +6,23 @@ import { getShareScreenStatus } from "../controllers/sharescreen_controller.js";
 
 
 const shareScreen = (io, socket) => {
-  socket.on("start-share-screen", async (roomId) => {
+  socket.on("start-share-screen", async (roomId, peerScreenId) => {
     const status = await redis.hget("shareScreenStatus", roomId);
-    if (status === "true") {
+    if (status !== null && status !== "") {
       socket.emit("already-share-screen", status);
       return;
     }
-    redis.hset("shareScreenStatus", roomId, "true");
+    redis.hset("shareScreenStatus", roomId, peerScreenId);
     const shareUserSocketId = socket.id;
     socket.to(roomId).emit("start-share-screen", shareUserSocketId);
+
+    socket.on("disconnect", async () => {
+      const status = await redis.hget("shareScreenStatus", roomId);
+      if (status === peerScreenId) {
+        socket.to(roomId).emit("shareScreen-user-disconnected", peerScreenId);
+        redis.hset("shareScreenStatus", roomId, null);
+      }
+    });
   });
 
   socket.on("give-peerScreenId", (socketId, peerId) => {
@@ -22,7 +30,7 @@ const shareScreen = (io, socket) => {
   });
 
   socket.on("stop-share-screen", (roomId) => {
-    redis.hset("shareScreenStatus", roomId, "false");
+    redis.hset("shareScreenStatus", roomId, null);
     socket.to(roomId).emit("stop-share-screen");
   });
 

@@ -18,7 +18,8 @@ const deleteShareScreenStatus = (roomId) => {
 };
 
 const deleteWhiteboardStatus = (roomId) => {
-  redis.hdel("whiteboardStatus", roomId);
+  redis.hdel("whiteboardShareName", roomId);
+  redis.hdel("whiteboardSharePeerId", roomId);
 };
 
 const getStartTime = async (req, res) => {
@@ -34,6 +35,16 @@ const getRoomTitle = async (req, res) => {
   res.send(roomTitle);
 }
 
+const checkWhiteboardPeerId = async (roomId) => {
+  const peerId = await redis.hget("whiteboardSharePeerId", roomId);
+  return peerId;
+}
+
+const resetWhiteboardStatus = async (roomId) => {
+  redis.hset("whiteboardShareName", roomId, null);
+  redis.hset("whiteboardSharePeerId", roomId, null);
+}
+
 export {
   reviseRoomUserNumber,
   deleteRoomId,
@@ -42,4 +53,6 @@ export {
   deleteStartTime,
   deleteShareScreenStatus,
   deleteWhiteboardStatus,
+  checkWhiteboardPeerId,
+  resetWhiteboardStatus,
 };

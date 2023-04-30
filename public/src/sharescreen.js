@@ -4,6 +4,20 @@ import { roomId, myName, socket } from "./constant.js";
 // 自己分享螢幕的狀態
 let myShareScreenStatus;
 
+const myPeerScreen = new Peer(undefined, {
+  host: "currentmeet.com", // currentmeet.com
+  port: "443", // 443
+  path: "/myapp",
+  debug: 2,
+});
+
+let myPeerScreenId;
+myPeerScreen.on("open", (peerId) => {
+  myPeerScreenId = peerId;
+  // 新user進來，傳送自己的myPeerScreenId給聊天室所有人
+  socket.emit("new-give-peerScreenId", roomId, myPeerScreenId);
+});
+
 /* ----------------------------- Part 1: 點選分享螢幕按鈕，獲取自己螢幕畫面的stream ----------------------------- */
 $("#entire").on("click", async () => {
   shareScreen("monitor");
@@ -51,7 +65,7 @@ async function shareScreen(surface) {
   );
   addShareScreen(myScreen, myScreenStream);
 
-  socket.emit("start-share-screen", roomId);
+  socket.emit("start-share-screen", roomId, myPeerScreenId);
   socket.on("give-peerScreenId", (peerId) => {
     const options = {
       metadata: { name: myName },
@@ -90,19 +104,19 @@ async function shareScreen(surface) {
 
 /* ----------------------------- Part 2: 確定好要交換的stream後，開始處理Peer連線，進行stream交換 ----------------------------- */
 
-const myPeerScreen = new Peer(undefined, {
-  host: "currentmeet.com", // currentmeet.com
-  port: "443", // 443
-  path: "/myapp",
-  debug: 2,
-});
+// const myPeerScreen = new Peer(undefined, {
+//   host: "localhost", // currentmeet.com
+//   port: "3001", // 443
+//   path: "/myapp",
+//   debug: 2,
+// });
 
-let myPeerScreenId;
-myPeerScreen.on("open", (peerId) => {
-  myPeerScreenId = peerId;
-  // 新user進來，傳送自己的myPeerScreenId給聊天室所有人
-  socket.emit("new-give-peerScreenId", roomId, myPeerScreenId);
-});
+// let myPeerScreenId;
+// myPeerScreen.on("open", (peerId) => {
+//   myPeerScreenId = peerId;
+//   // 新user進來，傳送自己的myPeerScreenId給聊天室所有人
+//   socket.emit("new-give-peerScreenId", roomId, myPeerScreenId);
+// });
 
 myPeerScreen.on("call", (call) => {
   call.answer();
@@ -124,6 +138,15 @@ myPeerScreen.on("call", (call) => {
 
 socket.on("start-share-screen", (socketId) => {
   socket.emit("give-peerScreenId", socketId, myPeerScreenId);
+});
+
+// 若分享螢幕的user離開，通知會議的其他使用者要關掉
+socket.on("shareScreen-user-disconnected", (peerScreenId) => {
+  if ($("#share-screen-video video").attr("id") === peerScreenId) {
+    originLayout();
+    const userScreen = $("#share-screen video")[0];
+    removeShareScreen(userScreen);
+  }
 });
 
 // 把共享螢幕append到html上的function

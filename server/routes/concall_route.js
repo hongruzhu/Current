@@ -9,6 +9,8 @@ import {
   deleteStartTime,
   deleteShareScreenStatus,
   deleteWhiteboardStatus,
+  checkWhiteboardPeerId,
+  resetWhiteboardStatus
 } from "../controllers/concall_controller.js";
 
 const conferenceCall = (io, socket) => {
@@ -20,6 +22,10 @@ const conferenceCall = (io, socket) => {
 
     socket.on("disconnect", async () => {
       socket.to(roomId).emit("user-disconnected", peerId);
+      const whiteboardPeerId = await checkWhiteboardPeerId(roomId);
+      if (peerId === whiteboardPeerId) {
+        await resetWhiteboardStatus(roomId);
+      }
       const count = await reviseRoomUserNumber(roomId, -1);
       if (count === 0) {
         deleteRoomId(roomId);

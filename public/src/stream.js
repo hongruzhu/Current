@@ -6,7 +6,7 @@ import {
   myRole,
   socket,
   roomShareScreenStatus,
-  roomWhiteboardStatus
+  whiteboardShareName,
 } from "./constant.js";
 
 /* ----------------------------- Step 1: 獲取自己視訊畫面的stream ----------------------------- */
@@ -58,7 +58,7 @@ async function playing() {
 // 在member list加入自己
 $("#my-name").text(`${myName} (你)`);
 if (myRole === "host") {
-  $("#my-role").text("會議主持人"); 
+  $("#my-role").text("會議主持人");
 }
 if (myRole === "guest") {
   $("#my-role").text("來賓");
@@ -131,7 +131,7 @@ myPeer.on("call", async (call) => {
   });
   $(`div[id=${peerId}]`).append(video);
   addUserName(name, peerId);
-  addMemberList(name, role);
+  addMemberList(name, role, peerId);
   adjustLayout();
   if (!otherWebcamStatus) hideCamera(peerId, "video");
   if (!otherMicStatus) muteMic(peerId);
@@ -149,13 +149,16 @@ socket.on("user-connected", async (peerId, name, role, socketId) => {
 // 若有user離開，移除他的視訊畫面
 socket.on("user-disconnected", (peerId) => {
   $(`div[id=${peerId}]`).remove();
+  $(`li[id=${peerId}]`).remove();
   adjustLayout();
   console.log(`Disconnect with ${peerId}`);
 });
 
 // 新user加入，建立peer連線的function
 function connectToNewUser(peerId, name, role, stream) {
-  const options = { metadata: { name: myName, role: myRole, myWebcamStatus, myMicStatus } };
+  const options = {
+    metadata: { name: myName, role: myRole, myWebcamStatus, myMicStatus },
+  };
   const call = myPeer.call(peerId, stream, options);
   addVideoGridElement(peerId);
   const video = document.createElement("video");
@@ -168,7 +171,7 @@ function connectToNewUser(peerId, name, role, stream) {
   });
   $(`div[id=${peerId}]`).append(video);
   addUserName(name, peerId);
-  addMemberList(name, role);
+  addMemberList(name, role, peerId);
   adjustLayout();
   console.log(`Connection with ${peerId}`);
 }
@@ -177,11 +180,15 @@ function connectToNewUser(peerId, name, role, stream) {
 function addVideoGridElement(peerId) {
   let videoGridElement;
   // FIXME:不能只以偵測分享螢幕渲染了沒當基準，加上去redis抓分享螢幕狀態，才可以確保新user的渲染畫面正確
-  if (roomShareScreenStatus === "true" || $("#share-screen video").length === 1) {
-    if($("#display div").length >= 5) {
+  if (
+    roomShareScreenStatus === "true" ||
+    $("#share-screen video").length === 1
+  ) {
+    if ($("#display div").length >= 5) {
       videoGridElement = $("<div>", {
         id: peerId,
-        class: "hidden relative w-[20%] aspect-video overflow-hidden bg-gray-100",
+        class:
+          "hidden relative w-[20%] aspect-video overflow-hidden bg-gray-100",
       });
     } else {
       videoGridElement = $("<div>", {
@@ -191,11 +198,9 @@ function addVideoGridElement(peerId) {
     }
     $("#display").append(videoGridElement);
     return;
-  } 
+  }
   if (
-    (roomWhiteboardStatus !== "false" &&
-      roomWhiteboardStatus !== "" &&
-      roomWhiteboardStatus) ||
+    (whiteboardShareName !== "" && whiteboardShareName) ||
     $("#left-items span").length === 1
   ) {
     if ($("#display div").length >= 5) {
@@ -212,7 +217,7 @@ function addVideoGridElement(peerId) {
     }
     $("#display").append(videoGridElement);
     return;
-  } 
+  }
   videoGridElement = $("<div>", {
     id: peerId,
     class: "relative pb-[56.25%] overflow-hidden h-0 bg-gray-100",
@@ -239,7 +244,7 @@ function addUserName(name, peerId) {
 }
 
 // Append member list
-function addMemberList(name, role) {
+function addMemberList(name, role, peerId) {
   if (role === "host") {
     role = "會議主持人";
   }
@@ -247,21 +252,21 @@ function addMemberList(name, role) {
     role = "來賓";
   }
   $("#members-list ul").append(`
-    <li class="py-2">
-    <div class="flex items-center space-x-4">
-      <div class="flex-shrink-0">
-        <img class="w-8 h-8 rounded-full" src="./images/user.png" alt="Neil image">
+    <li id="${peerId}" class="py-2">
+      <div class="flex items-center space-x-4">
+        <div class="flex-shrink-0">
+          <img class="w-8 h-8 rounded-full" src="./images/user.png" alt="Neil image">
+        </div>
+        <div class="flex-1 min-w-0">
+          <p class="text-sm font-medium text-gray-900 truncate dark:text-white">
+            ${name}
+          </p>
+          <p class="text-sm text-gray-500 truncate dark:text-gray-400">
+            ${role}
+          </p>
+        </div>
       </div>
-      <div class="flex-1 min-w-0">
-        <p class="text-sm font-medium text-gray-900 truncate dark:text-white">
-          ${name}
-        </p>
-        <p class="text-sm text-gray-500 truncate dark:text-gray-400">
-          ${role}
-        </p>
-      </div>
-    </div>
-  </li>
+    </li>
   `);
 }
 
@@ -286,7 +291,7 @@ function adjustLayout() {
         .removeClass("grid-cols-fluid-s")
         .addClass("grid-cols-fluid-m");
     }
-  } 
+  }
   if (count > 9) {
     if ($(".grid-cols-fluid-m").length === 1) {
       $("#display")
@@ -388,4 +393,8 @@ window.onbeforeunload = function (e) {
   localStorage.removeItem(`name-${roomId}`);
   localStorage.removeItem(`cameraStatus-${roomId}`);
   localStorage.removeItem(`micStatus-${roomId}`);
+  localStorage.removeItem(`title-${roomId}`);
+  localStorage.removeItem(`role-${roomId}`);
 };
+
+export { myPeerId };

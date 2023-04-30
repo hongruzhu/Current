@@ -3,8 +3,11 @@ import {
   roomId,
   myName,
   socket,
-  roomWhiteboardStatus  
+  whiteboardShareName,
+  whiteboardSharePeerId
 } from "./constant.js";
+
+import { myPeerId } from "./stream.js";
 
 let openWhiteboardStatus;
 // 開啟小白板
@@ -20,7 +23,7 @@ $("#start-whiteboard").on("click", async () => {
     return;
   }
   // 通知會議室其他人開啟小白版
-  socket.emit("start-whiteboard", roomId, myName);
+  socket.emit("start-whiteboard", roomId, myName, myPeerId);
   $("#left-items").append(
     `<span class="flex items-center bg-gray-300 rounded-lg h-full mt-2 ml-2">&emsp;你正在共享小白版&emsp;</span>`
   );
@@ -48,7 +51,8 @@ $("#start-whiteboard").on("click", async () => {
   });
 });
 
-socket.on("start-whiteboard", async (name) => {
+socket.on("start-whiteboard", async (name, peerId) => {
+  $("#whiteboard canvas").attr("id", peerId)
   $("#left-items").append(
     `<span class="flex items-center bg-gray-300 rounded-lg h-full mt-2 ml-2">&emsp;${name}正在共享小白版&emsp;</span>`
   );
@@ -69,12 +73,12 @@ socket.on("start-whiteboard", async (name) => {
 
 // 新user剛進會議室時，偵測會議室是否已開啟小白版
 if (
-  roomWhiteboardStatus !== "false" &&
-  roomWhiteboardStatus !== "" &&
-  roomWhiteboardStatus
+  whiteboardShareName !== "" &&
+  whiteboardShareName
 ) {
+  $("#whiteboard canvas").attr("id", whiteboardSharePeerId);
   $("#left-items").append(
-    `<span class="flex items-center bg-gray-300 rounded-lg h-full mt-2 ml-2">&emsp;${roomWhiteboardStatus}正在共享小白版&emsp;</span>`
+    `<span class="flex items-center bg-gray-300 rounded-lg h-full mt-2 ml-2">&emsp;${whiteboardShareName}正在共享小白版&emsp;</span>`
   );
   $("#right-items").append(`          
     <span class="flex items-center h-full bg-gray-300 rounded-lg text-yellow-800 mt-2 mr-2 hover:text-yellow-600 hover:cursor-pointer">&emsp;清空白板&emsp;</span>
@@ -98,13 +102,13 @@ async function startWhiteboard() {
   const whiteboardHeight = $("#whiteboard").height();
   const whiteboardWidth = (whiteboardHeight * 16) / 9;
   $("#whiteboard").attr("width", whiteboardWidth);
-  $("#my-whiteboard").attr("width", whiteboardWidth);
-  $("#my-whiteboard").attr("height", whiteboardHeight);
+  $("#whiteboard canvas").attr("width", whiteboardWidth);
+  $("#whiteboard canvas").attr("height", whiteboardHeight);
 
   // TODO:若包裹canvas的div的長寬變了，canvas的長寬要動態調整，但這蠻細的，要實現非常有難度，先pending
 
   // 開始畫畫
-  const canvas = document.getElementById("my-whiteboard");
+  const canvas = $("#whiteboard canvas")[0];
   const context = canvas.getContext("2d");
 
   const brushMini = $("#brush-mini div").width();
@@ -309,6 +313,17 @@ async function startWhiteboard() {
     step.push(["restore-whiteboard", state]);
   });
 
+  // 若開啟小白版的user離開，通知會議的其他使用者要關掉
+  socket.on("user-disconnected", (peerId) => {
+    if ($("#whiteboard canvas").attr("id") === peerId) {
+      originLayout();
+      // 取消畫布的監聽
+      canvas.removeEventListener("mousedown", startDrawing);
+      canvas.removeEventListener("mousemove", move);
+      canvas.removeEventListener("mouseup", stopDrawing);
+    }
+  });
+
   return { canvas, startDrawing, move, stopDrawing };
 }
 
@@ -329,7 +344,7 @@ async function whiteboardLayout() {
 async function originLayout() {
   // 還原canavs的長和寬，以及包裹canavs的div的長
   $("#whiteboard").removeAttr("width");
-  $("#my-whiteboard").removeAttr("width height");
+  $("#whiteboard canvas").removeAttr("width height");
   // 還原視訊部分css跟著大改
   $("#whiteboard-reminder span").remove();
   $("#display div")

@@ -16,7 +16,8 @@ const roomShareScreenStatus = shareScreenResult.data;
 
 // 抓取會議室分享小白版的狀態
 const whiteboardResult = await axios.post("./getWhiteboardStatus", { roomId });
-const roomWhiteboardStatus = whiteboardResult.data;
+const whiteboardShareName = whiteboardResult.data.name;
+const whiteboardSharePeerId = whiteboardResult.data.peerId;
 
 // 抓取會議名稱，加到會議資訊欄
 if (myRole === "host") {
@@ -35,7 +36,8 @@ export {
   myRole,
   socket,
   roomShareScreenStatus,
-  roomWhiteboardStatus
+  whiteboardShareName,
+  whiteboardSharePeerId
 };
 
 // 右側欄位控制項

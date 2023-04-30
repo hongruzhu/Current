@@ -6,14 +6,16 @@ import { getWhiteboardStatus } from "../controllers/whiteboard_controller.js";
 
 
 const whiteboard = (io, socket) => {
-  socket.on("start-whiteboard", (roomId, name) => {
-    redis.hset("whiteboardStatus", roomId, name);
-    socket.to(roomId).emit("start-whiteboard", name);
+  socket.on("start-whiteboard", (roomId, name, peerId) => {
+    redis.hset("whiteboardShareName", roomId, name);
+    redis.hset("whiteboardSharePeerId", roomId, peerId);
+    socket.to(roomId).emit("start-whiteboard", name, peerId);
   });
 
   socket.on("stop-whiteboard", (roomId) => {
     socket.to(roomId).emit("stop-whiteboard");
-    redis.hset("whiteboardStatus", roomId, "false");
+    redis.hset("whiteboardShareName", roomId, null);
+    redis.hset("whiteboardSharePeerId", roomId, null);
   });
 
   socket.on(
