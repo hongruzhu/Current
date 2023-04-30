@@ -180,6 +180,7 @@ function connectToNewUser(peerId, name, role, stream) {
 function addVideoGridElement(peerId) {
   let videoGridElement;
   // FIXME:不能只以偵測分享螢幕渲染了沒當基準，加上去redis抓分享螢幕狀態，才可以確保新user的渲染畫面正確
+  console.log(roomShareScreenStatus);
   if (
     roomShareScreenStatus === "true" ||
     $("#share-screen video").length === 1
