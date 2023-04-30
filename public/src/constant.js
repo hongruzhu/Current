@@ -6,6 +6,8 @@ const urlParams = new URLSearchParams(window.location.search);
 const createStatus = urlParams.get("create");
 const roomId = urlParams.get("roomId");
 const myName = localStorage.getItem(`name-${roomId}`);
+const myEmail = localStorage.getItem(`userEmail`);
+const myRole = localStorage.getItem(`role-${roomId}`);
 const socket = io();
 
 // 抓取會議室分享螢幕的狀態
@@ -16,13 +18,87 @@ const roomShareScreenStatus = shareScreenResult.data;
 const whiteboardResult = await axios.post("./getWhiteboardStatus", { roomId });
 const roomWhiteboardStatus = whiteboardResult.data;
 
+// 抓取會議名稱，加到會議資訊欄
+if (myRole === "host") {
+  const title = localStorage.getItem(`title-${roomId}`);
+  $("#room-title").text(title);
+} else {
+  const result = await axios.post("./getRoomTitle", { roomId });
+  const title = result.data;
+  $("#room-title").text(title);
+}
+
 export {
   roomId,
   myName,
+  myEmail,
+  myRole,
   socket,
   roomShareScreenStatus,
   roomWhiteboardStatus
 };
+
+// 右側欄位控制項
+let chatRoomStatus = false;
+let memberListStatus = false;
+let infoStatus = false;
+// 聊天室開關控制選項
+$("#chat-room-btn").on("click", () => {
+  if (chatRoomStatus) {
+    $("#right-block").addClass("hidden");
+    $("#chat-room").addClass("hidden");
+    chatRoomStatus = false;
+    return;
+  }
+  $("#right-block").removeClass("hidden");
+  $("#chat-room").removeClass("hidden");
+  $("#members").addClass("hidden");
+  $("#info").addClass("hidden");
+  chatRoomStatus = true;
+  memberListStatus = false;
+  infoStatus = false;
+});
+
+// 會議成員開關控制選項
+$("#show-members-btn").on("click", () => {
+  if (memberListStatus) {
+    $("#right-block").addClass("hidden");
+    $("#members").addClass("hidden");
+    memberListStatus = false;
+    return;
+  }
+  $("#right-block").removeClass("hidden");
+  $("#members").removeClass("hidden");
+  $("#chat-room").addClass("hidden");
+  $("#info").addClass("hidden");
+  memberListStatus = true;
+  chatRoomStatus = false;
+  infoStatus = false;
+});
+
+// 會議資訊開關選項
+$("#show-info-btn").on("click", () => {
+  if (infoStatus) {
+    $("#right-block").addClass("hidden");
+    $("#info").addClass("hidden");
+    infoStatus = false;
+    return;
+  }
+  $("#right-block").removeClass("hidden");
+  $("#info").removeClass("hidden");
+  $("#chat-room").addClass("hidden");
+  $("#members").addClass("hidden");
+  infoStatus = true;
+  memberListStatus = false;
+  chatRoomStatus = false;
+});
+// 按X關閉右側欄
+$(".close-right-block").on("click", () => {
+  $("#right-block").addClass("hidden");
+  $("#info").addClass("hidden");
+  $("#chat-room").addClass("hidden");
+  $("#members").addClass("hidden");
+})
 
 // 若是創建新會議來到這，把url改成正常樣子
 if (createStatus) {

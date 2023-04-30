@@ -36,7 +36,6 @@ const createRoomPage = async (req, res) => {
 
 const createRoom = async (req, res) => {
   // TODO:存會議資料到database
-  // console.log(req.body, req.payload);
   const roomId = req.query.roomId;
   const title = req.body.title;
   const checkRoomId = await redis.hexists("room", roomId);
@@ -44,6 +43,8 @@ const createRoom = async (req, res) => {
     res.render("wrongNumber");
     return;
   }
+  // 儲存會議名稱到redis，方便之後加進來的user抓取
+  redis.hset("roomTitle", roomId, title);
   res.redirect(`./concall?roomId=${roomId}&create=true`);
 };
 

@@ -67,16 +67,19 @@ try {
   $("#create-room").on("submit", async (e) => {
     e.preventDefault();
     const name = $("input[name='name']").val();
+    const title = $("input[name='title']").val();
     localStorage.setItem(`name-${roomId}`, name);
     localStorage.setItem(`cameraStatus-${roomId}`, cameraStatus);
     localStorage.setItem(`micStatus-${roomId}`, micStatus);
+    localStorage.setItem(`role-${roomId}`, "host");
+    localStorage.setItem(`title-${roomId}`, title);
 
     const headers = {
       Authorization: `Bearer ${accessToken}`,
     };
 
     const data = {
-      title: $("input[name='title']").val(),
+      title,
       storeStatus: $("input[name='store-status']").val(),
     };
 

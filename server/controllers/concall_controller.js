@@ -27,11 +27,19 @@ const getStartTime = async (req, res) => {
   res.send(startTime);
 };
 
+const getRoomTitle = async (req, res) => {
+  const { roomId } = req.body;
+  let roomTitle = await redis.hget("roomTitle", roomId);
+  if (!roomTitle) roomTitle = "無";
+  res.send(roomTitle);
+}
+
 export {
   reviseRoomUserNumber,
   deleteRoomId,
   getStartTime,
+  getRoomTitle,
   deleteStartTime,
   deleteShareScreenStatus,
-  deleteWhiteboardStatus
+  deleteWhiteboardStatus,
 };

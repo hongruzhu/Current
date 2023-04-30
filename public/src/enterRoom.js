@@ -69,6 +69,7 @@ try {
     localStorage.setItem(`name-${roomId}`, name);
     localStorage.setItem(`cameraStatus-${roomId}`, cameraStatus);
     localStorage.setItem(`micStatus-${roomId}`, micStatus);
+    localStorage.setItem(`role-${roomId}`, "guest");
   });
 
   let cameraStatus = true;

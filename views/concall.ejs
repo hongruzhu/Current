@@ -44,10 +44,8 @@
           <canvas id="my-whiteboard" class="border-black border rounded-xl"></canvas>
           <div id="whiteboard-reminder" class="absolute w-full h-8 flex justify-between">
             <div id="left-items" class="order-1">
-
             </div>
             <div id="right-items" class="order-2 flex">
-
             </div>
           </div>
           <div id="whiteboard-toolbar" class="absolute flex flex-col bg-gray-300 rounded-3xl w-[3%] left-4 top-[25%]">
@@ -99,8 +97,17 @@
         </div>
       </div>
       <div id="right-block" class="hidden w-[22%] h-full pl-2 min-w-[250px]">
-        <div id="chat-room" class="relative w-full h-full bg-gray-200 rounded-lg drop-shadow-md overflow-hidden">
-          <div id="messenges" class="absolute top-0 w-full h-[calc(100%-70px)] p-1.5 overflow-y-scroll break-words"></div>
+        <div id="chat-room" class="hidden relative w-full h-full bg-gray-200 rounded-lg drop-shadow-md overflow-hidden">
+          <div id="chatroom-header" class="flex justify-between text-xl m-4">
+            <span>聊天室</span>
+            <button class="close-right-block flex items-center justify-center rounded-full hover:bg-gray-300 h-8 w-8">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 50" width="20px" height="20px">
+                <path
+                  d="M 9.15625 6.3125 L 6.3125 9.15625 L 22.15625 25 L 6.21875 40.96875 L 9.03125 43.78125 L 25 27.84375 L 40.9375 43.78125 L 43.78125 40.9375 L 27.84375 25 L 43.6875 9.15625 L 40.84375 6.3125 L 25 22.15625 Z" />
+              </svg>
+            </button>
+          </div>
+          <div id="messenges" class="absolute top-16 w-full h-[calc(100%-102px)] p-1.5 overflow-y-scroll break-words"></div>
           <form id="chat" class="absolute bottom-0 w-full p-1.5">
             <label for="chat" class="sr-only">Your message</label>
             <div class="flex items-center px-1 py-2 rounded-lg bg-gray-100">
@@ -127,6 +134,64 @@
               </button>
             </div>
           </form>
+        </div>
+        <div id="members" class="hidden relative w-full h-full bg-gray-200 rounded-lg drop-shadow-md overflow-hidden overflow-y-scroll">
+          <div id="members-header" class="flex justify-between text-xl m-4">
+            <span>參與者</span>
+            <button class="close-right-block flex items-center justify-center rounded-full hover:bg-gray-300 h-8 w-8">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 50" width="20px" height="20px">
+                <path
+                  d="M 9.15625 6.3125 L 6.3125 9.15625 L 22.15625 25 L 6.21875 40.96875 L 9.03125 43.78125 L 25 27.84375 L 40.9375 43.78125 L 43.78125 40.9375 L 27.84375 25 L 43.6875 9.15625 L 40.84375 6.3125 L 25 22.15625 Z" />
+              </svg>
+            </button>
+          </div>
+          <div id="members-list" class="mx-4">
+            <ul class="divide-y divide-gray-200 dark:divide-gray-700">
+              <li class="py-2">
+                <div class="flex items-center space-x-4">
+                  <div class="flex-shrink-0">
+                    <img class="w-8 h-8 rounded-full" src="./images/user.png" alt="Neil image">
+                  </div>
+                  <div class="flex-1 min-w-0">
+                    <p id="my-name" class="text-sm font-medium text-gray-900 truncate dark:text-white">
+                      Neil Sims
+                    </p>
+                    <p id="my-role" class="text-sm text-gray-500 truncate dark:text-gray-400">
+                      會議主持人
+                    </p>
+                  </div>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div id="info" class="hidden relative w-full h-full bg-gray-200 rounded-lg drop-shadow-md overflow-hidden">
+          <div id="info-header" class="flex justify-between text-xl m-4">
+            <span>會議資訊</span>
+            <button class="close-right-block flex items-center justify-center rounded-full hover:bg-gray-300 h-8 w-8">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 50" width="20px" height="20px">
+                <path
+                  d="M 9.15625 6.3125 L 6.3125 9.15625 L 22.15625 25 L 6.21875 40.96875 L 9.03125 43.78125 L 25 27.84375 L 40.9375 43.78125 L 43.78125 40.9375 L 27.84375 25 L 43.6875 9.15625 L 40.84375 6.3125 L 25 22.15625 Z" />
+              </svg>
+            </button>
+          </div>
+          <div id="info-content" class="m-4">
+            <dl class="max-w-md text-gray-900 divide-y divide-gray-200 dark:text-white dark:divide-gray-700">
+              <div class="flex flex-col pb-3 break-words">
+                <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">會議名稱</dt>
+                <dd id="room-title" class="text-lg font-semibold"></dd>
+              </div>
+              <div class="flex flex-col py-3 break-words">
+                <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">會議連結</dt>
+                <dd class="text-lg font-semibold">https://currentmeet.com/concall?roomId=<%= roomId %></dd>
+              </div>
+              <div class="flex flex-col pt-3 break-words">
+                <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">會議代碼</dt>
+                <dd class="text-lg font-semibold"><%= roomId %></dd>
+              </div>
+            </dl>
+          </div>
         </div>
       </div>
     </div>
@@ -279,7 +344,7 @@
         </div>
       </div>
       <div class="items-center justify-center hidden ml-auto md:flex">
-        <button data-tooltip-target="tooltip-participants" type="button"
+        <button id="show-members-btn" data-tooltip-target="tooltip-participants" type="button"
           class="p-2.5 group rounded-full hover:bg-gray-100 mr-1 focus:outline-none focus:ring-4 focus:ring-gray-200">
           <svg class="w-5 h-5 text-gray-500 group-hover:text-gray-900"
             fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -309,7 +374,7 @@
           Adjust volume
           <div class="tooltip-arrow" data-popper-arrow></div>
         </div>
-        <button data-tooltip-target="tooltip-information" type="button"
+        <button id="show-info-btn" data-tooltip-target="tooltip-information" type="button"
           class="p-2.5 group rounded-full hover:bg-gray-100 focus:outline-none focus:ring-4 focus:ring-gray-200">
           <svg class="w-5 h-5 text-gray-500 group-hover:text-gray-900"
             fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">

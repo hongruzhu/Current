@@ -2,6 +2,8 @@
 import {
   roomId,
   myName,
+  myEmail,
+  myRole,
   socket,
   roomShareScreenStatus,
   roomWhiteboardStatus
@@ -53,6 +55,15 @@ async function playing() {
   setTimeout(playing, 0);
 }
 
+// 在member list加入自己
+$("#my-name").text(`${myName} (你)`);
+if (myRole === "host") {
+  $("#my-role").text("會議主持人"); 
+}
+if (myRole === "guest") {
+  $("#my-role").text("來賓");
+}
+
 // PeerJS需傳送stream給其他人，把自己畫面的canvas轉回video stream的function
 async function convertCanvasToStream(canvas) {
   // 把canvas的畫面重新轉回stream
@@ -99,12 +110,12 @@ const myPeer = new Peer(undefined, {
 myPeer.on("open", (peerId) => {
   myPeerId = peerId;
   console.log(`my peerId: ${peerId}`);
-  socket.emit("join-room", roomId, peerId, myName);
+  socket.emit("join-room", roomId, peerId, myName, myRole);
 });
 
 myPeer.on("call", async (call) => {
   const peerId = call.peer;
-  const { name } = call.metadata;
+  const { name, role } = call.metadata;
   const otherWebcamStatus = call.metadata.myWebcamStatus;
   const otherMicStatus = call.metadata.myMicStatus;
   console.log(`Connection with ${peerId}`);
@@ -120,6 +131,7 @@ myPeer.on("call", async (call) => {
   });
   $(`div[id=${peerId}]`).append(video);
   addUserName(name, peerId);
+  addMemberList(name, role);
   adjustLayout();
   if (!otherWebcamStatus) hideCamera(peerId, "video");
   if (!otherMicStatus) muteMic(peerId);
@@ -130,8 +142,8 @@ myPeer.on("call", async (call) => {
   if (!myMicStatus) socket.emit("mute-mic", roomId, myPeerId);
 });
 
-socket.on("user-connected", async (peerId, name, socketId) => {
-  connectToNewUser(peerId, name, myStream);
+socket.on("user-connected", async (peerId, name, role, socketId) => {
+  connectToNewUser(peerId, name, role, myStream);
 });
 
 // 若有user離開，移除他的視訊畫面
@@ -142,8 +154,8 @@ socket.on("user-disconnected", (peerId) => {
 });
 
 // 新user加入，建立peer連線的function
-function connectToNewUser(peerId, name, stream) {
-  const options = { metadata: { name: myName, myWebcamStatus, myMicStatus } };
+function connectToNewUser(peerId, name, role, stream) {
+  const options = { metadata: { name: myName, role: myRole, myWebcamStatus, myMicStatus } };
   const call = myPeer.call(peerId, stream, options);
   addVideoGridElement(peerId);
   const video = document.createElement("video");
@@ -156,6 +168,7 @@ function connectToNewUser(peerId, name, stream) {
   });
   $(`div[id=${peerId}]`).append(video);
   addUserName(name, peerId);
+  addMemberList(name, role);
   adjustLayout();
   console.log(`Connection with ${peerId}`);
 }
@@ -223,6 +236,33 @@ function addUserName(name, peerId) {
       "absolute z-10 bottom-0 left-0 px-4 py-3 text-base text-white text-shadow",
   });
   $(`div[id=${peerId}]`).append(userName);
+}
+
+// Append member list
+function addMemberList(name, role) {
+  if (role === "host") {
+    role = "會議主持人";
+  }
+  if (role === "guest") {
+    role = "來賓";
+  }
+  $("#members-list ul").append(`
+    <li class="py-2">
+    <div class="flex items-center space-x-4">
+      <div class="flex-shrink-0">
+        <img class="w-8 h-8 rounded-full" src="./images/user.png" alt="Neil image">
+      </div>
+      <div class="flex-1 min-w-0">
+        <p class="text-sm font-medium text-gray-900 truncate dark:text-white">
+          ${name}
+        </p>
+        <p class="text-sm text-gray-500 truncate dark:text-gray-400">
+          ${role}
+        </p>
+      </div>
+    </div>
+  </li>
+  `);
 }
 
 // 偵測現在有會議有幾個畫面，並調整layout

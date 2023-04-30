@@ -67,18 +67,6 @@ function getTime() {
   return time;
 }
 
-// 聊天室開關控制選項
-let chatRoomStatus = false;
-$("#chat-room-btn").on("click", () => {
-  if (chatRoomStatus) {
-    $("#right-block").addClass("hidden");
-    chatRoomStatus = false;
-    return;
-  }
-  $("#right-block").removeClass("hidden");
-  chatRoomStatus = true;
-});
-
 $("#messenge-input").keypress((e) => {
   if (e.which === 13 && !e.shiftKey) {
     e.preventDefault();

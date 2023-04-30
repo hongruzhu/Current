@@ -5,16 +5,17 @@ import {
   reviseRoomUserNumber,
   deleteRoomId,
   getStartTime,
+  getRoomTitle,
   deleteStartTime,
   deleteShareScreenStatus,
   deleteWhiteboardStatus,
 } from "../controllers/concall_controller.js";
 
 const conferenceCall = (io, socket) => {
-  socket.on("join-room", (roomId, peerId, name) => {
+  socket.on("join-room", (roomId, peerId, name, role) => {
     socket.join(roomId);
     const socketId = socket.id;
-    socket.to(roomId).emit("user-connected", peerId, name, socketId);
+    socket.to(roomId).emit("user-connected", peerId, name, role, socketId);
     reviseRoomUserNumber(roomId, 1);
 
     socket.on("disconnect", async () => {
@@ -44,6 +45,7 @@ const conferenceCall = (io, socket) => {
 };
 
 router.route("/getStartTime").get(wrapAsync(getStartTime));
+router.route("/getRoomTitle").post(wrapAsync(getRoomTitle));
 
 export { conferenceCall };
 export { router as concall_route };
