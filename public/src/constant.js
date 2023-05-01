@@ -102,6 +102,39 @@ $(".close-right-block").on("click", () => {
   $("#members").addClass("hidden");
 })
 
+// 點擊end call btn，跳轉到thankyou頁面
+// set the modal menu element
+const $targetEl = document.getElementById("popup-modal");
+
+// options with default values
+const options = {
+  placement: 'bottom-right',
+  backdrop: 'dynamic',
+  backdropClasses: 'bg-gray-900 bg-opacity-50 dark:bg-opacity-80 fixed inset-0 z-40',
+  closable: true,
+  onHide: () => {
+      console.log('modal is hidden');
+  },
+  onShow: () => {
+      console.log('modal is shown');
+  },
+  onToggle: () => {
+      console.log('modal has been toggled');
+  }
+};
+
+const modal = new Modal($targetEl, options);
+
+$("#leave-room").on("click", () => {
+  localStorage.removeItem(`name-${roomId}`);
+  localStorage.removeItem(`cameraStatus-${roomId}`);
+  localStorage.removeItem(`micStatus-${roomId}`);
+  localStorage.removeItem(`title-${roomId}`);
+  localStorage.removeItem(`role-${roomId}`);
+  window.location.href = "./thankyou";
+})
+
+
 // 若是創建新會議來到這，把url改成正常樣子
 if (createStatus) {
   const domain = window.location.host;
