@@ -216,11 +216,6 @@
           </svg>
           <span class="sr-only">Mute microphone</span>
         </button>
-        <div id="tooltip-microphone" role="tooltip"
-          class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip">
-          Mute microphone
-          <div class="tooltip-arrow" data-popper-arrow></div>
-        </div>
         <button id="hide-camera" data-tooltip-target="tooltip-camera" type="button"
           class="p-2.5 bg-gray-100 group rounded-full hover:bg-gray-200 mr-4">
           <svg class="w-5 h-5 text-green-500 group-hover:text-green-500"
@@ -231,11 +226,6 @@
           </svg>
           <span class="sr-only">Hide camera</span>
         </button>
-        <div id="tooltip-camera" role="tooltip"
-          class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip">
-          Hide camera
-          <div class="tooltip-arrow" data-popper-arrow></div>
-        </div>
         <button id="share-screen-btn" data-tooltip-target="tooltip-feedback" type="button"
           class="p-2.5 bg-gray-100 group rounded-full hover:bg-gray-200 mr-4">
           <svg class="w-5 h-5 text-gray-500 group-hover:text-gray-900"
@@ -297,55 +287,37 @@
           </svg>
           <span class="sr-only">Start whiteboard</span>
         </button>
-        <div id="tooltip-feedback" role="tooltip"
-          class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip">
-          Share feedback
-          <div class="tooltip-arrow" data-popper-arrow></div>
-        </div>
-        <button data-tooltip-target="tooltip-settings" type="button"
-          class="p-2.5 bg-gray-100 group rounded-full mr-4 md:mr-0 hover:bg-gray-200 focus:outline-none focus:ring-4 focus:ring-gray-200">
-          <svg class="w-5 h-5 text-gray-500 group-hover:text-gray-900"
-            fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <button id="change-background" data-tooltip-target="tooltip-feedback" type="button"
+          class="p-2 bg-gray-100 group rounded-full hover:bg-gray-200 mr-4">
+          <svg class="w-6 h-6 text-gray-500 group-hover:text-gray-900" xmlns="http://www.w3.org/2000/svg" viewBox="0 96 960 960" fill="currentColor" aria-hidden="true">
+            <path clip-rule="evenodd" fill-rule="evenodd"
+              d="M120 482v-85l181-181h85L120 482Zm0-196v-70h70l-70 70Zm527 67q-10-11-21.5-21.5T602 313l97-97h85L647 353ZM220 695l77-77q7 11 14.5 20t16.5 17q-28 7-56.5 17.5T220 695Zm480-197v-2q0-19-3-37t-9-35l152-152v86L700 498ZM436 280l65-64h85l-64 64q-11-2-21-3t-21-1q-11 0-22 1t-22 3ZM120 681v-85l144-144q-2 11-3 22t-1 22q0 11 1 21t3 20L120 681Zm709 83q-8-12-18.5-23T788 721l52-52v85l-11 10Zm-116-82q-7-3-14-5.5t-14-4.5q-9-3-17.5-6t-17.5-5l190-191v86L713 682Zm-233-26q-66 0-113-47t-47-113q0-66 47-113t113-47q66 0 113 47t47 113q0 66-47 113t-113 47Zm0-80q33 0 56.5-23.5T560 496q0-33-23.5-56.5T480 416q-33 0-56.5 23.5T400 496q0 33 23.5 56.5T480 576ZM160 936v-71q0-34 17-63t47-44q51-26 115.5-44T480 696q76 0 140.5 18T736 758q30 15 47 44t17 63v71H160Zm81-80h478q-2-9-7-15.5T699 830q-36-18-91.5-36T480 776q-72 0-127.5 18T261 830q-8 4-13 11t-7 15Zm239 0Zm0-360Z" />
+          </svg>
+          <span class="sr-only">Change background</span>
+        </button>
+        <button id="start-recording" data-tooltip-target="tooltip-feedback" type="button"
+          class="p-2 bg-gray-100 group rounded-full hover:bg-gray-200 mr-4">
+          <svg class="w-6 h-6 text-gray-500 group-hover:text-gray-900" xmlns="http://www.w3.org/2000/svg" viewBox="0 96 960 960" fill="currentColor" aria-hidden="true">
+            <path clip-rule="evenodd" fill-rule="evenodd"
+              d="M158 814q-37-50-57.5-110.5T80 576q0-67 20-127t57-110l58 57q-26 38-40.5 83.5T160 576q0 51 14.5 97t40.5 84l-57 57Zm322 162q-67 0-127-20t-110-57l57-58q38 26 83.5 40.5T480 896q51 0 96.5-14.5T660 841l57 58q-50 37-110 57t-127 20Zm322-162-57-57q26-38 40.5-84t14.5-97q0-51-14.5-96.5T745 396l58-57q37 50 57 110t20 127q0 67-20.5 127.5T802 814ZM299 311l-57-57q50-37 110.5-57.5T480 176q68 0 128 20.5T718 254l-57 57q-38-26-84-40.5T480 256q-51 0-97 14.5T299 311Zm181 465q-83 0-141.5-58.5T280 576q0-83 58.5-141.5T480 376q83 0 141.5 58.5T680 576q0 83-58.5 141.5T480 776Z" />
+          </svg>
+          <span class="sr-only">Start recording</span>
+        </button>
+        <button id="end-call" data-tooltip-target="tooltip-feedback" type="button"
+          class="px-4 py-2.5 bg-red-600 group rounded-full hover:bg-red-500 mr-4">
+          <svg class="w-5 h-5 text-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+            fill="currentColor" aria-hidden="true">
+            <path fill="none" d="M0 0h24v24H0V0z"></path>
             <path
-              d="M5 4a1 1 0 00-2 0v7.268a2 2 0 000 3.464V16a1 1 0 102 0v-1.268a2 2 0 000-3.464V4zM11 4a1 1 0 10-2 0v1.268a2 2 0 000 3.464V16a1 1 0 102 0V8.732a2 2 0 000-3.464V4zM16 3a1 1 0 011 1v7.268a2 2 0 010 3.464V16a1 1 0 11-2 0v-1.268a2 2 0 010-3.464V4a1 1 0 011-1z">
+              d="M4.51 15.48l2-1.59c.48-.38.76-.96.76-1.57v-2.6c3.02-.98 6.29-.99 9.32 0v2.61c0 .61.28 1.19.76 1.57l1.99 1.58c.8.63 1.94.57 2.66-.15l1.22-1.22c.8-.8.8-2.13-.05-2.88-6.41-5.66-16.07-5.66-22.48 0-.85.75-.85 2.08-.05 2.88l1.22 1.22c.71.72 1.85.78 2.65.15z">
             </path>
           </svg>
-          <span class="sr-only">Video settings</span>
+          <span class="sr-only">End call</span>
         </button>
-        <div id="tooltip-settings" role="tooltip"
-          class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip">
-          Video settings
-          <div class="tooltip-arrow" data-popper-arrow></div>
-        </div>
-        <button id="moreOptionsDropdownButton" data-dropdown-toggle="moreOptionsDropdown" type="button"
-          class="p-2.5 bg-gray-100 md:hidden group rounded-full hover:bg-gray-200 focus:outline-none focus:ring-4 focus:ring-gray-200">
-          <svg class="w-5 h-5 text-gray-500 group-hover:text-gray-900"
-            fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z"></path>
-          </svg>
-          <span class="sr-only">Show options</span>
-        </button>
-        <div id="moreOptionsDropdown"
-          class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44">
-          <ul class="py-2 text-sm text-gray-700" aria-labelledby="moreOptionsDropdownButton">
-            <li>
-              <a href="#" class="block px-4 py-2 hover:bg-gray-100">Show
-                participants</a>
-            </li>
-            <li>
-              <a href="#" class="block px-4 py-2 hover:bg-gray-100">Adjust
-                volume</a>
-            </li>
-            <li>
-              <a href="#" class="block px-4 py-2 hover:bg-gray-100">Show
-                information</a>
-            </li>
-          </ul>
-        </div>
       </div>
       <div class="items-center justify-center hidden ml-auto md:flex">
         <button id="show-members-btn" data-tooltip-target="tooltip-participants" type="button"
-          class="p-2.5 group rounded-full hover:bg-gray-100 mr-1 focus:outline-none focus:ring-4 focus:ring-gray-200">
+          class="p-2.5 group rounded-full hover:bg-gray-100 mr-1">
           <svg class="w-5 h-5 text-gray-500 group-hover:text-gray-900"
             fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
             <path
@@ -354,11 +326,6 @@
           </svg>
           <span class="sr-only">Show participants</span>
         </button>
-        <div id="tooltip-participants" role="tooltip"
-          class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip">
-          Show participants
-          <div class="tooltip-arrow" data-popper-arrow></div>
-        </div>
         <button id="chat-room-btn" data-tooltip-target="tooltip-volume" type="button"
           class="p-2.5 group rounded-full hover:bg-gray-100 mr-1">
           <svg class="w-5 h-5 text-gray-500 group-hover:text-gray-900"
@@ -369,13 +336,8 @@
           </svg>
           <span class="sr-only">Chat room</span>
         </button>
-        <div id="tooltip-volume" role="tooltip"
-          class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip">
-          Adjust volume
-          <div class="tooltip-arrow" data-popper-arrow></div>
-        </div>
         <button id="show-info-btn" data-tooltip-target="tooltip-information" type="button"
-          class="p-2.5 group rounded-full hover:bg-gray-100 focus:outline-none focus:ring-4 focus:ring-gray-200">
+          class="p-2.5 group rounded-full hover:bg-gray-100">
           <svg class="w-5 h-5 text-gray-500 group-hover:text-gray-900"
             fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
             <path clip-rule="evenodd" fill-rule="evenodd"
@@ -384,11 +346,6 @@
           </svg>
           <span class="sr-only">Show information</span>
         </button>
-        <div id="tooltip-information" role="tooltip"
-          class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip">
-          Show information
-          <div class="tooltip-arrow" data-popper-arrow></div>
-        </div>
       </div>
     </div>
     <script type="module" src="./src/constant.js"></script>
