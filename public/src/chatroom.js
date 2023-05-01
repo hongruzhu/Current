@@ -1,4 +1,4 @@
-import { roomId, myName, socket } from "./constant.js";
+import { roomId, myName, socket } from "./begin.js";
 
 $("#chat").on("submit", (e) => {
   e.preventDefault();

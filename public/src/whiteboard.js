@@ -5,7 +5,7 @@ import {
   socket,
   whiteboardShareName,
   whiteboardSharePeerId
-} from "./constant.js";
+} from "./begin.js";
 
 import { myPeerId } from "./stream.js";
 
