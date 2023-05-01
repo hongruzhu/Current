@@ -1,7 +1,3 @@
-window.addEventListener("load", () => {
-  $("#loading").remove();
-});
-
 const urlParams = new URLSearchParams(window.location.search);
 const createStatus = urlParams.get("create");
 const roomId = urlParams.get("roomId");
@@ -101,6 +97,14 @@ $(".close-right-block").on("click", () => {
   $("#chat-room").addClass("hidden");
   $("#members").addClass("hidden");
 })
+
+// 一鍵複製
+$("#invite-code-copy").on("click", () => {
+  navigator.clipboard.writeText($("#invite-code").text());
+});
+$("#invite-url-copy").on("click", () => {
+  navigator.clipboard.writeText($("#invite-url").text());
+});
 
 // 點擊end call btn，跳轉到thankyou頁面
 // set the modal menu element

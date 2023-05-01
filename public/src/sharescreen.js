@@ -1,5 +1,5 @@
 // 引入共用的變數
-import { roomId, myName, socket } from "./constant.js";
+import { roomId, myName, socket } from "./begin.js";
 
 // 自己分享螢幕的狀態
 let myShareScreenStatus;
@@ -43,13 +43,13 @@ async function shareScreen(surface) {
   socket.on("already-share-screen", (status) => {
     if (status) alert("現在有人分享螢幕，不能分享");
   });
-  
+
   myShareScreenStatus = true;
 
   closeShareScreenList();
   const myScreenStream = await navigator.mediaDevices.getDisplayMedia({
     video: { cursor: "always", displaySurface: surface },
-    audio: true
+    audio: true,
   });
 
   const myScreen = document.createElement("video");
@@ -188,7 +188,9 @@ function originLayout() {
     .removeClass("w-[90%] flex gap-1 items-center justify-center mb-2")
     .addClass("w-full h-full grid gap-1 items-center");
   $("#display div")
-    .removeClass("hidden relative w-[20%] aspect-video overflow-hidden bg-gray-100")
+    .removeClass(
+      "hidden relative w-[20%] aspect-video overflow-hidden bg-gray-100"
+    )
     .addClass("relative pb-[56.25%] overflow-hidden h-0 bg-gray-100");
 }
 

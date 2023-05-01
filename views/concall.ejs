@@ -177,16 +177,38 @@
           <div id="info-content" class="m-4">
             <dl class="max-w-md text-gray-900 divide-y divide-gray-200 dark:text-white dark:divide-gray-700">
               <div class="flex flex-col pb-3 break-words">
-                <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">會議名稱</dt>
+                <dt class="mb-1 text-gray-500 md:text-lg">會議名稱</dt>
                 <dd id="room-title" class="text-lg font-semibold"></dd>
               </div>
               <div class="flex flex-col py-3 break-words">
-                <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">會議連結</dt>
-                <dd class="text-lg font-semibold">https://currentmeet.com/concall?roomId=<%= roomId %></dd>
+                <div class="flex items-center">
+                  <dt class="text-gray-500 md:text-lg">會議連結</dt>
+                  <button id="invite-url-copy"
+                    class="inline-flex justify-center p-2 text-yellow-600 rounded-lg cursor-pointer bg-gray-200 hover:bg-gray-100">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5">
+                      <path
+                        d="M7 3.5A1.5 1.5 0 018.5 2h3.879a1.5 1.5 0 011.06.44l3.122 3.12A1.5 1.5 0 0117 6.622V12.5a1.5 1.5 0 01-1.5 1.5h-1v-3.379a3 3 0 00-.879-2.121L10.5 5.379A3 3 0 008.379 4.5H7v-1z" />
+                      <path
+                        d="M4.5 6A1.5 1.5 0 003 7.5v9A1.5 1.5 0 004.5 18h7a1.5 1.5 0 001.5-1.5v-5.879a1.5 1.5 0 00-.44-1.06L9.44 6.439A1.5 1.5 0 008.378 6H4.5z" />
+                    </svg>
+                  </button>
+                </div>
+                <dd id="invite-url" class="text-lg font-semibold">https://currentmeet.com/concall?roomId=<%= roomId %></dd>
               </div>
               <div class="flex flex-col pt-3 break-words">
-                <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">會議代碼</dt>
-                <dd class="text-lg font-semibold"><%= roomId %></dd>
+                <div class="flex items-center">
+                  <dt class="text-gray-500 md:text-lg dark:text-gray-400">會議代碼</dt>
+                  <button id="invite-code-copy"
+                    class="inline-flex justify-center p-2 text-yellow-600 rounded-lg cursor-pointer bg-gray-200 hover:bg-gray-100">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5">
+                      <path
+                        d="M7 3.5A1.5 1.5 0 018.5 2h3.879a1.5 1.5 0 011.06.44l3.122 3.12A1.5 1.5 0 0117 6.622V12.5a1.5 1.5 0 01-1.5 1.5h-1v-3.379a3 3 0 00-.879-2.121L10.5 5.379A3 3 0 008.379 4.5H7v-1z" />
+                      <path
+                        d="M4.5 6A1.5 1.5 0 003 7.5v9A1.5 1.5 0 004.5 18h7a1.5 1.5 0 001.5-1.5v-5.879a1.5 1.5 0 00-.44-1.06L9.44 6.439A1.5 1.5 0 008.378 6H4.5z" />
+                    </svg>
+                  </button>
+                </div>
+                <dd id="invite-code" class="text-lg font-semibold"><%= roomId %></dd>
               </div>
             </dl>
           </div>
@@ -427,7 +449,7 @@
         </div>
       </div>
     </div>
-    <script type="module" src="./src/constant.js"></script>
+    <script type="module" src="./src/begin.js"></script>
     <script type="module" src="./src/stream.js"></script>
     <script type="module" src="./src/chatroom.js"></script>
     <script type="module" src="./src/sharescreen.js"></script>

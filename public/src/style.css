@@ -16,10 +16,14 @@
 
 #invite-url-copy:focus::after {
   content: '複製成功';
+  font-size: 0.875rem;
+  line-height: 1.25rem;
 }
 
 #invite-code-copy:focus::after {
-  content: '複製成功';
+  content: ' 複製成功';
+  font-size: 0.875rem;
+  line-height: 1.25rem;
 }
 
 .loader {

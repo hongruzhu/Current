@@ -7,7 +7,7 @@ import {
   socket,
   roomShareScreenStatus,
   whiteboardShareName,
-} from "./constant.js";
+} from "./begin.js";
 
 /* ----------------------------- Step 1: 獲取自己視訊畫面的stream ----------------------------- */
 
@@ -29,6 +29,7 @@ myVideo.srcObject = myWebcamStream;
 myVideo.onplay = playing;
 myVideo.addEventListener("loadedmetadata", () => {
   myVideo.play();
+  $("#loading").remove();
 });
 
 // 將自己視訊的video stream，轉換成canvas，以利更換背景功能運作
