@@ -316,11 +316,13 @@ $("#hide-camera").on("click", async () => {
   const stream = myVideo.srcObject;
   if (stream.getVideoTracks()[0].enabled) {
     socket.emit("hide-camera", roomId, myPeerId);
+    $("#tooltip-camera").text("開啟鏡頭");
     stopVideoTrack(stream);
     myWebcamStatus = false;
     return;
   }
   socket.emit("show-camera", roomId, myPeerId);
+  $("#tooltip-camera").text("關閉鏡頭");
   $("button[id='hide-camera'] svg")
     .removeClass("text-red-500 group-hover:text-red-500")
     .addClass("text-green-500 group-hover:text-green-500");
@@ -359,11 +361,13 @@ function showCamera(peerId, displayMethod) {
 $("#mute-mic").on("click", async () => {
   if (myStream.getAudioTracks()[0].enabled) {
     socket.emit("mute-mic", roomId, myPeerId);
+    $("#tooltip-microphone").text("開啟麥克風");
     stopMicTrack(myStream);
     myMicStatus = false;
     return;
   }
   socket.emit("unmute-mic", roomId, myPeerId);
+  $("#tooltip-microphone").text("關閉麥克風");
   $("button[id='mute-mic'] svg")
     .removeClass("text-red-500 group-hover:text-red-500")
     .addClass("text-green-500 group-hover:text-green-500");
