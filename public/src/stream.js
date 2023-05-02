@@ -21,7 +21,7 @@ const myWebcamStream = await navigator.mediaDevices.getUserMedia({
     height: 720,
     aspectRatio: 1.777777778,
   },
-  audio: false,
+  audio: true,
 });
 
 myVideo.srcObject = myWebcamStream;
