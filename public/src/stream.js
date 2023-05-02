@@ -124,7 +124,7 @@ myPeer.on("call", async (call) => {
   console.log("myPeer.on", "call.answer");
   await checkTracks(myStream);
 
-  call.answer(myStream);
+  call.answer(myWebcamStream);
   addVideoGridElement(peerId);
   const video = document.createElement("video");
   video.setAttribute(
@@ -151,7 +151,7 @@ myPeer.on("call", async (call) => {
 });
 
 socket.on("user-connected", async (peerId, name, role, socketId) => {
-  connectToNewUser(peerId, name, role, myStream);
+  connectToNewUser(peerId, name, role, myWebcamStream);
 });
 
 // 若有user離開，移除他的視訊畫面
@@ -181,7 +181,7 @@ async function connectToNewUser(peerId, name, role, stream) {
   call.on("stream", async (userVideoStream) => {
     console.log("connectToNewUser", "call.on");
     await checkTracks(userVideoStream);
-    
+
     await addVideoStream(userVideoStream, video);
   });
   $(`div[id=${peerId}]`).append(video);
