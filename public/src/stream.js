@@ -121,7 +121,8 @@ myPeer.on("call", async (call) => {
   const otherMicStatus = call.metadata.myMicStatus;
   console.log(`Connection with ${peerId}`);
 
-  console.log("myPeer.on", "call.answer", myStream);
+  console.log("myPeer.on", "call.answer");
+  await checkTracks(myStream);
 
   call.answer(myStream);
   addVideoGridElement(peerId);
@@ -131,7 +132,9 @@ myPeer.on("call", async (call) => {
     "absolute w-full h-full t-0 l-0 object-cover transform-rotateY-180"
   );
   call.on("stream", async (userVideoStream) => {
-    console.log("myPeer.on", "call.on", userVideoStream);
+    console.log("myPeer.on", "call.on");
+    await checkTracks(userVideoStream);
+
     await addVideoStream(userVideoStream, video);
   });
   $(`div[id=${peerId}]`).append(video);
@@ -160,12 +163,13 @@ socket.on("user-disconnected", (peerId) => {
 });
 
 // 新user加入，建立peer連線的function
-function connectToNewUser(peerId, name, role, stream) {
+async function connectToNewUser(peerId, name, role, stream) {
   const options = {
     metadata: { name: myName, role: myRole, myWebcamStatus, myMicStatus },
   };
 
-  console.log("connectToNewUser", "myPeer.call", stream);
+  console.log("connectToNewUser", "myPeer.call");
+  await checkTracks(stream);
   
   const call = myPeer.call(peerId, stream, options);
   addVideoGridElement(peerId);
@@ -175,7 +179,9 @@ function connectToNewUser(peerId, name, role, stream) {
     "absolute w-full h-full t-0 l-0 object-cover transform-rotateY-180"
   );
   call.on("stream", async (userVideoStream) => {
-    console.log("connectToNewUser", "call.on", stream);
+    console.log("connectToNewUser", "call.on");
+    await checkTracks(userVideoStream);
+    
     await addVideoStream(userVideoStream, video);
   });
   $(`div[id=${peerId}]`).append(video);
@@ -407,3 +413,26 @@ window.onbeforeunload = function (e) {
 };
 
 export { myPeerId };
+
+// 檢查一下stream有沒有影音訊號
+async function checkTracks(stream) {
+  const tracks = stream.getTracks();
+
+  // 檢查 MediaStream 是否包含影音軌道
+  const hasVideoTrack = tracks.some((track) => track.kind === "video");
+  const hasAudioTrack = tracks.some((track) => track.kind === "audio");
+
+  if (hasVideoTrack && hasAudioTrack) {
+    console.log("MediaStream 包含影音訊號");
+
+    // 獲取第一個影音軌道
+    const videoTrack = tracks.find((track) => track.kind === "video");
+
+    // 監聽影音軌道的 readyState 屬性變化
+    videoTrack.addEventListener("ended", function () {
+      console.log("影音軌道停止輸出訊號");
+    });
+  } else {
+    console.log("MediaStream 不包含影音訊號");
+  }
+}
