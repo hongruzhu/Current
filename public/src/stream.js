@@ -120,6 +120,9 @@ myPeer.on("call", async (call) => {
   const otherWebcamStatus = call.metadata.myWebcamStatus;
   const otherMicStatus = call.metadata.myMicStatus;
   console.log(`Connection with ${peerId}`);
+
+  console.log("myPeer.on", "call.answer", myStream);
+
   call.answer(myStream);
   addVideoGridElement(peerId);
   const video = document.createElement("video");
@@ -128,6 +131,7 @@ myPeer.on("call", async (call) => {
     "absolute w-full h-full t-0 l-0 object-cover transform-rotateY-180"
   );
   call.on("stream", async (userVideoStream) => {
+    console.log("myPeer.on", "call.on", userVideoStream);
     await addVideoStream(userVideoStream, video);
   });
   $(`div[id=${peerId}]`).append(video);
@@ -160,6 +164,9 @@ function connectToNewUser(peerId, name, role, stream) {
   const options = {
     metadata: { name: myName, role: myRole, myWebcamStatus, myMicStatus },
   };
+
+  console.log("connectToNewUser", "myPeer.call", stream);
+  
   const call = myPeer.call(peerId, stream, options);
   addVideoGridElement(peerId);
   const video = document.createElement("video");
@@ -168,6 +175,7 @@ function connectToNewUser(peerId, name, role, stream) {
     "absolute w-full h-full t-0 l-0 object-cover transform-rotateY-180"
   );
   call.on("stream", async (userVideoStream) => {
+    console.log("connectToNewUser", "call.on", stream);
     await addVideoStream(userVideoStream, video);
   });
   $(`div[id=${peerId}]`).append(video);
