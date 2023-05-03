@@ -225,18 +225,77 @@
           <div id="background-content" class="m-4">
             <div class="flex flex-col w-full">
               <p class="text-lg text-gray-900 mb-2">無效果和模糊效果</p>
-              <div class="grid grid-cols-3 gap-4">
+              <div class="flex gap-4">
                 <button id="no-effect"
-                  class="rounded-lg border-2 border-black focus:outline-none focus:ring-4 focus:ring-yellow-400 hover:ring-4 hover:ring-white">
-                  <span>無效果</span>
+                  class="flex items-center justify-center aspect-square w-[30%] rounded-lg border-2 border-gray-100 focus:outline-none focus:ring-4 focus:ring-yellow-400 hover:ring-4 hover:ring-white">
+                  <svg class="w-[50%] h-[50%]" xmlns="http://www.w3.org/2000/svg" viewBox="0 96 960 960">
+                    <path
+                      d="M480 976q-83 0-156-31.5T197 859q-54-54-85.5-127T80 576q0-83 31.5-156T197 293q54-54 127-85.5T480 176q83 0 156 31.5T763 293q54 54 85.5 127T880 576q0 83-31.5 156T763 859q-54 54-127 85.5T480 976Zm0-66.666q139.583 0 236.459-96.875Q813.334 715.583 813.334 576q0-58.442-19.834-112.554-19.833-54.113-56.167-98.78L268.666 833.333q44 37.001 98.329 56.501 54.33 19.5 113.005 19.5Zm-256.667-122 468.001-468.001q-44.667-37-98.78-56.833Q538.442 242.666 480 242.666q-139.583 0-236.459 96.875Q146.666 436.417 146.666 576q0 58.675 20.5 113.005 20.5 54.329 56.167 98.329Z" />
+                  </svg>
                 </button>
                 <button id="blur-1"
-                  class="rounded-lg focus:outline-none focus:ring-4 focus:ring-yellow-400 hover:ring-4 hover:ring-white">
-                  <img class="h-auto max-w-full rounded-lg" src="./assets/blur-1.png" alt="">
+                  class="flex items-center justify-center aspect-square w-[30%] rounded-lg border-2 border-gray-100 focus:outline-none focus:ring-4 focus:ring-yellow-400 hover:ring-4 hover:ring-white">
+                  <svg class="w-[50%] h-[50%]" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="9.33653" cy="0.586526" r="0.586526" stroke="none"></circle>
+                    <circle cx="14.5094" cy="0.586526" r="0.586526" stroke="none"></circle>
+                    <circle cx="14.5094" cy="23.4137" r="0.586526" stroke="none"></circle>
+                    <circle cx="9.33653" cy="23.4137" r="0.586526" stroke="none"></circle>
+                    <circle cx="4.4209" cy="4.99023" r="0.75" stroke="none"></circle>
+                    <circle cx="9.49316" cy="4.99023" r="0.75" stroke="none"></circle>
+                    <circle cx="14.5664" cy="4.99023" r="0.75" stroke="none"></circle>
+                    <circle cx="19.7207" cy="4.99023" r="0.75" stroke="none"></circle>
+                    <circle cx="19.7207" cy="9.72314" r="0.75" stroke="none"></circle>
+                    <circle cx="19.7207" cy="14.7964" r="0.75" stroke="none"></circle>
+                    <circle cx="19.7207" cy="19.8687" r="0.75" stroke="none"></circle>
+                    <circle cx="4.41992" cy="19.8687" r="0.75" stroke="none"></circle>
+                    <circle cx="4.4209" cy="14.7964" r="0.75" stroke="none"></circle>
+                    <circle cx="4.4209" cy="9.72314" r="0.75" stroke="none"></circle>
+                    <circle cx="0.735391" cy="14.8081" r="0.585" stroke="none"></circle>
+                    <circle cx="0.735391" cy="9.7349" r="0.585" stroke="none"></circle>
+                    <circle cx="23.4053" cy="14.8081" r="0.585" stroke="none"></circle>
+                    <circle cx="23.4053" cy="9.7349" r="0.585" stroke="none"></circle>
+                    <path
+                      d="M11.889 12.6812C13.1096 12.6812 14.1083 11.6826 14.1083 10.462C14.1083 9.24135 13.1096 8.24268 11.889 8.24268C10.6684 8.24268 9.66969 9.24135 9.66969 10.462C9.66969 11.6826 10.6684 12.6812 11.889 12.6812Z"
+                      stroke="none"></path>
+                    <path
+                      d="M16.4678 18.0999C16.4678 15.6999 13.5572 14.6631 12.0689 14.6631C10.5806 14.6631 7.66992 15.6999 7.66992 18.0999V19.4631H16.4678V18.0999Z"
+                      stroke="none"></path>
+                    <path
+                      d="M11.889 12.6812C13.1096 12.6812 14.1083 11.6826 14.1083 10.462C14.1083 9.24135 13.1096 8.24268 11.889 8.24268C10.6684 8.24268 9.66969 9.24135 9.66969 10.462C9.66969 11.6826 10.6684 12.6812 11.889 12.6812Z"
+                      fill="none" stroke-width="1.8"></path>
+                    <path
+                      d="M16.4678 18.0999C16.4678 15.6999 13.5572 14.6631 12.0689 14.6631C10.5806 14.6631 7.66992 15.6999 7.66992 18.0999V19.4631H16.4678V18.0999Z"
+                      fill="none" stroke-width="1.8"></path>
+                  </svg>
                 </button>
                 <button id="blur-2"
-                  class="rounded-lg focus:outline-none focus:ring-4 focus:ring-yellow-400 hover:ring-4 hover:ring-white">
-                  <img class="h-auto max-w-full rounded-lg" src="./assets/blur-2.png" alt="">
+                  class="flex items-center justify-center aspect-square w-[30%] rounded-lg border-2 border-gray-100 focus:outline-none focus:ring-4 focus:ring-yellow-400 hover:ring-4 hover:ring-white">
+                  <svg class="w-[50%] h-[50%]" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="0.895148" cy="9.19837" r="0.895148" stroke="none"></circle>
+                    <circle cx="0.895148" cy="14.1339" r="0.895148" stroke="none"></circle>
+                    <circle cx="23.1051" cy="9.19837" r="0.895148" stroke="none"></circle>
+                    <circle cx="23.1051" cy="14.1339" r="0.895148" stroke="none"></circle>
+                    <circle cx="9.53187" cy="0.895148" r="0.895148" stroke="none"></circle>
+                    <circle cx="14.4684" cy="0.895148" r="0.895148" stroke="none"></circle>
+                    <circle cx="14.4684" cy="23.1046" r="0.895148" stroke="none"></circle>
+                    <circle cx="9.53187" cy="23.1046" r="0.895148" stroke="none"></circle>
+                    <circle cx="5.02959" cy="4.82452" r="1.12334" stroke="none"></circle>
+                    <circle cx="9.61358" cy="4.82452" r="1.12334" stroke="none"></circle>
+                    <circle cx="14.1956" cy="4.82452" r="1.12334" stroke="none"></circle>
+                    <circle cx="18.7786" cy="4.82452" r="1.12334" stroke="none"></circle>
+                    <circle cx="18.7786" cy="9.40801" r="1.12334" stroke="none"></circle>
+                    <circle cx="18.7786" cy="13.9905" r="1.12334" stroke="none"></circle>
+                    <circle cx="18.7786" cy="18.5731" r="1.12334" stroke="none"></circle>
+                    <circle cx="5.02959" cy="18.5731" r="1.12334" stroke="none"></circle>
+                    <circle cx="5.02959" cy="13.9905" r="1.12334" stroke="none"></circle>
+                    <circle cx="5.02959" cy="9.40801" r="1.12334" stroke="none"></circle>
+                    <path fill-rule="evenodd" clip-rule="evenodd"
+                      d="M13.9364 10.2191C13.9364 11.4114 12.9609 12.387 11.7685 12.387C10.5762 12.387 9.60069 11.4114 9.60069 10.2191C9.60069 9.0268 10.5762 8.05127 11.7685 8.05127C12.9609 8.05127 13.9364 9.0268 13.9364 10.2191ZM11.9357 14.3229C13.3895 14.3229 16.2326 15.3357 16.2326 17.6801V19.0117H7.63867V17.6801C7.63867 15.3357 10.4818 14.3229 11.9357 14.3229Z"
+                      stroke="none"></path>
+                    <path
+                      d="M16.2326 19.0117V19.9117H17.1326V19.0117H16.2326ZM7.63867 19.0117H6.73867V19.9117H7.63867V19.0117ZM11.7685 13.287C13.4579 13.287 14.8364 11.9085 14.8364 10.2191H13.0364C13.0364 10.9144 12.4638 11.487 11.7685 11.487V13.287ZM8.70069 10.2191C8.70069 11.9085 10.0792 13.287 11.7685 13.287V11.487C11.0733 11.487 10.5007 10.9144 10.5007 10.2191H8.70069ZM11.7685 7.15127C10.0792 7.15127 8.70069 8.52974 8.70069 10.2191H10.5007C10.5007 9.52386 11.0733 8.95127 11.7685 8.95127V7.15127ZM14.8364 10.2191C14.8364 8.52974 13.4579 7.15127 11.7685 7.15127V8.95127C12.4638 8.95127 13.0364 9.52386 13.0364 10.2191H14.8364ZM17.1326 17.6801C17.1326 16.0841 16.1487 14.9971 15.0991 14.3547C14.0629 13.7205 12.8256 13.4229 11.9357 13.4229V15.2229C12.4995 15.2229 13.4107 15.4317 14.1595 15.89C14.895 16.3401 15.3326 16.9317 15.3326 17.6801H17.1326ZM17.1326 19.0117V17.6801H15.3326V19.0117H17.1326ZM7.63867 19.9117H16.2326V18.1117H7.63867V19.9117ZM6.73867 17.6801V19.0117H8.53867V17.6801H6.73867ZM11.9357 13.4229C11.0457 13.4229 9.80843 13.7205 8.77217 14.3547C7.72257 14.9971 6.73867 16.0841 6.73867 17.6801H8.53867C8.53867 16.9317 8.97636 16.3401 9.7118 15.89C10.4606 15.4317 11.3718 15.2229 11.9357 15.2229V13.4229Z"
+                      stroke="none"></path>
+                  </svg>
                 </button>
               </div>
               <div class="divider"></div>
@@ -244,7 +303,7 @@
               <div class="grid grid-cols-2 gap-4">
                 <button id="bg-1"
                   class="rounded-lg focus:outline-none focus:ring-4 focus:ring-yellow-400 hover:ring-4 hover:ring-white">
-                  <img class="h-auto max-w-full rounded-lg" src="./assets/bg-1.jpg" alt="">
+                  <img class="aspect-video max-w-full rounded-lg" src="./assets/bg-1.jpg" alt="">
                 </button>
                 <button id="bg-2"
                   class="rounded-lg focus:outline-none focus:ring-4 focus:ring-yellow-400 hover:ring-4 hover:ring-white">
