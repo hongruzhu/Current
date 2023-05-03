@@ -5,8 +5,8 @@ import { roomId, myName, socket } from "./begin.js";
 let myShareScreenStatus;
 
 const myPeerScreen = new Peer(undefined, {
-  host: "localhost", // currentmeet.com
-  port: "3001", // 443
+  host: "currentmeet.com", // currentmeet.com
+  port: "443", // 443
   path: "/myapp",
   debug: 2,
 });
