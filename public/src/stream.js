@@ -120,8 +120,7 @@ myPeer.on("call", async (call) => {
   const otherWebcamStatus = call.metadata.myWebcamStatus;
   const otherMicStatus = call.metadata.myMicStatus;
   console.log(`Connection with ${peerId}`);
-
-  call.answer(myStream);
+  await call.answer(myStream);
   addVideoGridElement(peerId);
   const video = document.createElement("video");
   video.setAttribute(
@@ -145,9 +144,7 @@ myPeer.on("call", async (call) => {
 });
 
 socket.on("user-connected", async (peerId, name, role, socketId) => {
-  setTimeout(() => {
-    connectToNewUser(peerId, name, role, myStream);
-  }, 1000);
+  connectToNewUser(peerId, name, role, myStream);
 });
 
 // 若有user離開，移除他的視訊畫面
