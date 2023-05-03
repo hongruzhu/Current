@@ -97,7 +97,7 @@
       <div id="right-block" class="hidden w-[22%] h-full pl-2 min-w-[250px]">
         <div id="chat-room" class="hidden relative w-full h-full bg-gray-200 rounded-lg drop-shadow-md overflow-hidden">
           <div id="chatroom-header" class="flex justify-between text-xl m-4">
-            <span>聊天室</span>
+            <span class="font-bold">聊天室</span>
             <button class="close-right-block flex items-center justify-center rounded-full hover:bg-gray-300 h-8 w-8">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 50" width="20px" height="20px">
                 <path
@@ -135,7 +135,7 @@
         </div>
         <div id="members" class="hidden relative w-full h-full bg-gray-200 rounded-lg drop-shadow-md overflow-hidden overflow-y-scroll">
           <div id="members-header" class="flex justify-between text-xl m-4">
-            <span>參與者</span>
+            <span class="font-bold">參與者</span>
             <button class="close-right-block flex items-center justify-center rounded-full hover:bg-gray-300 h-8 w-8">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 50" width="20px" height="20px">
                 <path
@@ -163,10 +163,9 @@
             </ul>
           </div>
         </div>
-
         <div id="info" class="hidden relative w-full h-full bg-gray-200 rounded-lg drop-shadow-md overflow-hidden">
           <div id="info-header" class="flex justify-between text-xl m-4">
-            <span>會議資訊</span>
+            <span class="font-bold">會議資訊</span>
             <button class="close-right-block flex items-center justify-center rounded-full hover:bg-gray-300 h-8 w-8">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 50" width="20px" height="20px">
                 <path
@@ -211,6 +210,56 @@
                 <dd id="invite-code" class="text-lg font-semibold"><%= roomId %></dd>
               </div>
             </dl>
+          </div>
+        </div>
+        <div id="background" class="hidden relative w-full h-full bg-gray-200 rounded-lg drop-shadow-md overflow-hidden">
+          <div id="background-header" class="flex justify-between text-xl m-4">
+            <span class="font-bold">更換背景</span>
+            <button class="close-right-block flex items-center justify-center rounded-full hover:bg-gray-300 h-8 w-8">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 50" width="20px" height="20px">
+                <path
+                  d="M 9.15625 6.3125 L 6.3125 9.15625 L 22.15625 25 L 6.21875 40.96875 L 9.03125 43.78125 L 25 27.84375 L 40.9375 43.78125 L 43.78125 40.9375 L 27.84375 25 L 43.6875 9.15625 L 40.84375 6.3125 L 25 22.15625 Z" />
+              </svg>
+            </button>
+          </div>
+          <div id="background-content" class="m-4">
+            <div class="flex flex-col w-full">
+              <p class="text-lg text-gray-900 mb-2">無效果和模糊效果</p>
+              <div class="grid grid-cols-3 gap-4">
+                <button id="no-effect"
+                  class="rounded-lg border-2 border-black focus:outline-none focus:ring-4 focus:ring-yellow-400 hover:ring-4 hover:ring-white">
+                  <span>無效果</span>
+                </button>
+                <button id="blur-1"
+                  class="rounded-lg focus:outline-none focus:ring-4 focus:ring-yellow-400 hover:ring-4 hover:ring-white">
+                  <img class="h-auto max-w-full rounded-lg" src="./assets/blur-1.png" alt="">
+                </button>
+                <button id="blur-2"
+                  class="rounded-lg focus:outline-none focus:ring-4 focus:ring-yellow-400 hover:ring-4 hover:ring-white">
+                  <img class="h-auto max-w-full rounded-lg" src="./assets/blur-2.png" alt="">
+                </button>
+              </div>
+              <div class="divider"></div>
+              <p class="text-lg text-gray-900 mb-2">圖片背景</p>
+              <div class="grid grid-cols-2 gap-4">
+                <button id="bg-1"
+                  class="rounded-lg focus:outline-none focus:ring-4 focus:ring-yellow-400 hover:ring-4 hover:ring-white">
+                  <img class="h-auto max-w-full rounded-lg" src="./assets/bg-1.jpg" alt="">
+                </button>
+                <button id="bg-2"
+                  class="rounded-lg focus:outline-none focus:ring-4 focus:ring-yellow-400 hover:ring-4 hover:ring-white">
+                  <img class="h-auto max-w-full rounded-lg" src="./assets/bg-2.jpg" alt="">
+                </button>
+                <button id="bg-3"
+                  class="rounded-lg focus:outline-none focus:ring-4 focus:ring-yellow-400 hover:ring-4 hover:ring-white">
+                  <img class="h-auto max-w-full rounded-lg" src="./assets/bg-3.jpg" alt="">
+                </button>
+                <button id="bg-4"
+                  class="rounded-lg focus:outline-none focus:ring-4 focus:ring-yellow-400 hover:ring-4 hover:ring-white">
+                  <img class="h-auto max-w-full rounded-lg" src="./assets/bg-4.jpg" alt="">
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -323,18 +372,6 @@
           class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
           分享白版
         </div>
-        <button id="change-background" data-tooltip-target="tooltip-background" type="button"
-          class="p-2 bg-gray-100 group rounded-full hover:bg-gray-200 mr-4">
-          <svg class="w-6 h-6 text-gray-500 group-hover:text-gray-900" xmlns="http://www.w3.org/2000/svg" viewBox="0 96 960 960" fill="currentColor" aria-hidden="true">
-            <path clip-rule="evenodd" fill-rule="evenodd"
-              d="M120 482v-85l181-181h85L120 482Zm0-196v-70h70l-70 70Zm527 67q-10-11-21.5-21.5T602 313l97-97h85L647 353ZM220 695l77-77q7 11 14.5 20t16.5 17q-28 7-56.5 17.5T220 695Zm480-197v-2q0-19-3-37t-9-35l152-152v86L700 498ZM436 280l65-64h85l-64 64q-11-2-21-3t-21-1q-11 0-22 1t-22 3ZM120 681v-85l144-144q-2 11-3 22t-1 22q0 11 1 21t3 20L120 681Zm709 83q-8-12-18.5-23T788 721l52-52v85l-11 10Zm-116-82q-7-3-14-5.5t-14-4.5q-9-3-17.5-6t-17.5-5l190-191v86L713 682Zm-233-26q-66 0-113-47t-47-113q0-66 47-113t113-47q66 0 113 47t47 113q0 66-47 113t-113 47Zm0-80q33 0 56.5-23.5T560 496q0-33-23.5-56.5T480 416q-33 0-56.5 23.5T400 496q0 33 23.5 56.5T480 576ZM160 936v-71q0-34 17-63t47-44q51-26 115.5-44T480 696q76 0 140.5 18T736 758q30 15 47 44t17 63v71H160Zm81-80h478q-2-9-7-15.5T699 830q-36-18-91.5-36T480 776q-72 0-127.5 18T261 830q-8 4-13 11t-7 15Zm239 0Zm0-360Z" />
-          </svg>
-          <span class="sr-only">Change background</span>
-        </button>
-        <div id="tooltip-background" role="tooltip"
-          class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
-          更換背景
-        </div>
         <button id="start-recording" data-tooltip-target="tooltip-recording" type="button"
           class="p-2 bg-gray-100 group rounded-full hover:bg-gray-200 mr-4">
           <svg class="w-6 h-6 text-gray-500 group-hover:text-gray-900" xmlns="http://www.w3.org/2000/svg" viewBox="0 96 960 960" fill="currentColor" aria-hidden="true">
@@ -391,6 +428,19 @@
           class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
           聊天室
         </div>
+        <button id="change-background-btn" data-tooltip-target="tooltip-background" type="button"
+          class="p-2.5 group rounded-full hover:bg-gray-100 mr-1">
+          <svg class="w-6 h-6 text-gray-500 group-hover:text-gray-900" xmlns="http://www.w3.org/2000/svg" viewBox="0 96 960 960"
+            fill="currentColor" aria-hidden="true">
+            <path clip-rule="evenodd" fill-rule="evenodd"
+              d="M120 482v-85l181-181h85L120 482Zm0-196v-70h70l-70 70Zm527 67q-10-11-21.5-21.5T602 313l97-97h85L647 353ZM220 695l77-77q7 11 14.5 20t16.5 17q-28 7-56.5 17.5T220 695Zm480-197v-2q0-19-3-37t-9-35l152-152v86L700 498ZM436 280l65-64h85l-64 64q-11-2-21-3t-21-1q-11 0-22 1t-22 3ZM120 681v-85l144-144q-2 11-3 22t-1 22q0 11 1 21t3 20L120 681Zm709 83q-8-12-18.5-23T788 721l52-52v85l-11 10Zm-116-82q-7-3-14-5.5t-14-4.5q-9-3-17.5-6t-17.5-5l190-191v86L713 682Zm-233-26q-66 0-113-47t-47-113q0-66 47-113t113-47q66 0 113 47t47 113q0 66-47 113t-113 47Zm0-80q33 0 56.5-23.5T560 496q0-33-23.5-56.5T480 416q-33 0-56.5 23.5T400 496q0 33 23.5 56.5T480 576ZM160 936v-71q0-34 17-63t47-44q51-26 115.5-44T480 696q76 0 140.5 18T736 758q30 15 47 44t17 63v71H160Zm81-80h478q-2-9-7-15.5T699 830q-36-18-91.5-36T480 776q-72 0-127.5 18T261 830q-8 4-13 11t-7 15Zm239 0Zm0-360Z" />
+          </svg>
+          <span class="sr-only">Change background</span>
+        </button>
+        <div id="tooltip-background" role="tooltip"
+          class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+          更換背景
+        </div>
         <button id="show-info-btn" data-tooltip-target="tooltip-information" type="button"
           class="p-2.5 group rounded-full hover:bg-gray-100">
           <svg class="w-5 h-5 text-gray-500 group-hover:text-gray-900"
@@ -441,6 +491,7 @@
     </div>
     <script type="module" src="./src/begin.js"></script>
     <script type="module" src="./src/stream.js"></script>
+    <script type="module" src="./src/worker.js"></script>
     <script type="module" src="./src/chatroom.js"></script>
     <script type="module" src="./src/sharescreen.js"></script>
     <script type="module" src="./src/whiteboard.js"></script>

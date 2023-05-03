@@ -25,11 +25,10 @@ function background_origin() {
 
 function playing() {
   background_origin();
-  requestAnimationFrame(playing);
+  setTimeout(playing, 0);
 }
 
 onmessage = function(e) {
-  console.log(e.data);
   if (e.data.type === 'init') {
     canvas = e.data.offscreen
     canvasCtx = canvas.getContext('2d')

@@ -9,6 +9,133 @@ import {
   whiteboardShareName,
 } from "./begin.js";
 
+// 更換背景的function
+// 原始背景
+function originBackground(results) {
+  canvasCtx.save();
+  canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
+  // canvasCtx.filter = "blur(0)"
+
+  canvasCtx.drawImage(
+    results.image,
+    0,
+    0,
+    canvasElement.width,
+    canvasElement.height
+  );
+  canvasCtx.restore();
+};
+
+// 稍微模糊
+function slightBlurBackground(results) {
+  canvasCtx.save();
+  canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
+  // canvasCtx.filter = "blur(0)"
+
+  canvasCtx.drawImage(
+    results.segmentationMask,
+    0,
+    0,
+    canvasElement.width,
+    canvasElement.height
+  );
+
+  // Only overwrite existing pixels.
+  canvasCtx.globalCompositeOperation = "source-in";
+  canvasCtx.drawImage(
+    results.image,
+    0,
+    0,
+    canvasElement.width,
+    canvasElement.height
+  );
+  // canvasCtx.fillRect(0, 0, canvasElement.width, canvasElement.height);
+
+  // // Only overwrite missing pixels.
+  canvasCtx.globalCompositeOperation = "destination-atop";
+  canvasCtx.filter = "blur(10px)";
+
+  canvasCtx.drawImage(
+    results.image,
+    0,
+    0,
+    canvasElement.width,
+    canvasElement.height
+  );
+  canvasCtx.restore();
+};
+
+// 重度模糊
+function heavyBlurBackground(results) {
+  canvasCtx.save();
+  canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
+  // canvasCtx.filter = "blur(0)"
+
+  canvasCtx.drawImage(
+    results.segmentationMask,
+    0,
+    0,
+    canvasElement.width,
+    canvasElement.height
+  );
+
+  // Only overwrite existing pixels.
+  canvasCtx.globalCompositeOperation = "source-in";
+  canvasCtx.drawImage(
+    results.image,
+    0,
+    0,
+    canvasElement.width,
+    canvasElement.height
+  );
+  // canvasCtx.fillRect(0, 0, canvasElement.width, canvasElement.height);
+
+  // // Only overwrite missing pixels.
+  canvasCtx.globalCompositeOperation = "destination-atop";
+  canvasCtx.filter = "blur(20px)";
+
+  canvasCtx.drawImage(
+    results.image,
+    0,
+    0,
+    canvasElement.width,
+    canvasElement.height
+  );
+  canvasCtx.restore();
+};
+
+// 更換背景圖片
+function imageBackground(results) {
+  canvasCtx.save();
+
+  canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
+  canvasCtx.drawImage(
+    results.segmentationMask,
+    0,
+    0,
+    canvasElement.width,
+    canvasElement.height
+  );
+
+  canvasCtx.globalCompositeOperation = "source-out";
+
+  const backgroundImg = new Image();
+  backgroundImg.src = path;
+  const pat = canvasCtx.createPattern(backgroundImg, "no-repeat");
+  canvasCtx.fillStyle = pat;
+  canvasCtx.fillRect(0, 0, canvasElement.width, canvasElement.height);
+
+  canvasCtx.globalCompositeOperation = "destination-atop";
+  canvasCtx.drawImage(
+    results.image,
+    0,
+    0,
+    canvasElement.width,
+    canvasElement.height
+  );
+  canvasCtx.restore();
+};
+
 /* ----------------------------- Step 1: 獲取自己視訊畫面的stream ----------------------------- */
 
 // 開啟視訊鏡頭，擷取自己的視訊畫面
@@ -36,24 +163,54 @@ myVideo.addEventListener("loadedmetadata", () => {
 const canvasElement = $("div[id='myVideo'] canvas")[0];
 const canvasCtx = canvasElement.getContext("2d");
 
-function background_origin() {
-  canvasCtx.save();
-  canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
-  // canvasCtx.filter = "blur(0)"
+// MediaPipe渲染背景功能
+const selfieSegmentation = new SelfieSegmentation({
+  locateFile: (file) => {
+    return `https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation/${file}`;
+  },
+});
+selfieSegmentation.setOptions({
+  modelSelection: 1,
+});
 
-  canvasCtx.drawImage(myVideo, 0, 0, canvasElement.width, canvasElement.height);
-  canvasCtx.restore();
-}
+// 選擇背景效果
+let path ="";
+$("#no-effect").on("click", () => {
+  selfieSegmentation.onResults(originBackground);
+})
+$("#blur-1").on("click", () => {
+  selfieSegmentation.onResults(slightBlurBackground);
+});
+$("#blur-2").on("click", () => {
+  selfieSegmentation.onResults(heavyBlurBackground);
+});
+$("#bg-1").on("click", () => {
+  path = $("#bg-1 img").attr("src");
+  selfieSegmentation.onResults(imageBackground);
+});
+$("#bg-2").on("click", () => {
+  path = $("#bg-2 img").attr("src");
+  selfieSegmentation.onResults(imageBackground);
+});
+$("#bg-3").on("click", () => {
+  path = $("#bg-3 img").attr("src");
+  selfieSegmentation.onResults(imageBackground);
+});
+$("#bg-4").on("click", () => {
+  path = $("#bg-4 img").attr("src");
+  selfieSegmentation.onResults(imageBackground);
+});
+
+selfieSegmentation.onResults(originBackground);
 
 async function playing() {
-  // await selfieSegmentation.send({ image: myVideo });
-  background_origin();
+  await selfieSegmentation.send({ image: myVideo });
   /**
    * 當沒有在chrome tab時(最小化 or 不在分頁)，window.requestAnimationFrame()不會執行，會造成其他人看到自己的畫面停格
-   * 改成setTimeout就解決這個問題了！來源：https://github.com/google/mediapipe/issues/3018
+   * 改成setTimeout就解決這個問題了，但不是效能好的做法，來源：https://github.com/google/mediapipe/issues/3018
    */
   // window.requestAnimationFrame(playing);
-  setTimeout(playing, 0);
+  setTimeout(playing, 1000/60);
 }
 
 // 在member list加入自己
@@ -102,8 +259,8 @@ if (!myMicStatus) stopMicTrack(myStream);
 /* ----------------------------- Step 2: 確定好要交換的stream後，開始處理Peer連線，進行stream交換 ----------------------------- */
 // Peer setup
 const myPeer = new Peer(undefined, {
-  host: "currentmeet.com", // currentmeet.com
-  port: "443", // 443
+  host: "localhost", // currentmeet.com
+  port: "3001", // 443
   path: "/myapp",
   debug: 2,
 });

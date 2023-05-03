@@ -39,6 +39,7 @@ export {
 // 右側欄位控制項
 let chatRoomStatus = false;
 let memberListStatus = false;
+let backgroundStatus = false;
 let infoStatus = false;
 // 聊天室開關控制選項
 $("#chat-room-btn").on("click", () => {
@@ -52,9 +53,11 @@ $("#chat-room-btn").on("click", () => {
   $("#chat-room").removeClass("hidden");
   $("#members").addClass("hidden");
   $("#info").addClass("hidden");
+  $("#background").addClass("hidden");
   chatRoomStatus = true;
   memberListStatus = false;
   infoStatus = false;
+  backgroundStatus = false;
 });
 
 // 會議成員開關控制選項
@@ -69,7 +72,28 @@ $("#show-members-btn").on("click", () => {
   $("#members").removeClass("hidden");
   $("#chat-room").addClass("hidden");
   $("#info").addClass("hidden");
+  $("#background").addClass("hidden");
   memberListStatus = true;
+  chatRoomStatus = false;
+  infoStatus = false;
+  backgroundStatus = false;
+});
+
+// 更換背景開關選項
+$("#change-background-btn").on("click", () => {
+  if (backgroundStatus) {
+    $("#right-block").addClass("hidden");
+    $("#background").addClass("hidden");
+    backgroundStatus = false;
+    return;
+  }
+  $("#right-block").removeClass("hidden");
+  $("#background").removeClass("hidden");
+  $("#chat-room").addClass("hidden");
+  $("#info").addClass("hidden");
+  $("#members").addClass("hidden");
+  backgroundStatus = true;
+  memberListStatus = false;
   chatRoomStatus = false;
   infoStatus = false;
 });
@@ -86,10 +110,14 @@ $("#show-info-btn").on("click", () => {
   $("#info").removeClass("hidden");
   $("#chat-room").addClass("hidden");
   $("#members").addClass("hidden");
+  $("#background").addClass("hidden");
   infoStatus = true;
   memberListStatus = false;
   chatRoomStatus = false;
+  backgroundStatus = false;
 });
+
+
 // 按X關閉右側欄
 $(".close-right-block").on("click", () => {
   $("#right-block").addClass("hidden");
@@ -105,29 +133,6 @@ $("#invite-code-copy").on("click", () => {
 $("#invite-url-copy").on("click", () => {
   navigator.clipboard.writeText($("#invite-url").text());
 });
-
-// 點擊end call btn，跳轉到thankyou頁面
-// set the modal menu element
-const $targetEl = document.getElementById("popup-modal");
-
-// options with default values
-const options = {
-  placement: 'bottom-right',
-  backdrop: 'dynamic',
-  backdropClasses: 'bg-gray-900 bg-opacity-50 dark:bg-opacity-80 fixed inset-0 z-40',
-  closable: true,
-  onHide: () => {
-      console.log('modal is hidden');
-  },
-  onShow: () => {
-      console.log('modal is shown');
-  },
-  onToggle: () => {
-      console.log('modal has been toggled');
-  }
-};
-
-const modal = new Modal($targetEl, options);
 
 $("#leave-room").on("click", () => {
   localStorage.removeItem(`name-${roomId}`);
