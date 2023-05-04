@@ -30,6 +30,7 @@ import { enter_route } from "./server/routes/enter_route.js";
 import { concall_route } from "./server/routes/concall_route.js";
 import { shareScreen_route } from "./server/routes/sharescreen_route.js"; 
 import { whiteboard_route } from "./server/routes/whiteboard_route.js";
+import { recording_route } from "./server/routes/recording_route.js";
 
 app.use(
   index_route,
@@ -37,7 +38,8 @@ app.use(
   enter_route,
   concall_route,
   shareScreen_route,
-  whiteboard_route
+  whiteboard_route,
+  recording_route
 );
 
 // Socket.IO routes

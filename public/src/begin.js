@@ -117,6 +117,19 @@ $("#show-info-btn").on("click", () => {
   backgroundStatus = false;
 });
 
+// 開始螢幕錄影
+$("#start-recording").on("click", () => {
+  function openNewWindow() {
+    // 使用window.open()方法打开一个新窗口
+    // 第一个参数是URL，第二个参数是窗口名称，第三个参数是窗口属性（大小，位置等）
+    window.open(
+      `/startRecording?roomId=${roomId}`,
+      "Recording conference audio",
+      "width=400, height=300"
+    );
+  }
+  openNewWindow();
+})
 
 // 按X關閉右側欄
 $(".close-right-block").on("click", () => {
