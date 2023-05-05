@@ -182,11 +182,11 @@
   color: #FFFFFF;
   text-transform: uppercase;
   text-decoration: none;
-  border: 2px solid #D47D16;
+  border: 2px solid rgb(194 65 12);
   padding: 10px 20px;
   font-size: 17px;
   font-weight: bold;
-  background: #D47D16;
+  background: rgb(194 65 12);
   position: relative;
   transition: all 0.4s;
   overflow: hidden;
