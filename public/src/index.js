@@ -40,7 +40,7 @@ if (logInStatus) {
   $("#navbar").append(`    
     <div class="px-1 ml-auto">
       <a id="signin" type="button" href="./signin"
-        class="focus:outline-none text-white bg-rose-700 hover:bg-rose-800 focus:ring-4 focus:ring-rose-300 font-medium rounded-lg text-sm px-5 py-2.5">登入</a>
+        class="focus:outline-none text-white bg-orange-700 hover:bg-orange-800 focus:ring-4 focus:ring-orange-300 font-medium rounded-lg text-sm px-5 py-2.5">登入</a>
     </div>
     <div class="px-1">
       <a id="signout" type="button" href="./signup"
