@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Current - <%= roomId %></title>
+    <link rel="shortcut icon" href="./images/favicon.ico" />
+    <link rel="bookmark" href="./images/favicon.ico" />
     <link href="./src/style.css" rel="stylesheet">
     <link href="./src/output.css" rel="stylesheet">
     <script src="/socket.io/socket.io.js"></script>
@@ -33,7 +35,7 @@
         </div>
         <div id="share-screen" class="hidden flex-[1_0_auto] relative w-full flex flex-col items-center">
           <div id="share-screen-reminder" class="flex justify-between items-center inline-block align-top w-full h-10 bg-gray-300 mt-0 mb-1 rounded-lg">
-            <span id="who-share-screen" class="ml-2">你正在與所有人分享螢幕畫面</span>
+            <span id="who-share-screen" class="ml-2 text-black">你正在與所有人分享螢幕畫面</span>
           </div>
           <div id="share-screen-video" class="relative w-full flex-[1_0_auto]">
           </div>
@@ -97,7 +99,7 @@
       <div id="right-block" class="hidden w-[22%] h-full pl-2 min-w-[250px]">
         <div id="chat-room" class="hidden relative w-full h-full bg-gray-200 rounded-lg drop-shadow-md overflow-hidden">
           <div id="chatroom-header" class="flex justify-between text-xl m-4">
-            <span class="font-bold">聊天室</span>
+            <span class="font-bold text-black">聊天室</span>
             <button class="close-right-block flex items-center justify-center rounded-full hover:bg-gray-300 h-8 w-8">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 50" width="20px" height="20px">
                 <path
@@ -135,7 +137,7 @@
         </div>
         <div id="members" class="hidden relative w-full h-full bg-gray-200 rounded-lg drop-shadow-md overflow-hidden overflow-y-scroll">
           <div id="members-header" class="flex justify-between text-xl m-4">
-            <span class="font-bold">參與者</span>
+            <span class="font-bold text-black">參與者</span>
             <button class="close-right-block flex items-center justify-center rounded-full hover:bg-gray-300 h-8 w-8">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 50" width="20px" height="20px">
                 <path
@@ -148,15 +150,11 @@
               <li class="py-2">
                 <div class="flex items-center space-x-4">
                   <div class="flex-shrink-0">
-                    <img class="w-8 h-8 rounded-full" src="./images/user.png" alt="Neil image">
+                    <img class="w-8 h-8 rounded-full" src="./images/user.png" alt="">
                   </div>
                   <div class="flex-1 min-w-0">
-                    <p id="my-name" class="text-sm font-medium text-gray-900 truncate dark:text-white">
-                      Neil Sims
-                    </p>
-                    <p id="my-role" class="text-sm text-gray-500 truncate dark:text-gray-400">
-                      會議主持人
-                    </p>
+                    <p id="my-name" class="text-sm font-medium text-gray-900 truncate dark:text-white"></p>
+                    <p id="my-role" class="text-sm text-gray-500 truncate dark:text-gray-400"></p>
                   </div>
                 </div>
               </li>
@@ -165,7 +163,7 @@
         </div>
         <div id="info" class="hidden relative w-full h-full bg-gray-200 rounded-lg drop-shadow-md overflow-hidden">
           <div id="info-header" class="flex justify-between text-xl m-4">
-            <span class="font-bold">會議資訊</span>
+            <span class="font-bold text-black">會議資訊</span>
             <button class="close-right-block flex items-center justify-center rounded-full hover:bg-gray-300 h-8 w-8">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 50" width="20px" height="20px">
                 <path
@@ -176,12 +174,12 @@
           <div id="info-content" class="m-4">
             <dl class="max-w-md text-gray-900 divide-y divide-gray-200 dark:text-white dark:divide-gray-700">
               <div class="flex flex-col pb-3 break-words">
-                <dt class="mb-1 text-gray-500 md:text-lg">會議名稱</dt>
+                <dt class="mb-1 text-gray-500 md:text-lg text-black">會議名稱</dt>
                 <dd id="room-title" class="text-lg font-semibold"></dd>
               </div>
               <div class="flex flex-col py-3 break-words">
                 <div class="flex items-center">
-                  <dt class="text-gray-500 md:text-lg">會議連結</dt>
+                  <dt class="text-gray-500 md:text-lg text-black">會議連結</dt>
                   <button id="invite-url-copy"
                     class="inline-flex justify-center p-2 text-yellow-600 rounded-lg cursor-pointer bg-gray-200 hover:bg-gray-100">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5">
@@ -196,7 +194,7 @@
               </div>
               <div class="flex flex-col pt-3 break-words">
                 <div class="flex items-center">
-                  <dt class="text-gray-500 md:text-lg dark:text-gray-400">會議代碼</dt>
+                  <dt class="text-gray-500 md:text-lg text-black">會議代碼</dt>
                   <button id="invite-code-copy"
                     class="inline-flex justify-center p-2 text-yellow-600 rounded-lg cursor-pointer bg-gray-200 hover:bg-gray-100">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5">
@@ -214,7 +212,7 @@
         </div>
         <div id="background" class="hidden relative w-full h-full bg-gray-200 rounded-lg drop-shadow-md overflow-hidden">
           <div id="background-header" class="flex justify-between text-xl m-4">
-            <span class="font-bold">更換背景</span>
+            <span class="font-bold text-black">更換背景</span>
             <button class="close-right-block flex items-center justify-center rounded-full hover:bg-gray-300 h-8 w-8">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 50" width="20px" height="20px">
                 <path

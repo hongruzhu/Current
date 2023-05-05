@@ -25,7 +25,7 @@ $("#start-whiteboard").on("click", async () => {
   // 通知會議室其他人開啟小白版
   socket.emit("start-whiteboard", roomId, myName, myPeerId);
   $("#left-items").append(
-    `<span class="flex items-center bg-gray-300 rounded-lg h-full mt-2 ml-2">&emsp;你正在共享小白版&emsp;</span>`
+    `<span class="flex items-center bg-gray-300 rounded-lg text-black h-full mt-2 ml-2">&emsp;你正在共享小白版&emsp;</span>`
   );
 
   $("#right-items").append(`          
