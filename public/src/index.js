@@ -78,3 +78,21 @@ $("#signin").on("click", () => {
 $("#signon").on("click", () => {
   localStorage.removeItem("room-ready");
 });
+
+// 控制輪播圖
+let swiper = new Swiper(".mySwiper", {
+  spaceBetween: 30,
+  centeredSlides: true,
+  // autoplay: {
+  //   delay: 3500,
+  //   disableOnInteraction: false,
+  // },
+  pagination: {
+    el: ".swiper-pagination",
+    clickable: true,
+  },
+  navigation: {
+    nextEl: ".swiper-button-next",
+    prevEl: ".swiper-button-prev",
+  },
+});
