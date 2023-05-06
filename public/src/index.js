@@ -31,7 +31,7 @@ if (logInStatus) {
         <div class="text-base text-black">${userName}</div>
         <div class="text-base text-gray-500">歡迎使用 Current</div>
       </div>
-      <button class="avatar" type="button" data-dropdown-toggle="userDropdown" data-dropdown-placement="bottom-start">
+      <button class="avatar" type="button" data-dropdown-toggle="userDropdown" data-dropdown-placement="bottom-end">
         <div class="w-[45px] h-[45px] rounded-full ring ring-primary ring-yellow-600 ring-offset-base-100 ring-offset-2">
           <img src="../images/user.png" />
         </div>
