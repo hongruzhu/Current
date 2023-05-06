@@ -25,7 +25,6 @@ try {
 if (logInStatus) {
   const userName = localStorage.getItem("userName");
   const userEmail = localStorage.getItem("userEmail");
-  console.log(userName);
   $("#user-profile").removeClass("hidden");
   $("#user-name").text(userName);
   $("#user-email").text(userEmail);
