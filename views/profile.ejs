@@ -15,7 +15,7 @@
 </head>
 
 <body>
-  <div id="navbar" class="relative flex top-0 left-0 h-24 w-full px-[32px] py-[16px] items-center gap-3">
+  <div id="navbar" class="relative flex top-0 left-0 h-24 w-full px-[32px] py-[16px] items-center gap-3 border-b border-gray-200">
     <a class="logo-btn relative w-[50px] h-[50px] flex items-center justify-center rounded-lg" href="./">
       <svg class="absolute h-[30px] w-[30px]" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
         viewBox="0 0 576 512"><!--! Font Awesome Pro 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. -->
@@ -24,6 +24,99 @@
       </svg>
     </a>
     <a class="text-4xl text-black font-['Product_Sans']" href="./">Current</a>
+    <div id="user-profile" class="flex justify-center items-center gap-4 px-2 ml-auto">
+      <div class="font-medium text-balck text-right">
+        <div id="user-name" class="text-base text-black"></div>
+        <div class="text-base text-gray-500">歡迎使用 Current</div>
+      </div>
+      <button class="avatar" type="button" data-dropdown-toggle="userDropdown" data-dropdown-placement="bottom-end">
+        <div class="w-[45px] h-[45px] rounded-full ring ring-primary ring-yellow-600 ring-offset-base-100 ring-offset-2">
+          <img src="../images/user.png" />
+        </div>
+      </button>
+    </div>
+    <!-- Dropdown menu -->
+    <div id="userDropdown" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow-lg w-52">
+      <div class="px-4 py-3 text-base text-gray-900">
+        <div>您的 Email</div>
+        <div id="user-email" class="font-medium truncate"></div>
+      </div>
+      <ul class="py-2 text-base text-gray-700" aria-labelledby="avatarButton">
+        <li>
+          <a href="/" class="block px-4 py-2 hover:bg-gray-100">個人資訊</a>
+        </li>
+        <li>
+          <a id="signout" href="/" class="block px-4 py-2 hover:bg-gray-100">登出</a>
+        </li>
+      </ul>
+    </div>
+    </div>
   </div>
-  
+  <div id="main" class="h-[calc(100vh-96px)] flex">
+    <aside id="sidebar" class="top-0 left-0 z-20 hidden w-64 h-full font-normal duration-75 lg:flex transition-width" aria-label="Sidebar">
+      <div class="relative flex flex-col flex-1 min-h-0 pt-0 bg-white border-r border-gray-200">
+        <div class="flex flex-col flex-1 pt-5 pb-4 overflow-y-auto">
+          <div class="flex-1 px-3 space-y-1 bg-white divide-y divide-gray-200">
+            <ul class="pb-2 space-y-2">
+              <li>
+                <button id="user-profile-btn" class="flex items-center w-full p-2 text-base text-gray-900 rounded-lg hover:bg-gray-100 group">
+                  <svg class="w-6 h-6 text-gray-500 transition duration-75 group-hover:text-gray-900" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                      d="M10 8a3 3 0 100-6 3 3 0 000 6zM3.465 14.493a1.23 1.23 0 00.41 1.412A9.957 9.957 0 0010 18c2.31 0 4.438-.784 6.131-2.1.43-.333.604-.903.408-1.41a7.002 7.002 0 00-13.074.003z" />
+                  </svg>
+                  <span class="ml-3" sidebar-toggle-item="">個人資訊</span>
+                </button>
+              </li>
+              <li>
+                <button id="user-record-btn" class="flex items-center w-full p-2 text-base text-gray-900 transition duration-75 rounded-lg group hover:bg-gray-100">
+                  <svg class="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 group-hover:text-gray-900"
+                    fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <path
+                      d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z">
+                    </path>
+                  </svg>
+                  <span class="flex-1 ml-3 text-left whitespace-nowrap">會議記錄</span>
+                </button>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </aside>
+    <div id="content" class="w-[calc(100vw-16rem)] flex flex-col">
+      <div id="user-content-profile" class="hidden flex flex-col p-8 bg-white gap-8 w-full h-full">
+        <h3 class="w-full text-2xl font-semibold">個人資訊</h3>
+        <div class="w-full h-full flex gap-10 justify-center">
+          <div id="user-avatar" class="flex flex-col justify-center items-center h-[40%] aspect-square p-4 bg-white gap-2">
+            <img class="mb-4 rounded-full w-[70%] aspect-square" src="https://flowbite-admin-dashboard.vercel.app/images/users/bonnie-green-2x.png" alt="Jese picture">
+            <button type="button" class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-orange-700 hover:bg-orange-800 focus:ring-4 focus:ring-orange-300">
+              <svg class="w-4 h-4 mr-2 -ml-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                <path
+                  d="M5.5 13a3.5 3.5 0 01-.369-6.98 4 4 0 117.753-1.977A4.5 4.5 0 1113.5 13H11V9.413l1.293 1.293a1 1 0 001.414-1.414l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L9 9.414V13H5.5z">
+                </path>
+                <path d="M9 13h2v5a1 1 0 11-2 0v-5z"></path>
+              </svg>
+              上傳照片
+            </button>
+          </div>
+          <div class="flex flex-col justify-center gap-6 w-[60%] h-[40%]">
+            <div class="text-lg">
+              <label class="block mb-2 font-medium text-gray-900">姓名</label>
+              <span id="user-profile-name" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5"><span>
+            </div>
+            <div class="text-lg">
+              <label class="block mb-2 font-medium text-gray-900 dark:text-white">Email</label>
+              <span id="user-profile-email" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5"><span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="user-content-record" class="hidden flex flex-col p-8 bg-white gap-8 w-full h-full">
+        <h3 class="w-full text-2xl font-semibold">會議記錄</h3>
+        
+      </div>
+    </div>
+  </div>
+  <script type="module" src="./src/profile.js"></script>
+  <script src="./dist/flowbite.min.js"></script>
 </body>
