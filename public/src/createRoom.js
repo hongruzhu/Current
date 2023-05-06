@@ -64,8 +64,7 @@ try {
 
   const urlParams = new URLSearchParams(window.location.search);
   const roomId = urlParams.get("roomId");
-  $("#create-room").on("submit", async (e) => {
-    e.preventDefault();
+  $("#create-room button").on("click", async () => {
     const name = $("input[name='name']").val();
     const title = $("input[name='title']").val();
     localStorage.setItem(`name-${roomId}`, name);
@@ -90,7 +89,7 @@ try {
         headers,
         data,
       });
-      window.location.href = result.request.responseURL;
+      window.location.href = result.data;
     } catch (e) {
       if (e.response.data.err) {
         alert(e.response.data.err);

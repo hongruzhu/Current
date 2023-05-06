@@ -43,7 +43,7 @@
       </div>
       <ul class="py-2 text-base text-gray-700" aria-labelledby="avatarButton">
         <li>
-          <a href="/" class="block px-4 py-2 hover:bg-gray-100">個人資訊</a>
+          <a href="./profile?page=profile" class="block px-4 py-2 hover:bg-gray-100">個人資訊</a>
         </li>
         <li>
           <a href="./profile?page=record" class="block px-4 py-2 hover:bg-gray-100">會議記錄</a>
@@ -116,7 +116,20 @@
       </div>
       <div id="user-content-record" class="hidden flex flex-col p-8 bg-white gap-8 w-full h-full">
         <h3 class="w-full text-2xl font-semibold">會議記錄</h3>
-        
+        <div class="relative overflow-x-auto shadow-md">
+          <table class="w-full text-sm text-left text-gray-500 table-fixed">
+            <thead class="text-lg text-gray-700 bg-gray-50">
+              <tr>
+                <th scope="col" class="px-6 py-3">會議名稱</th>
+                <th scope="col" class="px-6 py-3">開始時間</th>
+                <th scope="col" class="px-6 py-3">主持人</th>
+                <th scope="col" class="px-6 py-3 w-[50%]">來賓</th>
+              </tr>
+            </thead>
+            <tbody id="user-record" class="text-base">
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   </div>

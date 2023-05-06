@@ -55,11 +55,14 @@
             </button>
           </div>
         </div>
-        <div class="col-span-1 flex justify-center items-center">
+        <div class="col-span-1 flex flex-col justify-center items-center">
+          <span class="block mb-2 text-2xl font-medium text-gray-900 text-center">會議名稱</span>
+          <span class="block w-full p-4 text-2xl font-medium text-gray-900 text-center text-orange-900 mb-2"><%= title %></span>
           <form id="enter-room" class="flex flex-col justify-center items-center" action="./enterRoom?roomId=<%= roomId %>" method="post" >
             <label id="name-label" for="large-input" class="block mb-2 text-2xl font-medium text-gray-900 text-center">請輸入姓名</label>
-            <input type="text" name="name"
-              class="block w-full p-4 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-md focus:ring-blue-500 focus:border-blue-500">
+            <input type="text" name="userId" class="hidden">
+            <input type="text" name="email" class="hidden">
+            <input type="text" name="name" class="block w-full p-4 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-md focus:ring-blue-500 focus:border-blue-500">
             <button type="submit" id="enter-room-btn"
               class="text-white bg-orange-800 hover:bg-orange-700 focus:outline-none focus:ring-4 focus:ring-orange-300 font-medium rounded-full text-lg px-5 py-2.5 text-center m-4">進入會議</button>
           </form>

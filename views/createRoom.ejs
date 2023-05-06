@@ -57,7 +57,7 @@
           </div>
         </div>
         <div class="col-span-1 flex justify-center items-center flex-col">
-          <form id="create-room" class="flex flex-col justify-center items-center" action="./createRoom?roomId=<%= roomId %>" method="post" >
+          <div id="create-room" class="flex flex-col justify-center items-center">
             <input type="text" name="name">
             <label for="large-input" class="block mb-2 text-xl font-medium text-gray-900 text-center">請輸入會議名稱 (可選)</label>
             <input type="text" name="title"
@@ -72,9 +72,8 @@
                 class="ml-6 w-5 h-5 text-red-600 bg-gray-100 border-gray-300 focus:ring-red-500 focus:ring-2">
               <label for="default-radio-2" class="ml-2 text-lg font-medium text-gray-900">否</label>
             </div>
-            <button type="submit" id="enter-room"
-              class="text-white bg-yellow-400 hover:bg-yellow-500 focus:outline-none focus:ring-4 focus:ring-yellow-300 font-medium rounded-full text-lg px-5 py-2.5 text-center m-4">建立會議</button>
-          </form>
+            <button id="enter-room" class="text-white bg-yellow-400 hover:bg-yellow-500 focus:outline-none focus:ring-4 focus:ring-yellow-300 font-medium rounded-full text-lg px-5 py-2.5 text-center m-4">建立會議</button>
+          </div>
           <label for="large-input"
               class="block m-2 text-lg font-medium text-gray-900 text-center">會議邀請碼</label>
           <div class="w-full flex items-center justify-center px-3 py-2 rounded-lg">

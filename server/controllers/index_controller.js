@@ -12,8 +12,4 @@ const checkAccessToken = async (req, res) => {
   res.send("Access token check successfully.");
 }
 
-const getProfile = async (req, res) => {
-  res.render("profile");
-};
-
-export { index, thankyou, checkAccessToken, getProfile };
+export { index, thankyou, checkAccessToken };

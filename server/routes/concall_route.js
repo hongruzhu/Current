@@ -13,6 +13,8 @@ import {
   resetWhiteboardStatus
 } from "../controllers/concall_controller.js";
 
+import { getConfId, changeConfStatus } from "../models/concall_model.js";
+
 const conferenceCall = (io, socket) => {
   socket.on("join-room", (roomId, peerId, name, role) => {
     socket.join(roomId);
@@ -28,6 +30,8 @@ const conferenceCall = (io, socket) => {
       }
       const count = await reviseRoomUserNumber(roomId, -1);
       if (count === 0) {
+        const confId = await getConfId(roomId);
+        await changeConfStatus(confId, "closed");
         deleteRoomId(roomId);
         deleteStartTime(roomId);
         deleteShareScreenStatus(roomId);

@@ -31,6 +31,7 @@ import { concall_route } from "./server/routes/concall_route.js";
 import { shareScreen_route } from "./server/routes/sharescreen_route.js"; 
 import { whiteboard_route } from "./server/routes/whiteboard_route.js";
 import { recording_route } from "./server/routes/recording_route.js";
+import { profile_route } from "./server/routes/profile_route.js";
 
 app.use(
   index_route,
@@ -39,7 +40,8 @@ app.use(
   concall_route,
   shareScreen_route,
   whiteboard_route,
-  recording_route
+  recording_route,
+  profile_route
 );
 
 // Socket.IO routes

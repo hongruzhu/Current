@@ -1,5 +1,5 @@
 const urlParams = new URLSearchParams(window.location.search);
-const createStatus = urlParams.get("create");
+const createStatus = urlParams.get("roomId");
 const roomId = urlParams.get("roomId");
 const myName = localStorage.getItem(`name-${roomId}`);
 const myEmail = localStorage.getItem(`userEmail`);

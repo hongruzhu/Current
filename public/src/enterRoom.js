@@ -30,9 +30,13 @@ if (logInStatus) {
   const userName = localStorage.getItem("userName");
   $("#name-label").text("準備好加入了嗎？");
   $("#name-label").after(
-    `<span class="text-2xl font-medium text-gray-900 text-center m-3">${userName}</span>`
+    `<span class="text-2xl font-medium text-orange-900 text-center m-3">${userName}</span>`
   );
   $("input[name='name']").val(userName).addClass("hidden");
+  const userId = localStorage.getItem("userId");
+  const userEmail = localStorage.getItem("userEmail");
+  $("input[name='userId']").val(userId);
+  $("input[name='email']").val(userEmail);
 } else {
   $("#sign").append(
     `<a id="signin" type="button" href="./signin" class="text-orange-700 hover:text-white border border-orange-700 hover:bg-orange-800 focus:ring-4 focus:outline-none focus:ring-orange-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-orange-500 dark:focus:ring-orange-800">登入</a>`
@@ -55,21 +59,6 @@ try {
     myVideo.play();
     $("#alert").remove();
     $("#loading").remove();
-  });
-
-  const urlParams = new URLSearchParams(window.location.search);
-  const roomId = urlParams.get("roomId");
-  $("#enter-room-btn").on("click", (e) => {
-    const name = $("input[name='name']").val();
-    if (!name) {
-      e.preventDefault();
-      alert("請輸入姓名");
-      return;
-    }
-    localStorage.setItem(`name-${roomId}`, name);
-    localStorage.setItem(`cameraStatus-${roomId}`, cameraStatus);
-    localStorage.setItem(`micStatus-${roomId}`, micStatus);
-    localStorage.setItem(`role-${roomId}`, "guest");
   });
 
   let cameraStatus = true;
@@ -112,6 +101,21 @@ try {
       .removeClass("bg-red-600")
       .addClass("bg-transparent border border-white hover:bg-white");
     micStatus = true;
+  });
+
+  const urlParams = new URLSearchParams(window.location.search);
+  const roomId = urlParams.get("roomId");
+  $("#enter-room-btn").on("click", (e) => {
+    const name = $("input[name='name']").val();
+    if (!name) {
+      e.preventDefault();
+      alert("請輸入姓名");
+      return;
+    }
+    localStorage.setItem(`name-${roomId}`, name);
+    localStorage.setItem(`cameraStatus-${roomId}`, cameraStatus);
+    localStorage.setItem(`micStatus-${roomId}`, micStatus);
+    localStorage.setItem(`role-${roomId}`, "guest");
   });
 } catch(e) {
   alert("請允許Current存取您的攝影機和麥克風，否則無法進入會議室");
