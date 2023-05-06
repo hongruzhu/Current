@@ -26,6 +26,32 @@
         </svg>
       </a>
       <a class="text-4xl text-black font-['Product_Sans']" href="./">Current</a>
+      <div id="user-profile" class="hidden flex justify-center items-center gap-4 px-2 ml-auto">
+        <div class="font-medium text-balck text-right">
+          <div id="user-name" class="text-base text-black"></div>
+          <div class="text-base text-gray-500">歡迎使用 Current</div>
+        </div>
+        <button class="avatar" type="button" data-dropdown-toggle="userDropdown" data-dropdown-placement="bottom-end">
+          <div class="w-[45px] h-[45px] rounded-full ring ring-primary ring-yellow-600 ring-offset-base-100 ring-offset-2">
+            <img src="../images/user.png" />
+          </div>
+        </button>
+      </div>
+      <!-- Dropdown menu -->
+      <div id="userDropdown" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow-lg w-52">
+        <div class="px-4 py-3 text-base text-gray-900">
+          <div>您的 Email</div>
+          <div id="user-email" class="font-medium truncate"></div>
+        </div>
+        <ul class="py-2 text-base text-gray-700" aria-labelledby="avatarButton">
+          <li>
+            <a href="/" class="block px-4 py-2 hover:bg-gray-100">個人資訊</a>
+          </li>
+          <li>
+            <a id="signout" href="/" class="block px-4 py-2 hover:bg-gray-100">登出</a>
+          </li>
+        </ul>
+      </div>
     </div>
     <div class="container mx-auto h-[calc(100vh-11rem)]">
       <div class="grid grid-cols-2 min-h-full">
@@ -3045,7 +3071,7 @@
       </div>
     </footer>
     <script type="module" src="./src/index.js"></script>
-    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.5/flowbite.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.5/flowbite.min.js"></script>
   </body>
 
 </html>

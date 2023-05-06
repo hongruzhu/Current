@@ -25,35 +25,11 @@ try {
 if (logInStatus) {
   const userName = localStorage.getItem("userName");
   const userEmail = localStorage.getItem("userEmail");
-  $("#navbar").append(`
-    <div id="user-profile" class="flex justify-center items-center gap-4 px-2 ml-auto">
-      <div class="font-medium text-balck text-right">
-        <div class="text-base text-black">${userName}</div>
-        <div class="text-base text-gray-500">歡迎使用 Current</div>
-      </div>
-      <button class="avatar" type="button" data-dropdown-toggle="userDropdown" data-dropdown-placement="bottom-end">
-        <div class="w-[45px] h-[45px] rounded-full ring ring-primary ring-yellow-600 ring-offset-base-100 ring-offset-2">
-          <img src="../images/user.png" />
-        </div>
-      </button>
-    </div>
-    <!-- Dropdown menu -->
-    <div id="userDropdown"
-      class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow-lg w-52">
-      <div class="px-4 py-3 text-base text-gray-900">
-        <div>您的 Email</div>
-        <div class="font-medium truncate">${userEmail}</div>
-      </div>
-      <ul class="py-2 text-base text-gray-700" aria-labelledby="avatarButton">
-        <li>
-          <a href="/" class="block px-4 py-2 hover:bg-gray-100">個人資訊</a>
-        </li>
-        <li>
-          <a id="signout" href="/" class="block px-4 py-2 hover:bg-gray-100">登出</a>
-        </li>
-      </ul>
-    </div>
-  `);
+  console.log(userName);
+  $("#user-profile").removeClass("hidden");
+  $("#user-name").text(userName);
+  $("#user-email").text(userEmail);
+
   $("#signout").click(() => {
     localStorage.removeItem("accessToken");
     localStorage.removeItem("userId");
