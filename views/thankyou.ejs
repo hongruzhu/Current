@@ -1,25 +1,64 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Current</title>
+    <link rel="shortcut icon" href="./images/favicon.ico" />
+    <link rel="bookmark" href="./images/favicon.ico" />
+    <link href="./src/style.css" rel="stylesheet">
+    <link href="./src/output.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"
+      integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios@1.1.2/dist/axios.min.js"></script>
+  </head>
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Current</title>
-  <link rel="shortcut icon" href="./images/favicon.ico" />
-  <link rel="bookmark" href="./images/favicon.ico" />
-  <link href="../src/output.css" rel="stylesheet">
-  <script src="https://code.jquery.com/jquery-3.6.4.min.js"
-    integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
-</head>
-
-<body class="h-screen w-screen bg-white">
-  <div class="relative flex top-0 left-0 h-24 w-full px-[32px] py-[16px] bg-white items-center">
-    <a class="flex-none bg-[url('../images/logo.png')] w-[190px] h-[48px] bg-contain" href="./"></a>
-    <a class="bg-[url('../images/user.png')] w-[50px] h-[50px] ml-auto bg-contain" href=""></a>
-  </div>
-  <div class="flex flex-col justify-center items-center">
-    <div class="text-4xl text-black py-7">謝謝您使用 Current!</div>
-    <a type="button" href="./"
-      class="text-white bg-orange-800 hover:bg-orange-700 focus:ring-4 focus:ring-orange-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 focus:outline-none">返回首頁</a>
-  </div>
-</body>
+  <body class="h-screen w-screen bg-white">
+    <div id="navbar" class="relative flex top-0 left-0 h-24 w-full px-[32px] py-[16px] items-center gap-3">
+      <a class="logo-btn relative w-[50px] h-[50px] flex items-center justify-center rounded-lg" href="./">
+        <svg class="absolute h-[30px] w-[30px]" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
+          viewBox="0 0 576 512"><!--! Font Awesome Pro 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. -->
+          <path
+            d="M0 128C0 92.7 28.7 64 64 64H320c35.3 0 64 28.7 64 64V384c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V128zM559.1 99.8c10.4 5.6 16.9 16.4 16.9 28.2V384c0 11.8-6.5 22.6-16.9 28.2s-23 5-32.9-1.6l-96-64L416 337.1V320 192 174.9l14.2-9.5 96-64c9.8-6.5 22.4-7.2 32.9-1.6z" />
+        </svg>
+      </a>
+      <a class="text-4xl text-black font-['Product_Sans']" href="./">Current</a>
+      <div id="user-profile" class="hidden flex justify-center items-center gap-4 px-2 ml-auto">
+        <div class="font-medium text-balck text-right">
+          <div id="user-name" class="text-base text-black"></div>
+          <div class="text-base text-gray-500">歡迎使用 Current</div>
+        </div>
+        <button class="avatar" type="button" data-dropdown-toggle="userDropdown" data-dropdown-placement="bottom-end">
+          <div class="w-[45px] h-[45px] rounded-full ring ring-primary ring-yellow-600 ring-offset-base-100 ring-offset-2">
+            <img src="../images/user.png" />
+          </div>
+        </button>
+      </div>
+      <!-- Dropdown menu -->
+      <div id="userDropdown" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow-lg w-52">
+        <div class="px-4 py-3 text-base text-gray-900">
+          <div>您的 Email</div>
+          <div id="user-email" class="font-medium truncate"></div>
+        </div>
+        <ul class="py-2 text-base text-gray-700" aria-labelledby="avatarButton">
+          <li>
+            <a href="./profile?page=profile" class="block px-4 py-2 hover:bg-gray-100">個人資訊</a>
+          </li>
+          <li>
+            <a href="./profile?page=record" class="block px-4 py-2 hover:bg-gray-100">會議記錄</a>
+          </li>
+          <li>
+            <a id="signout" href="./" class="block px-4 py-2 hover:bg-gray-100">登出</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="flex flex-col justify-center items-center">
+      <div class="text-4xl text-black py-7">謝謝您使用 Current!</div>
+      <a type="button" href="./"
+        class="text-white bg-orange-800 hover:bg-orange-700 focus:ring-4 focus:ring-orange-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 focus:outline-none">返回首頁</a>
+    </div>
+    <script type="module" src="./src/thankyou.js"></script>
+    <script src="./dist/flowbite.min.js"></script>
+  </body>
+</html>

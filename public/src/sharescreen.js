@@ -33,15 +33,26 @@ $("#paging").on("click", async () => {
 
 async function shareScreen(surface) {
   if ($("#share-screen video").length === 1) {
-    alert("現在有人分享螢幕，不能分享");
+    Swal.fire({
+      icon: "warning",
+      text: "現在有人分享螢幕，不能分享",
+    });
     return;
   }
   if ($("#left-items span").length === 1) {
-    alert("目前有人正在分享小白版，不能分享");
+    Swal.fire({
+      icon: "warning",
+      text: "目前有人正在分享小白版，不能分享",
+    });
     return;
   }
   socket.on("already-share-screen", (status) => {
-    if (status) alert("現在有人分享螢幕，不能分享");
+    if (status) {
+      Swal.fire({
+        icon: "warning",
+        text: "現在有人分享螢幕，不能分享",
+      });
+    }
   });
 
   myShareScreenStatus = true;

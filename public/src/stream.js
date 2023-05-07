@@ -317,9 +317,6 @@ async function connectToNewUser(peerId, name, role, stream) {
   const options = {
     metadata: { name: myName, role: myRole, myWebcamStatus, myMicStatus },
   };
-
-  console.log("connectToNewUser", "myPeer.call");
-  await checkTracks(stream);
   
   const call = myPeer.call(peerId, stream, options);
   addVideoGridElement(peerId);

@@ -16,7 +16,10 @@ try {
   localStorage.removeItem("userId");
   localStorage.removeItem("userName");
   localStorage.removeItem("userEmail");
-  alert("請先登入");
+  await Swal.fire({
+    icon: "warning",
+    text: "請先登入",
+  });
   window.location.href = "./";
 }
 
@@ -93,10 +96,17 @@ try {
 
 } catch (e) {
   if (e.response.data.err) {
-    alert(e.response.data.err);
+    await Swal.fire({
+      icon: "warning",
+      text: e.response.data.err,
+    });
     console.log(e);
   } else {
-    alert("Something Wrong!");
+    Swal.fire({
+      icon: "error",
+      title: "Oops...",
+      text: "Something went wrong!",
+    });
     console.log(e);
   }
 }

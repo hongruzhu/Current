@@ -18,7 +18,11 @@ const whiteboardSharePeerId = whiteboardResult.data.peerId;
 // 抓取會議名稱，加到會議資訊欄
 if (myRole === "host") {
   const title = localStorage.getItem(`title-${roomId}`);
-  $("#room-title").text(title);
+  if (title === "") {
+    $("#room-title").text("無");
+  } else {
+    $("#room-title").text(title);
+  }
 } else {
   const result = await axios.post("./getRoomTitle", { roomId });
   const title = result.data;
@@ -197,7 +201,11 @@ try {
   }
   startTimer();
 } catch (e) {
-  alert("Something wrong")
+  Swal.fire({
+    icon: "error",
+    title: "Oops...",
+    text: "Something went wrong!"
+  });
   console.log(e);
 }
 

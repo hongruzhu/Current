@@ -6,12 +6,15 @@
     <title>Current - <%= roomId %></title>
     <link rel="shortcut icon" href="./images/favicon.ico" />
     <link rel="bookmark" href="./images/favicon.ico" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.5/dist/sweetalert2.min.css"
+      integrity="sha256-aUL5sUzmON2yonFVjFCojGULVNIOaPxlH648oUtA/ng=" crossorigin="anonymous">
     <link href="./src/style.css" rel="stylesheet">
     <link href="./src/output.css" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"
       integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios@1.1.2/dist/axios.min.js"></script>
-  </head>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.5/dist/sweetalert2.all.min.js"
+      integrity="sha256-9AtIfusxXi0j4zXdSxRiZFn0g22OBdlTO4Bdsc2z/tY=" crossorigin="anonymous"></script>
   <body class="h-screen w-screen bg-white">
     <div id="loading" class="fixed h-screen w-screen top-0 left-0 flex items-center justify-center z-10 bg-gray-500 bg-opacity-25">
       <span class="loader"></span>
@@ -25,6 +28,35 @@
         </svg>
       </a>
       <a class="text-4xl text-black font-['Product_Sans']" href="./">Current</a>
+      <div id="user-profile" class="hidden flex justify-center items-center gap-4 px-2 ml-auto">
+        <div class="font-medium text-balck text-right">
+          <div id="user-name" class="text-base text-black"></div>
+          <div class="text-base text-gray-500">歡迎使用 Current</div>
+        </div>
+        <button class="avatar" type="button" data-dropdown-toggle="userDropdown" data-dropdown-placement="bottom-end">
+          <div class="w-[45px] h-[45px] rounded-full ring ring-primary ring-yellow-600 ring-offset-base-100 ring-offset-2">
+            <img src="../images/user.png" />
+          </div>
+        </button>
+      </div>
+      <!-- Dropdown menu -->
+      <div id="userDropdown" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow-lg w-52">
+        <div class="px-4 py-3 text-base text-gray-900">
+          <div>您的 Email</div>
+          <div id="user-email" class="font-medium truncate"></div>
+        </div>
+        <ul class="py-2 text-base text-gray-700" aria-labelledby="avatarButton">
+          <li>
+            <a href="./profile?page=profile" class="block px-4 py-2 hover:bg-gray-100">個人資訊</a>
+          </li>
+          <li>
+            <a href="./profile?page=record" class="block px-4 py-2 hover:bg-gray-100">會議記錄</a>
+          </li>
+          <li>
+            <button id="signout" class="block text-left px-4 py-2 w-full hover:bg-gray-100">登出</button>
+          </li>
+        </ul>
+      </div>
     </div>
     <div class="container mx-auto h-[calc(100vh-10rem)]">
       <div class="grid grid-cols-3 min-h-full">
@@ -33,7 +65,7 @@
         才能讓其他參與者看到和聽到您</span>
           <div id="myVideo" class="relative flex justify-center items-center">
             <video class="transform-rotateY-180"></video>
-            <button id="hide-camera" data-tooltip-target="tooltip-camera" type="button"
+            <button id="hide-camera" type="button"
               class="absolute bottom-5 right-[42%] p-[2%] bg-transparent border border-white group rounded-full hover:bg-white hover:bg-opacity-50">
               <svg class="w-6 h-6 text-white"
                 fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -43,7 +75,7 @@
               </svg>
               <span class="sr-only">Hide camera</span>
             </button>
-            <button id="mute-mic" data-tooltip-target="tooltip-microphone" type="button"
+            <button id="mute-mic" type="button"
               class="absolute bottom-5 left-[42%] p-[2%] group bg-transparent border border-white rounded-full hover:bg-white hover:bg-opacity-50">
               <svg class="w-6 h-6 text-white"
                 fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -70,5 +102,6 @@
       </div>
     </div>
     <script type="module" src="./src/enterRoom.js"></script>
+    <script src="./dist/flowbite.min.js"></script>
   </body>
 </html>

@@ -6,6 +6,8 @@
     <title>Current - <%= roomId %></title>
     <link rel="shortcut icon" href="./images/favicon.ico" />
     <link rel="bookmark" href="./images/favicon.ico" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.5/dist/sweetalert2.min.css"
+      integrity="sha256-aUL5sUzmON2yonFVjFCojGULVNIOaPxlH648oUtA/ng=" crossorigin="anonymous">
     <link href="./src/style.css" rel="stylesheet">
     <link href="./src/output.css" rel="stylesheet">
     <script src="/socket.io/socket.io.js"></script>
@@ -19,6 +21,8 @@
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation/selfie_segmentation.js"
       crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.5/dist/sweetalert2.all.min.js"
+      integrity="sha256-9AtIfusxXi0j4zXdSxRiZFn0g22OBdlTO4Bdsc2z/tY=" crossorigin="anonymous"></script>
   </head>
   <body class="bg-white">
     <div id="loading"
@@ -107,7 +111,7 @@
               </svg>
             </button>
           </div>
-          <div id="messenges" class="absolute top-16 w-full h-[calc(100%-102px)] p-1.5 overflow-y-scroll break-words"></div>
+          <div id="messenges" class="absolute top-16 w-full h-[calc(100%-8.25rem)] p-1.5 overflow-y-scroll break-words"></div>
           <form id="chat" class="absolute bottom-0 w-full p-1.5">
             <label for="chat" class="sr-only">Your message</label>
             <div class="flex items-center px-1 py-2 rounded-lg bg-gray-100">

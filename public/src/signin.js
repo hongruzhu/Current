@@ -32,7 +32,10 @@ async function signIn() {
     localStorage.setItem("userId", result.data.user.id);
     localStorage.setItem("userName", result.data.user.name);
     localStorage.setItem("userEmail", result.data.user.email);
-    alert("登入成功！");
+    await Swal.fire({
+      icon: "success",
+      text: "登入成功！",
+    });
     const roomReady = localStorage.getItem("room-ready");
     if (roomReady) {
       localStorage.removeItem("room-ready");
@@ -42,30 +45,49 @@ async function signIn() {
     }
   } catch (e) {
     if (e.response.data.err) {
-      alert(e.response.data.err);
+      await Swal.fire({
+        icon: "warning",
+        text: e.response.data.err,
+      });
       console.log(e);
       return;
     }
-    alert("Something Wrong!");
+    Swal.fire({
+      icon: "error",
+      title: "Oops...",
+      text: "Something went wrong!",
+    });
     console.log(e);
   }
 }
 
 async function signInValidation(email, password) {
   if (!email) {
-    alert("Please enter your email");
+    await Swal.fire({
+      icon: "warning",
+      text: "請輸入您的 email",
+    });
     return true;
   }
   if (!password) {
-    alert("Please enter your password");
+    await Swal.fire({
+      icon: "warning",
+      text: "請輸入密碼",
+    });
     return true;
   }
   if (!validator.isEmail(email)) {
-    alert("Please enter correct email format");
+    await Swal.fire({
+      icon: "warning",
+      text: "請輸入正確的 email格式",
+    });
     return true;
   }
   if (!validator.isLength(password, { min: 8, max: 12 })) {
-    alert("Password length should be between 8 to 12");
+    await Swal.fire({
+      icon: "warning",
+      text: "密碼長度需在8-12碼之間",
+    });
     return true;
   }
   if (
@@ -77,9 +99,10 @@ async function signInValidation(email, password) {
       minSymbols: 0,
     })
   ) {
-    alert(
-      "Password should have at least 1 lowercase, 1 number, and 1 uppercase."
-    );
+    await Swal.fire({
+      icon: "warning",
+      text: "密碼至少需要大小寫字母及數字各1位",
+    });
     return true;
   }
 }

@@ -99,7 +99,10 @@ const verifyRoomId = async (req, res) => {
     return;
   }
   // 抓取會議名稱
-  const title = await getTitle(roomId);
+  let title = await getTitle(roomId);
+  if (title === "") {
+    title = "無";
+  }
   res.render("enterRoom", { roomId, title });
 };
 

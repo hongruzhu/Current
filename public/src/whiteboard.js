@@ -15,11 +15,17 @@ $("#start-whiteboard").on("click", async () => {
   openWhiteboardStatus = true;
   // 若有人分享小白版或螢幕，則不能分享
   if ($("#left-items span").length === 1) {
-    alert("目前有人正在分享小白版，不能分享");
+    Swal.fire({
+      icon: "warning",
+      text: "目前有人正在分享小白版，不能分享",
+    });
     return;
   }
   if ($("#share-screen-video video").length === 1) {
-    alert("目前有人正在分享螢幕，不能分享小白版");
+    Swal.fire({
+      icon: "warning",
+      text: "目前有人正在分享螢幕，不能分享",
+    });
     return;
   }
   // 通知會議室其他人開啟小白版

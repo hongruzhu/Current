@@ -7,11 +7,15 @@
     <title>Current</title>
     <link rel="shortcut icon" href="./images/favicon.ico" />
     <link rel="bookmark" href="./images/favicon.ico" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.5/dist/sweetalert2.min.css"
+      integrity="sha256-aUL5sUzmON2yonFVjFCojGULVNIOaPxlH648oUtA/ng=" crossorigin="anonymous">
     <link href="./src/output.css" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"
       integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios@1.1.2/dist/axios.min.js"></script>
     <script src="https://unpkg.com/validator@latest/validator.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.5/dist/sweetalert2.all.min.js"
+      integrity="sha256-9AtIfusxXi0j4zXdSxRiZFn0g22OBdlTO4Bdsc2z/tY=" crossorigin="anonymous"></script>
   </head>
 
   <body>
@@ -1352,7 +1356,7 @@
               <label class="block text-gray-700 text-sm font-bold mb-2">密碼</label>
               <!-- <a href="#" class="text-xs text-gray-500">Forget Password?</a> -->
             </div>
-            <input name="password" class="bg-gray-200 text-gray-700 focus:outline-none focus:shadow-outline border border-gray-300 rounded py-2 px-4 block w-full appearance-none" type="password" placeholder="密碼需8-12位，大、小寫字母和數字至少各1位">
+            <input name="password" class="bg-gray-200 text-gray-700 focus:outline-none focus:shadow-outline border border-gray-300 rounded py-2 px-4 block w-full appearance-none placeholder:text-sm" type="password" placeholder="密碼需8-12位，大小寫字母和數字至少各1位">
           </div>
           <div class="mt-4">
             <div class="flex justify-between">

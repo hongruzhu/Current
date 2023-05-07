@@ -1,3 +1,5 @@
+localStorage.removeItem("room-ready");
+
 const accessToken = localStorage.getItem("accessToken");
 const headers = {
   Authorization: `Bearer ${accessToken}`,
@@ -12,15 +14,11 @@ try {
   });
   console.log(result.data);
   logInStatus = true;
-} catch(e) {
+} catch (e) {
   console.log(e.response.data);
-  localStorage.removeItem("accessToken");
-  localStorage.removeItem("userId");
-  localStorage.removeItem("userName");
-  localStorage.removeItem("userEmail");
+  localStorage.clear();
   logInStatus = false;
 }
-
 
 if (logInStatus) {
   const userName = localStorage.getItem("userName");
@@ -50,7 +48,10 @@ if (logInStatus) {
 
 $("#get-roomid").click(async () => {
   if (!logInStatus) {
-    alert("請先登入，未有帳號請先註冊！");
+    await Swal.fire({
+      icon: "warning",
+      text: "請先登入，未有帳號請先註冊！",
+    });
     window.location.href = "./signin";
     return;
   }
@@ -65,7 +66,11 @@ $("#get-roomid").click(async () => {
     });
     window.location.href = result.request.responseURL;
   } catch (e) {
-    alert("something worong")
+    Swal.fire({
+      icon: "error",
+      title: "Oops...",
+      text: "Something went wrong!"
+    });
     console.log(e);
   }
 });

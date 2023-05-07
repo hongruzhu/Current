@@ -1,6 +1,48 @@
-const accessToken = localStorage.getItem("accessToken");
 const userName = localStorage.getItem("userName");
 $("input[name='name']").val(userName).addClass("hidden");
+
+let logInStatus;
+try {
+  const accessToken = localStorage.getItem("accessToken");
+  const headers = {
+    Authorization: `Bearer ${accessToken}`,
+  };
+
+  const result = await axios({
+    method: "get",
+    url: "./checkAccessToken",
+    headers,
+  });
+  console.log(result.data);
+  logInStatus = true;
+} catch (e) {
+  console.log(e.response.data);
+  localStorage.removeItem("accessToken");
+  localStorage.removeItem("userId");
+  localStorage.removeItem("userName");
+  localStorage.removeItem("userEmail");
+  await Swal.fire({
+    icon: "warning",
+    text: "請先登入！",
+  });
+  window.location.href = "./"
+}
+
+if (logInStatus) {
+  const userName = localStorage.getItem("userName");
+  const userEmail = localStorage.getItem("userEmail");
+  $("#user-profile").removeClass("hidden");
+  $("#user-name").text(userName);
+  $("#user-email").text(userEmail);
+
+  $("#signout").click(() => {
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("userId");
+    localStorage.removeItem("userName");
+    localStorage.removeItem("userEmail");
+  });
+}
+
 
 try {
   const myWebcamStream = await navigator.mediaDevices.getUserMedia({
@@ -73,6 +115,7 @@ try {
     localStorage.setItem(`role-${roomId}`, "host");
     localStorage.setItem(`title-${roomId}`, title);
 
+    const accessToken = localStorage.getItem("accessToken");
     const headers = {
       Authorization: `Bearer ${accessToken}`,
     };
@@ -92,21 +135,35 @@ try {
       window.location.href = result.data;
     } catch (e) {
       if (e.response.data.err) {
-        alert(e.response.data.err);
         console.log(e);
+        await Swal.fire({
+          icon: "warning",
+          text: "請先登入，再建立新的會議",
+        });
+        window.location.href = "./";
         return;
       }
-      alert("Something Wrong!");
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Something went wrong!",
+      });
       console.log(e);
     }
   });
 } catch (e) {
-  alert("請允許Current存取您的攝影機和麥克風，否則無法進入會議室");
+  await Swal.fire({
+    icon: "warning",
+    text: "請允許Current存取您的攝影機和麥克風，否則無法進入會議室",
+  });
   console.log(e);
   $("#loading").remove();
   $("#create-room").on("submit", async (e) => {
     e.preventDefault();
-    alert("請允許Current存取您的攝影機和麥克風，否則無法進入會議室");
+    await Swal.fire({
+      icon: "warning",
+      text: "請允許Current存取您的攝影機和麥克風，否則無法進入會議室",
+    });
   });
 }
 
