@@ -28,6 +28,11 @@ if (logInStatus) {
   const userName = localStorage.getItem("userName");
   const userEmail = localStorage.getItem("userEmail");
   const userId = localStorage.getItem("userId");
+  const userPicture = localStorage.getItem("userPicture");
+
+  if (userPicture !== "null") {
+    $("#user-avatar-image").attr("src", `./uploads/${userPicture}`);
+  }
 
   $("#user-profile").removeClass("hidden");
   $("#user-name").text(userName);

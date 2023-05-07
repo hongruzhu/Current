@@ -1,6 +1,7 @@
 import dotenv from "dotenv";
 dotenv.config();
 import jwt from "jsonwebtoken";
+import multer from "multer";
 const { TOKEN_SECRET_KEY } = process.env;
 
 
@@ -31,4 +32,16 @@ const wrapAsync = (fn) => {
   };
 };
 
-export { authenticateJWT, wrapAsync };
+// multer抓取圖片後，儲存路徑及命名規則
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "./public/uploads/");
+  },
+  filename: function (req, file, cb) {
+    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
+    cb(null, file.fieldname + "-" + uniqueSuffix + ".jpg");
+  },
+});
+const upload = multer({ storage: storage }, { limit: { fileSize: 1000000 } });
+
+export { authenticateJWT, wrapAsync, upload };

@@ -25,6 +25,15 @@ try {
 
 const userName = localStorage.getItem("userName");
 const userEmail = localStorage.getItem("userEmail");
+const userPicture = localStorage.getItem("userPicture");
+
+if (userPicture !== "null") {
+  $("#user-avatar-image").attr("src", `./uploads/${userPicture}`);
+  $("#upload-image").addClass("hidden");
+  $("#user-avatar img").attr("src", `./uploads/${userPicture}`);
+  $("#user-avatar img").removeClass("hidden");
+}
+
 $("#user-profile").removeClass("hidden");
 $("#user-name").text(userName);
 $("#user-email").text(userEmail);
@@ -118,3 +127,27 @@ try {
   }
 }
 
+// 上傳個人照片
+$("#dropzone-file").on("change", async (e) => {
+  const picture = e.target.files[0];
+  const formData = new FormData();
+  formData.append("user_image", picture);
+
+  const accessToken = localStorage.getItem("accessToken");
+
+  const result = await fetch("/uploadUserImage", {
+    method: "POST",
+    headers: {
+      // "Content-Type": "multipart/form-data",
+      Authorization: `Bearer ${accessToken}`,
+    },
+    body: formData,
+  });
+
+  await Swal.fire({
+    icon: "success",
+    text: "上傳成功！請重新登入，以套用您的大頭照",
+  });
+  localStorage.clear();
+  window.location.href = "./signin";
+})

@@ -13,7 +13,7 @@ const getUserAllConf = async (userId) => {
   } catch (error) {
     throw new Error(error);
   }
-}
+};
 
 const getConfData = async (confId) => {
   try {
@@ -43,6 +43,20 @@ const getConfMembers = async (confId) => {
   } catch (error) {
     throw new Error(error);
   }
-}
+};
 
-export { getUserAllConf, getConfData, getConfMembers };
+const setUserImage = async (userId, image) => {
+  try {
+    const [result] = await pool.query(
+      `
+      UPDATE users SET picture = ? 
+      where id = ?
+      `,
+      [image, userId]
+    );
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
+export { getUserAllConf, getConfData, getConfMembers, setUserImage };

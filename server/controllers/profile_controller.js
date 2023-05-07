@@ -1,7 +1,8 @@
 import {
   getUserAllConf,
   getConfData,
-  getConfMembers
+  getConfMembers,
+  setUserImage,
 } from "../models/profile_model.js";
 
 const getProfilePage = async (req, res) => {
@@ -17,35 +18,45 @@ const getRecord = async (req, res) => {
       index === self.findIndex((t) => t.conferences_id === item.conferences_id)
     );
   });
-  const data = await Promise.all(userConf.map(async (item) => {
-    const confId = item.conferences_id;
-    const confData = await getConfData(confId);
-    const confMembers = await getConfMembers(confId);
-    const hostData = confMembers.filter((item) => item.role === "host")[0];
-    let host;
-    if (hostData.email === userEmail) {
-      host = `${hostData.name} (你)`;
-    } else {
-      host = `${hostData.name} <${hostData.email}>`;
-    }
-    const guestsData = confMembers.filter((item) => item.role === "guest");
-    const guests = guestsData.map((item) => {
-      if (item.email) {
-        if (item.email === userEmail) return `${item.name} (你)`;
-        return `${item.name} <${item.email}>`;
+  const data = await Promise.all(
+    userConf.map(async (item) => {
+      const confId = item.conferences_id;
+      const confData = await getConfData(confId);
+      const confMembers = await getConfMembers(confId);
+      const hostData = confMembers.filter((item) => item.role === "host")[0];
+      let host;
+      if (hostData.email === userEmail) {
+        host = `${hostData.name} (你)`;
+      } else {
+        host = `${hostData.name} <${hostData.email}>`;
       }
-      return `${item.name} (未註冊)`;
-    });
-    const result = {
-      conf_id: confId,
-      title: confData.title,
-      start_time: confData.start,
-      host,
-      guests
-    };
-    return result;
-  }));
+      const guestsData = confMembers.filter((item) => item.role === "guest");
+      const guests = guestsData.map((item) => {
+        if (item.email) {
+          if (item.email === userEmail) return `${item.name} (你)`;
+          return `${item.name} <${item.email}>`;
+        }
+        return `${item.name} (未註冊)`;
+      });
+      const result = {
+        conf_id: confId,
+        title: confData.title,
+        start_time: confData.start,
+        host,
+        guests,
+      };
+      return result;
+    })
+  );
   res.json({ data });
-}
+};
 
-export { getProfilePage, getRecord };
+const userImage = async (req, res) => {
+  const userId = req.payload.id;
+  const image = req.files.user_image[0].filename;
+  // 存進資料庫
+  await setUserImage(userId, image);
+  res.json({ image });
+};
+
+export { getProfilePage, getRecord, userImage };

@@ -31,9 +31,14 @@ try {
 if (logInStatus) {
   const userName = localStorage.getItem("userName");
   const userEmail = localStorage.getItem("userEmail");
+  const userPicture = localStorage.getItem("userPicture");
   $("#user-profile").removeClass("hidden");
   $("#user-name").text(userName);
   $("#user-email").text(userEmail);
+
+  if (userPicture !== "null") {
+    $("#user-avatar-image").attr("src", `./uploads/${userPicture}`);
+  }
 
   $("#signout").click(() => {
     localStorage.removeItem("accessToken");

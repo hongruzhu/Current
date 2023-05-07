@@ -41,6 +41,7 @@ async function signUp() {
     localStorage.setItem("userId", result.data.user.id);
     localStorage.setItem("userName", result.data.user.name);
     localStorage.setItem("userEmail", result.data.user.email);
+    localStorage.setItem("userPicture", result.data.user.picture);
     await Swal.fire({
       icon: "success",
       text: "註冊成功！",

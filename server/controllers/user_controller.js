@@ -34,7 +34,8 @@ const signUp = async (req, res) => {
   const provider = "native";
   const password_hash = await bcrypt.hash(password, 10);
   const id = await signUpDb(provider, name, email, password_hash);
-  const response = await generateResponse(id, provider, name, email);
+  const picture = null;
+  const response = await generateResponse(id, provider, name, email, picture);
   res.json(response);
 };
 
@@ -50,13 +51,13 @@ const signIn = async (req, res) => {
     res.status(403).send({ err: "此信箱尚未註冊" });
     return;
   }
-  const { id, provider, name, password_hash } = result[0];
+  const { id, provider, name, password_hash, picture } = result[0];
   const checkPassword = await bcrypt.compare(password, password_hash);
   if (!checkPassword) {
     res.status(403).send({ err: `密碼輸入錯誤，請重新輸入密碼` });
     return;
   }
-  const response = await generateResponse(id, provider, name, email);
+  const response = await generateResponse(id, provider, name, email, picture);
   res.json(response);
 };
 
@@ -116,12 +117,13 @@ const signInValidation = async (email, password) => {
   return false;
 };
 
-const generateResponse = async (id, provider, name, email) => {
+const generateResponse = async (id, provider, name, email, picture) => {
   const payload = {
     id,
     provider,
     name,
     email,
+    picture
   };
   const accessToken = jwt.sign(payload, TOKEN_SECRET_KEY, {
     expiresIn: TOKEN_EXPIRE,
@@ -134,6 +136,7 @@ const generateResponse = async (id, provider, name, email) => {
       provider,
       name,
       email,
+      picture
     },
   };
   return response;
