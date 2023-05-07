@@ -70,6 +70,13 @@ try {
   const data = result.data.data
 
   for (let i = 0; i < data.length; i++) {
+    let title;
+    if (data[i].title === "") {
+      title = "無";
+    } else {
+      title = data[i].title;
+    }
+
     const date = new Date(data[i].start_time);
     const year = date.getFullYear(); // 年份
     const month = date.getMonth() + 1; // 月份 (從0開始)
@@ -86,7 +93,7 @@ try {
     const guests = data[i].guests.join(', ')
     $("#user-record").append(`
       <tr class="bg-white border-b break-words">
-        <th scope="row" class="px-6 py-4 font-medium text-gray-900">${data[i].title}</th>
+        <th scope="row" class="px-6 py-4 font-medium text-gray-900">${title}</th>
         <td class="px-6 py-4">${startTime}</td>
         <td class="px-6 py-4">${data[i].host}</td>
         <td class="px-6 py-4">${guests}</td>
