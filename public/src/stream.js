@@ -201,6 +201,14 @@ $("#bg-4").on("click", () => {
   path = $("#bg-4 img").attr("src");
   selfieSegmentation.onResults(imageBackground);
 });
+$("#bg-5").on("click", () => {
+  path = $("#bg-5 img").attr("src");
+  selfieSegmentation.onResults(imageBackground);
+});
+$("#bg-6").on("click", () => {
+  path = $("#bg-6 img").attr("src");
+  selfieSegmentation.onResults(imageBackground);
+});
 
 selfieSegmentation.onResults(originBackground);
 
