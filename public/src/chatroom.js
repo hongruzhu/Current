@@ -27,7 +27,7 @@ function addMyMessage(name, msg, time) {
   </div>
   `);
   const messenge = $(
-    `<div class="chat-bubble bg-yellow-600 text-white">$</div>`
+    `<div class="chat-bubble bg-yellow-600 text-white"></div>`
   ).text(msg);
   item.append(messenge);
   $("#messenges").append(item);

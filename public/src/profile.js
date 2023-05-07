@@ -98,19 +98,18 @@ try {
       .padStart(2, "0")} ${hours.toString().padStart(2, "0")}:${minutes
       .toString()
       .padStart(2, "0")}`;
-
     const guests = data[i].guests.join(', ');
-
-    console.log(guests);
-
-    $("#user-record").append(`
+    
+    const item = $(`      
       <tr class="bg-white border-b break-words">
         <th scope="row" class="px-6 py-4 font-medium text-gray-900">${title}</th>
         <td class="px-6 py-4">${startTime}</td>
         <td class="px-6 py-4">${data[i].host}</td>
-        <td class="px-6 py-4">${guests}</td>
       </tr>
     `);
+    const guestItem = $(`<td class="px-6 py-4"></td>`).text(guests);
+    item.append(guestItem);
+    $("#user-record").append(item);
   }
 
 } catch (e) {
