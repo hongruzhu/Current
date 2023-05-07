@@ -135,24 +135,34 @@ $("#dropzone-file").on("change", async (e) => {
 
   const accessToken = localStorage.getItem("accessToken");
 
-  const result = await fetch("/uploadUserImage", {
-    method: "POST",
-    headers: {
-      // "Content-Type": "multipart/form-data",
-      Authorization: `Bearer ${accessToken}`,
-    },
-    body: formData,
-  });
+  try {
+    const result = await fetch("/uploadUserImage", {
+      method: "POST",
+      headers: {
+        // "Content-Type": "multipart/form-data",
+        Authorization: `Bearer ${accessToken}`,
+      },
+      body: formData,
+    });
 
-  Swal.fire({
-    icon: "success",
-    text: "上傳成功！",
-  });
-  
-  const userImage = (await result.json()).image;
-  $("#user-avatar img").attr("src", `./uploads/${userImage}`);
-  $("#upload-image").addClass("hidden");
-  $("#user-avatar img").removeClass("hidden");
-  $("#user-avatar-image").attr("src", `./uploads/${userImage}`);
-  localStorage.setItem("userPicture", userImage);
+    console.log(result);
+
+    const userImage = (await result.json()).image;
+
+    Swal.fire({
+      icon: "success",
+      text: "上傳成功！",
+    });
+    $("#user-avatar img").attr("src", `./uploads/${userImage}`);
+    $("#upload-image").addClass("hidden");
+    $("#user-avatar img").removeClass("hidden");
+    $("#user-avatar-image").attr("src", `./uploads/${userImage}`);
+    localStorage.setItem("userPicture", userImage);
+  } catch(e) {
+    console.log(e);
+    Swal.fire({
+      icon: "warning",
+      text: "圖片大小請在1 MB內",
+    });
+  };
 })

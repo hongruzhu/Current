@@ -42,6 +42,6 @@ const storage = multer.diskStorage({
     cb(null, file.fieldname + "-" + uniqueSuffix + ".jpg");
   },
 });
-const upload = multer({ storage: storage }, { limit: { fileSize: 1000000 } });
+const upload = multer({ storage: storage, limits: { fileSize: 1000000 } });
 
 export { authenticateJWT, wrapAsync, upload };
