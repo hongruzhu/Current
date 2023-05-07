@@ -144,10 +144,15 @@ $("#dropzone-file").on("change", async (e) => {
     body: formData,
   });
 
-  await Swal.fire({
+  Swal.fire({
     icon: "success",
-    text: "上傳成功！請重新登入，以套用您的大頭照",
+    text: "上傳成功！",
   });
-  localStorage.clear();
-  window.location.href = "./signin";
+  
+  const userImage = (await result.json()).image;
+  $("#user-avatar img").attr("src", `./uploads/${userImage}`);
+  $("#upload-image").addClass("hidden");
+  $("#user-avatar img").removeClass("hidden");
+  $("#user-avatar-image").attr("src", `./uploads/${userImage}`);
+  localStorage.setItem("userPicture", userImage);
 })
