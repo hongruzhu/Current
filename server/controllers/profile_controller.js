@@ -38,9 +38,6 @@ const getRecord = async (req, res) => {
         }
         return `${item.name} (未註冊)`;
       });
-
-      console.log(guests);
-
       const result = {
         conf_id: confId,
         title: confData.title,
