@@ -99,7 +99,7 @@ try {
       .toString()
       .padStart(2, "0")}`;
     const guests = data[i].guests.join(', ');
-    
+
     const item = $(`      
       <tr class="bg-white border-b break-words">
         <th scope="row" class="px-6 py-4 font-medium text-gray-900">${title}</th>
@@ -109,7 +109,7 @@ try {
     `);
     const guestItem = $(`<td class="px-6 py-4"></td>`).text(guests);
     item.append(guestItem);
-    $("#user-record").append(item);
+    $("#user-record").prepend(item);
   }
 
 } catch (e) {
