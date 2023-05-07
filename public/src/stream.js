@@ -4,6 +4,7 @@ import {
   myName,
   myEmail,
   myRole,
+  myPicture,
   socket,
   roomShareScreenStatus,
   whiteboardShareName,
@@ -213,13 +214,16 @@ async function playing() {
   setTimeout(playing, 1000/60);
 }
 
-// 在member list加入自己
+// 在member list加入自己，並插入自己的圖片
 $("#my-name").text(`${myName} (你)`);
 if (myRole === "host") {
   $("#my-role").text("會議主持人");
 }
 if (myRole === "guest") {
   $("#my-role").text("來賓");
+}
+if (myPicture !== null) {
+  $("#my-picture").attr("src", `./uploads/${myPicture}`);
 }
 
 // PeerJS需傳送stream給其他人，把自己畫面的canvas轉回video stream的function
@@ -268,12 +272,12 @@ const myPeer = new Peer(undefined, {
 myPeer.on("open", (peerId) => {
   myPeerId = peerId;
   console.log(`my peerId: ${peerId}`);
-  socket.emit("join-room", roomId, peerId, myName, myRole);
+  socket.emit("join-room", roomId, peerId, myName, myRole, myPicture);
 });
 
 myPeer.on("call", async (call) => {
   const peerId = call.peer;
-  const { name, role } = call.metadata;
+  const { name, role, picture } = call.metadata;
   const otherWebcamStatus = call.metadata.myWebcamStatus;
   const otherMicStatus = call.metadata.myMicStatus;
   console.log(`Connection with ${peerId}`);
@@ -288,8 +292,8 @@ myPeer.on("call", async (call) => {
     await addVideoStream(userVideoStream, video);
   });
   $(`div[id=${peerId}]`).append(video);
-  addUserName(name, peerId);
-  addMemberList(name, role, peerId);
+  addUserNameAndPicture(name, picture, peerId);
+  addMemberList(name, role, picture, peerId);
   adjustLayout();
   if (!otherWebcamStatus) hideCamera(peerId, "video");
   if (!otherMicStatus) muteMic(peerId);
@@ -300,8 +304,8 @@ myPeer.on("call", async (call) => {
   if (!myMicStatus) socket.emit("mute-mic", roomId, myPeerId);
 });
 
-socket.on("user-connected", async (peerId, name, role, socketId) => {
-  connectToNewUser(peerId, name, role, myStream);
+socket.on("user-connected", async (peerId, name, role, picture, socketId) => {
+  connectToNewUser(peerId, name, role, picture, myStream);
 });
 
 // 若有user離開，移除他的視訊畫面
@@ -313,9 +317,9 @@ socket.on("user-disconnected", (peerId) => {
 });
 
 // 新user加入，建立peer連線的function
-async function connectToNewUser(peerId, name, role, stream) {
+async function connectToNewUser(peerId, name, role, picture, stream) {
   const options = {
-    metadata: { name: myName, role: myRole, myWebcamStatus, myMicStatus },
+    metadata: { name: myName, role: myRole, picture: myPicture, myWebcamStatus, myMicStatus },
   };
   
   const call = myPeer.call(peerId, stream, options);
@@ -329,8 +333,8 @@ async function connectToNewUser(peerId, name, role, stream) {
     await addVideoStream(userVideoStream, video);
   });
   $(`div[id=${peerId}]`).append(video);
-  addUserName(name, peerId);
-  addMemberList(name, role, peerId);
+  addUserNameAndPicture(name, picture, peerId);
+  addMemberList(name, role, picture, peerId);
   adjustLayout();
   console.log(`Connection with ${peerId}`);
 }
@@ -393,34 +397,55 @@ async function addVideoStream(stream, video) {
 }
 
 // Append user名字
-function addUserName(name, peerId) {
+function addUserNameAndPicture(name, picture, peerId) {
   const userName = $("<span>", {
     text: name,
     class:
       "absolute z-10 bottom-0 left-0 px-4 py-3 text-base text-white text-shadow",
   });
   $(`div[id=${peerId}]`).append(userName);
+  
+  let userPicture;
+  if (picture === null) {
+    userPicture = $("<img>", {
+      class: "hidden absolute top-0 right-0 left-0 bottom-0 m-auto h-2/5",
+      src: `./images/user-hide-camera.png`
+    });
+  } else {
+    userPicture = $("<img>", {
+      class:
+        "hidden absolute top-0 right-0 left-0 bottom-0 m-auto h-2/5 rounded-full",
+      src: `./uploads/${picture}`,
+    });
+  }
+  $(`div[id=${peerId}]`).append(userPicture);
 }
 
 // Append member list
-function addMemberList(name, role, peerId) {
+function addMemberList(name, role, picture, peerId) {
   if (role === "host") {
     role = "會議主持人";
   }
   if (role === "guest") {
     role = "來賓";
   }
+  if (picture === null) {
+    picture = `./images/user.png`;
+  } else {
+    picture = `./uploads/${picture}`
+  }
+
   $("#members-list ul").append(`
     <li id="${peerId}" class="py-2">
       <div class="flex items-center space-x-4">
         <div class="flex-shrink-0">
-          <img class="w-8 h-8 rounded-full" src="./images/user.png" alt="Neil image">
+          <img class="w-10 h-10 rounded-full" src=${picture} alt="Neil image">
         </div>
         <div class="flex-1 min-w-0">
-          <p class="text-sm font-medium text-gray-900 truncate dark:text-white">
+          <p class="text-base font-medium text-gray-900 truncate dark:text-white">
             ${name}
           </p>
-          <p class="text-sm text-gray-500 truncate dark:text-gray-400">
+          <p class="text-base text-gray-500 truncate dark:text-gray-400">
             ${role}
           </p>
         </div>
@@ -499,12 +524,10 @@ async function stopVideoTrack(stream) {
 
 function hideCamera(peerId, displayMethod) {
   $(`div[id=${peerId}] ${displayMethod}`).addClass("hidden");
-  $(`div[id=${peerId}]`).append(
-    `<img id="user-icon" class="hide absolute top-0 right-0 left-0 bottom-0 m-auto h-2/5" width="" src="../images/user-hide-camera.png">`
-  );
+  $(`div[id=${peerId}] img`).removeClass("hidden");
 }
 function showCamera(peerId, displayMethod) {
-  $(`div[id=${peerId}] img[id='user-icon']`).remove();
+  $(`div[id=${peerId}] img`).addClass("hidden");
   $(`div[id=${peerId}] ${displayMethod}`).removeClass("hidden");
 }
 

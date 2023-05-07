@@ -16,10 +16,12 @@ import {
 import { getConfId, changeConfStatus } from "../models/concall_model.js";
 
 const conferenceCall = (io, socket) => {
-  socket.on("join-room", (roomId, peerId, name, role) => {
+  socket.on("join-room", (roomId, peerId, name, role, picture) => {
     socket.join(roomId);
     const socketId = socket.id;
-    socket.to(roomId).emit("user-connected", peerId, name, role, socketId);
+    socket
+      .to(roomId)
+      .emit("user-connected", peerId, name, role, picture, socketId);
     reviseRoomUserNumber(roomId, 1);
 
     socket.on("disconnect", async () => {

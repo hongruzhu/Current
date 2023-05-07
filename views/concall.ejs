@@ -35,6 +35,8 @@
           <div id="myVideo" class="relative pb-[56.25%] overflow-hidden h-0 bg-gray-100">
             <canvas width="1280" height="720" class="absolute w-full h-full t-0 l-0 transform-rotateY-180"></canvas>
             <span class="absolute z-10 bottom-0 left-0 px-4 py-3 text-base text-white text-shadow">你</span>
+            <img class="hidden absolute top-0 right-0 left-0 bottom-0 m-auto h-2/5 rounded-full"
+              src="">
           </div>
         </div>
         <div id="share-screen" class="hidden flex-[1_0_auto] relative w-full flex flex-col items-center">
@@ -150,15 +152,15 @@
             </button>
           </div>
           <div id="members-list" class="mx-4">
-            <ul class="divide-y divide-gray-200 dark:divide-gray-700">
+            <ul class="divide-y divide-gray-200">
               <li class="py-2">
                 <div class="flex items-center space-x-4">
                   <div class="flex-shrink-0">
-                    <img class="w-8 h-8 rounded-full" src="./images/user.png" alt="">
+                    <img id="my-picture" class="w-10 h-10 rounded-full" src="./images/user.png" alt="">
                   </div>
                   <div class="flex-1 min-w-0">
-                    <p id="my-name" class="text-sm font-medium text-gray-900 truncate dark:text-white"></p>
-                    <p id="my-role" class="text-sm text-gray-500 truncate dark:text-gray-400"></p>
+                    <p id="my-name" class="text-base font-medium text-gray-900 truncate"></p>
+                    <p id="my-role" class="text-base text-gray-500 truncate"></p>
                   </div>
                 </div>
               </li>
@@ -176,7 +178,7 @@
             </button>
           </div>
           <div id="info-content" class="m-4">
-            <dl class="max-w-md text-gray-900 divide-y divide-gray-200 dark:text-white dark:divide-gray-700">
+            <dl class="max-w-md text-gray-900 divide-y divide-gray-200">
               <div class="flex flex-col pb-3 break-words">
                 <dt class="mb-1 text-gray-500 md:text-lg text-black">會議名稱</dt>
                 <dd id="room-title" class="text-lg font-semibold"></dd>
@@ -347,7 +349,7 @@
           <span class="sr-only">Mute microphone</span>
         </button>
         <div id="tooltip-microphone" role="tooltip"
-          class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+          class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip">
           關閉麥克風
         </div>
         <button id="hide-camera" data-tooltip-target="tooltip-camera" type="button"
@@ -361,7 +363,7 @@
           <span class="sr-only">Hide camera</span>
         </button>
         <div id="tooltip-camera" role="tooltip"
-          class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+          class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip">
           關閉鏡頭
         </div>
         <button id="share-screen-btn" data-tooltip-target="tooltip-screen" type="button"
@@ -375,7 +377,7 @@
           <span class="sr-only">Share screen</span>
         </button>
         <div id="tooltip-screen" role="tooltip"
-          class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+          class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip">
           分享螢幕
         </div>
         <div id="share-screen-list" class="hidden absolute top-[-12rem] z-10 bg-white divide-y divide-gray-100 rounded-lg shadow w-60">
@@ -430,7 +432,7 @@
           <span class="sr-only">分享白版</span>
         </button>
         <div id="tooltip-whiteboard" role="tooltip"
-          class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+          class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip">
           分享白版
         </div>
         <button id="start-recording" data-tooltip-target="tooltip-recording" type="button"
@@ -442,7 +444,7 @@
           <span class="sr-only">Start recording</span>
         </button>
         <div id="tooltip-recording" role="tooltip"
-          class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+          class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip">
           會議錄影
         </div>
         <button id="end-call" data-tooltip-target="tooltip-ending" data-modal-target="popup-modal" data-modal-toggle="popup-modal" type="button" class="px-4 py-2.5 bg-red-600 group rounded-full hover:bg-red-500">
@@ -456,7 +458,7 @@
           <span class="sr-only">End call</span>
         </button>
         <div id="tooltip-ending" role="tooltip"
-          class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+          class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip">
           結束會議
         </div>
       </div>
@@ -472,7 +474,7 @@
           <span class="sr-only">Show participants</span>
         </button>
         <div id="tooltip-participants" role="tooltip"
-          class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+          class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip">
           顯示所有參與者
         </div>
         <button id="chat-room-btn" data-tooltip-target="tooltip-chatroom" type="button"
@@ -486,7 +488,7 @@
           <span class="sr-only">Chat room</span>
         </button>
         <div id="tooltip-chatroom" role="tooltip"
-          class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+          class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip">
           聊天室
         </div>
         <button id="change-background-btn" data-tooltip-target="tooltip-background" type="button"
@@ -499,7 +501,7 @@
           <span class="sr-only">Change background</span>
         </button>
         <div id="tooltip-background" role="tooltip"
-          class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+          class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip">
           更換背景
         </div>
         <button id="show-info-btn" data-tooltip-target="tooltip-information" type="button"
@@ -513,7 +515,7 @@
           <span class="sr-only">Show information</span>
         </button>
         <div id="tooltip-information" role="tooltip"
-          class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+          class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip">
           會議資訊
         </div>
       </div>
@@ -521,9 +523,9 @@
     <div id="popup-modal" tabindex="-1"
       class="fixed top-0 left-0 right-0 z-50 hidden p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
       <div class="relative w-full max-w-md max-h-full">
-        <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+        <div class="relative bg-white rounded-lg shadow">
           <button type="button"
-            class="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-800 dark:hover:text-white"
+            class="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center"
             data-modal-hide="popup-modal">
             <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
               xmlns="http://www.w3.org/2000/svg">
@@ -534,18 +536,18 @@
             <span class="sr-only">Close modal</span>
           </button>
           <div class="p-6 text-center">
-            <svg aria-hidden="true" class="mx-auto mb-4 text-gray-400 w-14 h-14 dark:text-gray-200" fill="none"
+            <svg aria-hidden="true" class="mx-auto mb-4 text-gray-400 w-14 h-14" fill="none"
               stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                 d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
             </svg>
-            <h3 class="mb-5 text-2xl font-normal text-gray-500 dark:text-gray-400">確定要離開會議室?</h3>
+            <h3 class="mb-5 text-2xl font-normal text-gray-500">確定要離開會議室?</h3>
             <button id="leave-room" data-modal-hide="popup-modal" type="button"
-              class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-base inline-flex items-center px-5 py-2.5 text-center mr-2">
+              class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-base inline-flex items-center px-5 py-2.5 text-center mr-2">
               離開
             </button>
             <button data-modal-hide="popup-modal" type="button"
-              class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-base font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">取消</button>
+              class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-base font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10">取消</button>
           </div>
         </div>
       </div>

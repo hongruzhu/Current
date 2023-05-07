@@ -4,7 +4,16 @@ const roomId = urlParams.get("roomId");
 const myName = localStorage.getItem(`name-${roomId}`);
 const myEmail = localStorage.getItem(`userEmail`);
 const myRole = localStorage.getItem(`role-${roomId}`);
+const myPicture = localStorage.getItem(`userPicture`);
 const socket = io();
+
+// 若有上傳大頭貼，把自己的大頭貼append到視訊頁面上
+if (myPicture === null) {
+  $("#myVideo img").attr("src", "./images/user-hide-camera.png");
+  
+} else {
+  $("#myVideo img").attr("src", `./uploads/${myPicture}`);
+}
 
 // 抓取會議室分享螢幕的狀態
 const shareScreenResult = await axios.post("./getShareScreenStatus", { roomId });
@@ -34,6 +43,7 @@ export {
   myName,
   myEmail,
   myRole,
+  myPicture,
   socket,
   roomShareScreenStatus,
   whiteboardShareName,
