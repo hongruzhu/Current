@@ -447,7 +447,7 @@ function addMemberList(name, role, picture, peerId) {
     <li id="${peerId}" class="py-2">
       <div class="flex items-center space-x-4">
         <div class="flex-shrink-0">
-          <img class="w-10 h-10 rounded-full" src=${picture} alt="Neil image">
+          <img class="w-10 h-10 rounded-full object-cover" src=${picture} alt="Neil image">
         </div>
         <div class="flex-1 min-w-0">
           <p class="text-base font-medium text-gray-900 truncate dark:text-white">
