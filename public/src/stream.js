@@ -422,7 +422,7 @@ function addUserNameAndPicture(name, picture, peerId) {
   } else {
     userPicture = $("<img>", {
       class:
-        "hidden absolute top-0 right-0 left-0 bottom-0 m-auto h-2/5 rounded-full",
+        "hidden absolute top-0 right-0 left-0 bottom-0 m-auto h-2/5 aspect-square rounded-full object-cover",
       src: `./uploads/${picture}`,
     });
   }
