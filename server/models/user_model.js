@@ -1,19 +1,15 @@
 import { pool } from "../models/mysql_config.js";
 
 const signUpDb = async (provider, name, email, password_hash) => {
-  try {
-    const [result] = await pool.query(
-      `
-      INSERT INTO users (provider, name, email, password_hash)
-      VALUES (?, ?, ?, ?)
-      `,
-      [provider, name, email, password_hash]
-    );
-    const userId = result.insertId;
-    return userId;
-  } catch (error) {
-    throw new Error(error);
-  }
+  const [result] = await pool.query(
+    `
+    INSERT INTO users (provider, name, email, password_hash)
+    VALUES (?, ?, ?, ?)
+    `,
+    [provider, name, email, password_hash]
+  );
+  const userId = result.insertId;
+  return userId;
 };
 
 const checkEmail = async (email) => {

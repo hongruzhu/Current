@@ -45,10 +45,7 @@ const createRoom = async (req, res) => {
   const roomId = req.query.roomId;
   const title = req.body.title;
   const checkRoomId = await redis.hexists("room", roomId);
-  if (checkRoomId === 0) {
-    res.render("wrongNumber");
-    return;
-  }
+  if (checkRoomId === 0) return res.render("wrongNumber");
   // 儲存會議名稱到redis，方便之後加進來的user抓取
   redis.hset("roomTitle", roomId, title);
   // 存會議資料到database
@@ -67,16 +64,10 @@ const enterRoom = async (req, res) => {
   if (userId === "") userId = null;
   if (email === "") email = null;
   const roomId = req.query.roomId;
-  if (!name) {
-    res.status(400).json({ err: "請輸入姓名" });
-    return;
-  }
+  if (!name) return res.status(400).json({ err: "請輸入姓名" });
   // FIXME: 可以寫成middleware，程式碼可讀性高且可重複利用，checkRoomId用到很多次
   const checkRoomId = await redis.hexists("room", roomId);
-  if (checkRoomId === 0) {
-    res.render("wrongNumber");
-    return;
-  }
+  if (checkRoomId === 0) return res.render("wrongNumber");
   // 存參與者進資料庫
   const confId = await getConfId(roomId);
   await setConfGuests(userId, confId, "guest", name, email);
@@ -88,17 +79,13 @@ const enterRoom = async (req, res) => {
 const verifyRoomId = async (req, res) => {
   const { roomId, confId } = req.query;
   const checkRoomId = await redis.hexists("room", roomId);
-  if (checkRoomId === 0) {
-    res.render("wrongNumber");
-    return;
-  }
+  if (checkRoomId === 0) return res.render("wrongNumber");
   if (confId) {
     const startTime = Date.now();
     redis.hset("startTime", roomId, startTime);
     // 存會議開始時間
     await setConfStart(confId, startTime);
-    res.render("concall", { roomId });
-    return;
+    return res.render("concall", { roomId });
   }
   // 抓取會議名稱
   let title = await getTitle(roomId);

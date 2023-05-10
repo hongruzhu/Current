@@ -18,9 +18,7 @@ const authenticateJWT = (req, res, next) => {
       next();
     });
   } else {
-    // FIXME:可以把return寫在res前面，比較精簡
-    res.status(401).json({ err: `Client Error (No token)` });
-    return;
+    return res.status(401).json({ err: `Client Error (No token)` });
   }
 };
 

@@ -22,15 +22,9 @@ const signUp = async (req, res) => {
     password,
     password_confirmed
   );
-  if (state) {
-    res.status(state.status).send({ err: state.err });
-    return;
-  }
+  if (state) return res.status(state.status).send({ err: state.err });
   const check = await checkEmail(email);
-  if (check) {
-    res.status(403).send({ err: "此信箱已註冊過，請輸入其他信箱" });
-    return;
-  }
+  if (check) return res.status(403).send({ err: "此信箱已註冊過，請輸入其他信箱" });
   const provider = "native";
   const password_hash = await bcrypt.hash(password, 10);
   const id = await signUpDb(provider, name, email, password_hash);
@@ -42,21 +36,12 @@ const signUp = async (req, res) => {
 const signIn = async (req, res) => {
   let { email, password } = req.body;
   const state = await signInValidation(email, password);
-  if (state) {
-    res.status(state.status).send({ err: state.err });
-    return;
-  }
+  if (state) return res.status(state.status).send({ err: state.err });
   const result = await getUserInfo(email);
-  if (result.length === 0) {
-    res.status(403).send({ err: "此信箱尚未註冊" });
-    return;
-  }
+  if (result.length === 0) return res.status(403).send({ err: "此信箱尚未註冊" });
   const { id, provider, name, password_hash, picture } = result[0];
   const checkPassword = await bcrypt.compare(password, password_hash);
-  if (!checkPassword) {
-    res.status(403).send({ err: "密碼輸入錯誤，請重新輸入密碼" });
-    return;
-  }
+  if (!checkPassword) return res.status(403).send({ err: "密碼輸入錯誤，請重新輸入密碼" });
   const response = await generateResponse(id, provider, name, email, picture);
   res.json(response);
 };
@@ -91,7 +76,7 @@ const signUpValidation = async (name, email, password, password_confirmed) => {
       status: 400,
       err: "Confirm password unsuccessfully. Please check again",
     };
-  return false;
+  return null;
 };
 
 const signInValidation = async (email, password) => {
@@ -114,8 +99,7 @@ const signInValidation = async (email, password) => {
       status: 400,
       err: "Password should have at least 1 lowercase, 1 number, and 1 uppercase",
     };
-  // FIXME:這邊改成return null，才有格式一致
-  return false;
+  return null;
 };
 
 const generateResponse = async (id, provider, name, email, picture) => {

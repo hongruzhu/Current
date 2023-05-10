@@ -1,62 +1,46 @@
 import { pool } from "../models/mysql_config.js";
 
 const getUserAllConf = async (userId) => {
-  try {
-    const [result] = await pool.query(
-      `
-    SELECT conferences_id, role FROM users_conferences
-    WHERE users_id = ?
-    `,
-      [userId]
-    );
-    return result;
-  } catch (error) {
-    throw new Error(error);
-  }
+  const [result] = await pool.query(
+    `
+  SELECT conferences_id, role FROM users_conferences
+  WHERE users_id = ?
+  `,
+    [userId]
+  );
+  return result;
 };
 
 const getConfData = async (confId) => {
-  try {
-    const [result] = await pool.query(
-      `
-    SELECT title, start FROM conferences
-    WHERE id = ?
-    `,
-      [confId]
-    );
-    return result[0];
-  } catch (error) {
-    throw new Error(error);
-  }
+  const [result] = await pool.query(
+    `
+  SELECT title, start FROM conferences
+  WHERE id = ?
+  `,
+    [confId]
+  );
+  return result[0];
 };
 
 const getConfMembers = async (confId) => {
-  try {
-    const [result] = await pool.query(
-      `
-    SELECT role, name, email FROM users_conferences
-    WHERE conferences_id = ?
-    `,
-      [confId]
-    );
-    return result;
-  } catch (error) {
-    throw new Error(error);
-  }
+  const [result] = await pool.query(
+    `
+  SELECT role, name, email FROM users_conferences
+  WHERE conferences_id = ?
+  `,
+    [confId]
+  );
+  return result;
 };
 
 const setUserImage = async (userId, image) => {
-  try {
-    await pool.query(
-      `
-      UPDATE users SET picture = ? 
-      where id = ?
-      `,
-      [image, userId]
-    );
-  } catch (error) {
-    throw new Error(error);
-  }
+  await pool.query(
+    `
+    UPDATE users SET picture = ? 
+    where id = ?
+    `,
+    [image, userId]
+  );
 };
 
 export { getUserAllConf, getConfData, getConfMembers, setUserImage };
