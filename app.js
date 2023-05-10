@@ -1,11 +1,6 @@
 import * as dotenv from "dotenv";
 dotenv.config();
 
-// Get __dirname (and __filename) back in ES6
-import * as url from "url";
-const __filename = url.fileURLToPath(import.meta.url);
-const __dirname = url.fileURLToPath(new URL(".", import.meta.url));
-
 // Express Initialization
 import express from "express";
 import cors from "cors";
@@ -21,6 +16,8 @@ app.set("view engine", "ejs");
 app.use(express.static("public"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// FIXME:這樣cors是否全開，拿掉功能是不是也不影響？
 app.use(cors());
 
 // API routes
@@ -59,11 +56,15 @@ const onConnection = (socket) => {
 
 io.on("connection", onConnection);
 
+// FIXME:補上404 page的middleware
+
 // Error handling
+/* eslint-disable */
 app.use(function (err, req, res, next) {
   console.log(err);
   res.status(500).send("Internal Server Error");
 });
+/* eslint-enable */
 
 server.listen(PORT, async () => {
   console.log(`Listening on port: ${PORT}`);

@@ -8,8 +8,8 @@ const { TOKEN_SECRET_KEY } = process.env;
 // 驗證JWT
 const authenticateJWT = (req, res, next) => {
   if (req.header("Authorization")) {
-    const access_token = req.header("Authorization").replace("Bearer ", "");
-    jwt.verify(access_token, TOKEN_SECRET_KEY, (err, payload) => {
+    const accessToken = req.header("Authorization").replace("Bearer ", "");
+    jwt.verify(accessToken, TOKEN_SECRET_KEY, (err, payload) => {
       if (err) {
         res.status(403).json({ err: `Client Error (Wrong token)` });
         return;
@@ -18,6 +18,7 @@ const authenticateJWT = (req, res, next) => {
       next();
     });
   } else {
+    // FIXME:可以把return寫在res前面，比較精簡
     res.status(401).json({ err: `Client Error (No token)` });
     return;
   }

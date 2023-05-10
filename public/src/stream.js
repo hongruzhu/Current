@@ -2,7 +2,6 @@
 import {
   roomId,
   myName,
-  myEmail,
   myRole,
   myPicture,
   socket,
@@ -25,7 +24,7 @@ function originBackground(results) {
     canvasElement.height
   );
   canvasCtx.restore();
-};
+}
 
 // 稍微模糊
 function slightBlurBackground(results) {
@@ -64,7 +63,7 @@ function slightBlurBackground(results) {
     canvasElement.height
   );
   canvasCtx.restore();
-};
+}
 
 // 重度模糊
 function heavyBlurBackground(results) {
@@ -103,7 +102,7 @@ function heavyBlurBackground(results) {
     canvasElement.height
   );
   canvasCtx.restore();
-};
+}
 
 // 更換背景圖片
 function imageBackground(results) {
@@ -135,7 +134,7 @@ function imageBackground(results) {
     canvasElement.height
   );
   canvasCtx.restore();
-};
+}
 
 /* ----------------------------- Step 1: 獲取自己視訊畫面的stream ----------------------------- */
 
@@ -312,7 +311,7 @@ myPeer.on("call", async (call) => {
   if (!myMicStatus) socket.emit("mute-mic", roomId, myPeerId);
 });
 
-socket.on("user-connected", async (peerId, name, role, picture, socketId) => {
+socket.on("user-connected", async (peerId, name, role, picture) => {
   connectToNewUser(peerId, name, role, picture, myStream);
 });
 
@@ -350,7 +349,7 @@ async function connectToNewUser(peerId, name, role, picture, stream) {
 // Append包裹視訊的div到html上的function
 function addVideoGridElement(peerId) {
   let videoGridElement;
-  // FIXME:不能只以偵測分享螢幕渲染了沒當基準，加上去redis抓分享螢幕狀態，才可以確保新user的渲染畫面正確
+  // 不能只以偵測分享螢幕渲染了沒當基準，加上去redis抓分享螢幕狀態，才可以確保新user的渲染畫面正確
   if (
     (roomShareScreenStatus !== null && roomShareScreenStatus !== "") ||
     $("#share-screen video").length === 1
@@ -583,7 +582,7 @@ function unmuteMic(peerId) {
 }
 
 // 監聽關閉頁面時，把存在localStorage的相關資料刪除
-window.onbeforeunload = function (e) {
+window.onbeforeunload = function () {
   localStorage.removeItem(`name-${roomId}`);
   localStorage.removeItem(`cameraStatus-${roomId}`);
   localStorage.removeItem(`micStatus-${roomId}`);
@@ -592,26 +591,3 @@ window.onbeforeunload = function (e) {
 };
 
 export { myPeerId };
-
-// 檢查一下stream有沒有影音訊號
-async function checkTracks(stream) {
-  const tracks = stream.getTracks();
-
-  // 檢查 MediaStream 是否包含影音軌道
-  const hasVideoTrack = tracks.some((track) => track.kind === "video");
-  const hasAudioTrack = tracks.some((track) => track.kind === "audio");
-
-  if (hasVideoTrack && hasAudioTrack) {
-    console.log("MediaStream 包含影音訊號");
-
-    // 獲取第一個影音軌道
-    const videoTrack = tracks.find((track) => track.kind === "video");
-
-    // 監聽影音軌道的 readyState 屬性變化
-    videoTrack.addEventListener("ended", function () {
-      console.log("影音軌道停止輸出訊號");
-    });
-  } else {
-    console.log("MediaStream 不包含影音訊號");
-  }
-}

@@ -2,7 +2,9 @@
     "env": {
         "node": true,
         "browser": true,
-        "es2021": true
+        "commonjs": true,
+        "es2021": true,
+        "jquery": true
     },
     "extends": [
         "eslint:recommended",
@@ -18,5 +20,14 @@
         "react"
     ],
     "rules": {
+    },
+    "globals": {
+        "axios": "readonly",
+        "Swal": "readonly",
+        "Peer": "readonly",
+        "io": "readonly",
+        "Swiper": "readonly",
+        "validator": "readonly",
+        "SelfieSegmentation": "readonly"
     }
 }

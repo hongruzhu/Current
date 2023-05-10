@@ -15,13 +15,13 @@ import {
 
 import { getConfId, changeConfStatus } from "../models/concall_model.js";
 
+// FIXME:Socket.io的code，放在MVC的哪裡比較合適？
 const conferenceCall = (io, socket) => {
   socket.on("join-room", (roomId, peerId, name, role, picture) => {
     socket.join(roomId);
-    const socketId = socket.id;
     socket
       .to(roomId)
-      .emit("user-connected", peerId, name, role, picture, socketId);
+      .emit("user-connected", peerId, name, role, picture);
     reviseRoomUserNumber(roomId, 1);
 
     socket.on("disconnect", async () => {

@@ -191,25 +191,8 @@ try {
   });
   
   let startTime = result.data;
-  let elapsedTime = 0;
-  let timerInterval;
+  requestAnimationFrame(() => updateTime(startTime));
 
-  function updateTime() {
-    const milliseconds = Date.now() - startTime + elapsedTime;
-    const hours = Math.floor(milliseconds / 3600000);
-    const minutes = Math.floor((milliseconds % 3600000) / 60000);
-    const seconds = Math.floor((milliseconds % 60000) / 1000);
-    document.getElementById("timer").textContent = `${hours
-      .toString()
-      .padStart(2, "0")}:${minutes.toString().padStart(2, "0")}:${seconds
-      .toString()
-      .padStart(2, "0")}`;
-    timerInterval = requestAnimationFrame(updateTime);
-  }
-  function startTimer() {
-    timerInterval = requestAnimationFrame(updateTime);
-  }
-  startTimer();
 } catch (e) {
   Swal.fire({
     icon: "error",
@@ -219,8 +202,15 @@ try {
   console.log(e);
 }
 
-// function stopTimer() {
-//   cancelAnimationFrame(timerInterval);
-//   elapsedTime += Date.now() - startTime;
-//   document.getElementById("clock").textContent = "00:00:00";
-// }
+function updateTime(startTime) {
+  const milliseconds = Date.now() - startTime;
+  const hours = Math.floor(milliseconds / 3600000);
+  const minutes = Math.floor((milliseconds % 3600000) / 60000);
+  const seconds = Math.floor((milliseconds % 60000) / 1000);
+  document.getElementById("timer").textContent = `${hours
+    .toString()
+    .padStart(2, "0")}:${minutes.toString().padStart(2, "0")}:${seconds
+    .toString()
+    .padStart(2, "0")}`;
+  requestAnimationFrame(() => updateTime(startTime));
+}

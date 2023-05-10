@@ -87,7 +87,7 @@ $("#signon").on("click", () => {
 });
 
 // 控制輪播圖
-let swiper = new Swiper(".mySwiper", {
+new Swiper(".mySwiper", {
   spaceBetween: 30,
   centeredSlides: true,
   autoplay: {

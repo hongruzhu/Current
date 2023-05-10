@@ -54,7 +54,7 @@ const signIn = async (req, res) => {
   const { id, provider, name, password_hash, picture } = result[0];
   const checkPassword = await bcrypt.compare(password, password_hash);
   if (!checkPassword) {
-    res.status(403).send({ err: `密碼輸入錯誤，請重新輸入密碼` });
+    res.status(403).send({ err: "密碼輸入錯誤，請重新輸入密碼" });
     return;
   }
   const response = await generateResponse(id, provider, name, email, picture);
@@ -114,6 +114,7 @@ const signInValidation = async (email, password) => {
       status: 400,
       err: "Password should have at least 1 lowercase, 1 number, and 1 uppercase",
     };
+  // FIXME:這邊改成return null，才有格式一致
   return false;
 };
 

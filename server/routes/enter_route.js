@@ -10,6 +10,7 @@ import {
   createRoom
 } from "../controllers/enter_controller.js";
 
+// FIXME:API取名沒有符合RESTFUL API格式，有點差太多了，比較常用的是dash，不是camelCase
 router.route("/getRoomId").get(authenticateJWT, wrapAsync(getRoomId));
 router
   .route("/createRoom")

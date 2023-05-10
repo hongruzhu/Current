@@ -348,7 +348,7 @@ async function whiteboardLayout() {
 }
 
 async function originLayout() {
-  // 還原canavs的長和寬，以及包裹canavs的div的長
+  // 還原canvas的長和寬，以及包裹canvas的div的長
   $("#whiteboard").removeAttr("width");
   $("#whiteboard canvas").removeAttr("width height");
   // 還原視訊部分css跟著大改

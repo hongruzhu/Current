@@ -30,7 +30,7 @@ const getRoomId = async (req, res) => {
       state = false;
     }
   }
-
+  // FIXME:關於cache的function code，在MVC架構裡放在哪裡比較好？
   redis.hset("room", roomId, 0);
   res.redirect(`./createRoom?roomId=${roomId}`);
 };
@@ -62,6 +62,7 @@ const createRoom = async (req, res) => {
 };
 
 const enterRoom = async (req, res) => {
+  // FIXME:客製化jwt middleware，就可以直接從jwt取一些個人資料，不用偷懶不想多寫一個解析jwt的function
   let { name, userId, email } = req.body;
   if (userId === "") userId = null;
   if (email === "") email = null;
@@ -70,6 +71,7 @@ const enterRoom = async (req, res) => {
     res.status(400).json({ err: "請輸入姓名" });
     return;
   }
+  // FIXME: 可以寫成middleware，程式碼可讀性高且可重複利用，checkRoomId用到很多次
   const checkRoomId = await redis.hexists("room", roomId);
   if (checkRoomId === 0) {
     res.render("wrongNumber");

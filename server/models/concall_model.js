@@ -17,7 +17,7 @@ const getConfId = async (roomId) => {
 
 const changeConfStatus = async (confId, status) => {
   try {
-    const [result] = await pool.query(
+    await pool.query(
       `
     UPDATE conferences SET status = ? 
     where id = ?

@@ -2,12 +2,12 @@ import { roomId, myName, socket } from "./begin.js";
 
 $("#chat").on("submit", (e) => {
   e.preventDefault();
-  if ($("#messenge-input").val()) {
-    const msg = $("#messenge-input").val();
+  if ($("#message-input").val()) {
+    const msg = $("#message-input").val();
     socket.emit("chat-message", roomId, myName, msg);
     const time = getTime();
     addMyMessage(myName, msg, time);
-    $("#messenge-input").val("");
+    $("#message-input").val("");
   }
 });
 
@@ -26,14 +26,14 @@ function addMyMessage(name, msg, time) {
     </div>
   </div>
   `);
-  const messenge = $(
+  const message = $(
     `<div class="chat-bubble bg-yellow-600 text-white"></div>`
   ).text(msg);
-  item.append(messenge);
-  $("#messenges").append(item);
+  item.append(message);
+  $("#messages").append(item);
 
   // 隨時顯示最新訊息
-  $("#messenges")[0].scrollTop = $("#messenges")[0].scrollHeight;
+  $("#messages")[0].scrollTop = $("#messages")[0].scrollHeight;
 }
 
 // 增加其他user訊息到聊天室
@@ -46,14 +46,14 @@ function addUserMessage(name, msg, time) {
     </div>
   </div>
   `);
-  const messenge = $(
+  const message = $(
     `<div class="chat-bubble text-black bg-gray-100">$</div>`
   ).text(msg);
-  item.append(messenge);
-  $("#messenges").append(item);
+  item.append(message);
+  $("#messages").append(item);
 
   // 隨時顯示最新訊息
-  $("#messenges")[0].scrollTop = $("#messenges")[0].scrollHeight;
+  $("#messages")[0].scrollTop = $("#messages")[0].scrollHeight;
 }
 
 // 產出現在時間
@@ -67,10 +67,10 @@ function getTime() {
   return time;
 }
 
-$("#messenge-input").keypress((e) => {
+$("#message-input").keypress((e) => {
   if (e.which === 13 && !e.shiftKey) {
     e.preventDefault();
     $("#chat").submit();
-    $("#messenge-input").attr("val", "");
+    $("#message-input").attr("val", "");
   }
 });

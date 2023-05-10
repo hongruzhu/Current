@@ -12,4 +12,5 @@ const pool = mysql
   })
   .promise();
 
+// FIXME:不要把整個pool export出去，以免外面誤用中斷連線，把pool.query寫成function包出去就好
 export { pool };

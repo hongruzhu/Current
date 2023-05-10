@@ -24,7 +24,6 @@ try {
 if (logInStatus) {
   const userName = localStorage.getItem("userName");
   const userEmail = localStorage.getItem("userEmail");
-  const userId = localStorage.getItem("userId");
   const userPicture = localStorage.getItem("userPicture");
 
   if (userPicture !== "null") {

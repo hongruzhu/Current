@@ -47,7 +47,7 @@ const getConfMembers = async (confId) => {
 
 const setUserImage = async (userId, image) => {
   try {
-    const [result] = await pool.query(
+    await pool.query(
       `
       UPDATE users SET picture = ? 
       where id = ?

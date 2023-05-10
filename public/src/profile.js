@@ -166,5 +166,5 @@ $("#dropzone-file").on("change", async (e) => {
       icon: "warning",
       text: "圖片大小請在1 MB內",
     });
-  };
+  }
 })

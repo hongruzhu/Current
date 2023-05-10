@@ -3,7 +3,6 @@ let canvasCtx
 let imageBitmapTmp
 let width
 let height
-let play
 
 // const draw = () => {
 //   context.drawImage(imageBitmapTmp, 0, 0, width, height)

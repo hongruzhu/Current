@@ -1,5 +1,3 @@
-import { redis } from "../util/cache.js";
-
 const index = async (req, res) => {
   res.render("index");
 };
@@ -9,6 +7,7 @@ const thankyou = async (req, res) => {
 };
 
 const checkAccessToken = async (req, res) => {
+  // FIXME:API的格式要一致，我都亂寫一通
   res.send("Access token check successfully.");
 }
 

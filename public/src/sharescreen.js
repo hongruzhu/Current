@@ -151,7 +151,7 @@ function addShareScreen(video, stream) {
   video.srcObject = stream;
   video.addEventListener("loadedmetadata", () => {
     video.play();
-    // FIXME:只有可以順利加載metadata的stream，video tag才會被append到網頁上，這樣便可以阻檔已經結束的share screen
+    // 只有可以順利加載metadata的stream，video tag才會被append到網頁上，這樣便可以阻檔已經結束的share screen
     $("#share-screen-video").append(video);
   });
 }

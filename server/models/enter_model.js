@@ -2,6 +2,7 @@ import { pool } from "../models/mysql_config.js";
 
 const setConf = async (title, status) => {
   try {
+    // FIXME:status換個名字，不然取名跟裡面存放的東西意思差太遠，可讀性低又難維護
     const [result] = await pool.query(
       `
     INSERT INTO conferences (title, status)
@@ -12,13 +13,14 @@ const setConf = async (title, status) => {
     const confId = result.insertId;
     return confId;
   } catch (error) {
+    // FIXME: model可以不用寫try catch，寫了跟沒寫結果一樣
     throw new Error(error);
   }
 }
 
 const setConfHost = async (user_id, conference_id, role, name, email) => {
   try {
-    const [result] = await pool.query(
+    await pool.query(
       `
     INSERT INTO users_conferences (users_id, conferences_id, role, name, email)
     VALUES (?, ?, ?, ?, ?)
@@ -32,7 +34,7 @@ const setConfHost = async (user_id, conference_id, role, name, email) => {
 
 const setConfStart = async (confId, start) => {
   try {
-    const [result] = await pool.query(
+    await pool.query(
       `
     UPDATE conferences SET start = ? 
     where id = ?
@@ -61,7 +63,7 @@ const getTitle = async (roomId) => {
 
 const setConfGuests = async (userId, confId, role, name, email) => {
   try {
-    const [result] = await pool.query(
+    await pool.query(
       `
     INSERT INTO users_conferences (users_id, conferences_id, role, name, email)
     VALUES (?, ?, ?, ?, ?)

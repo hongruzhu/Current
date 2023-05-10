@@ -7,6 +7,7 @@ import { getShareScreenStatus } from "../controllers/sharescreen_controller.js";
 
 const shareScreen = (io, socket) => {
   socket.on("start-share-screen", async (roomId, peerScreenId) => {
+    // FIXME:cache的function放哪裡不一致，我有些寫在controller，但有些又直接寫在router裡(跟socket.io有關的部分)
     const status = await redis.hget("shareScreenStatus", roomId);
     if (status !== null && status !== "") {
       socket.emit("already-share-screen", status);
