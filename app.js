@@ -3,7 +3,6 @@ dotenv.config();
 
 // Express Initialization
 import express from "express";
-import cors from "cors";
 import http from "http";
 import { Server } from "socket.io";
 
@@ -16,9 +15,6 @@ app.set("view engine", "ejs");
 app.use(express.static("public"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
-// FIXME:這樣cors是否全開，拿掉功能是不是也不影響？
-// app.use(cors());
 
 // API routes
 import { index_route } from "./server/routes/index_route.js";
