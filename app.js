@@ -18,7 +18,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // FIXME:這樣cors是否全開，拿掉功能是不是也不影響？
-app.use(cors());
+// app.use(cors());
 
 // API routes
 import { index_route } from "./server/routes/index_route.js";
