@@ -9,7 +9,7 @@ const socket = io();
 
 // 若有上傳大頭貼，把自己的大頭貼append到視訊頁面上
 if (myPicture === "null") {
-  $("#myVideo img").attr("src", "/images/user-hide-camera.png");
+  $("#myVideo img").attr("src", "/images/user.png");
 } else {
   $("#myVideo img").attr("src", `/uploads/${myPicture}`);
 }

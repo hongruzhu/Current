@@ -425,7 +425,7 @@ function addUserNameAndPicture(name, picture, peerId) {
   if (picture === "null") {
     userPicture = $("<img>", {
       class: "hidden absolute top-0 right-0 left-0 bottom-0 m-auto h-2/5",
-      src: `/images/user-hide-camera.png`,
+      src: `/images/user.png`,
     });
   } else {
     userPicture = $("<img>", {
