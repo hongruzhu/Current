@@ -1,7 +1,7 @@
 import express from "express";
 const router = express.Router();
 
-import { wrapAsync, authenticateJWT } from "../util/util.js";
+import { wrapAsync, authenticateJWT, checkRoomIdMiddle } from "../util/util.js";
 import {
   getRoomId,
   verifyRoomId,
@@ -13,11 +13,11 @@ import {
 router.route("/room").get(authenticateJWT, wrapAsync(getRoomId));
 router
   .route("/room/create")
-  .get(wrapAsync(createRoomPage))
-  .post(authenticateJWT, wrapAsync(createRoom));
+  .get(checkRoomIdMiddle, wrapAsync(createRoomPage))
+  .post(authenticateJWT, checkRoomIdMiddle, wrapAsync(createRoom));
 router
   .route("/room/enter")
   .get(wrapAsync(verifyRoomId))
-  .post(wrapAsync(enterRoom));
+  .post(checkRoomIdMiddle, wrapAsync(enterRoom));
 
 export { router as enter_route };

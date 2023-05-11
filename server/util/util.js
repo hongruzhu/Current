@@ -2,7 +2,16 @@ import dotenv from "dotenv";
 dotenv.config();
 import jwt from "jsonwebtoken";
 import multer from "multer";
+import { checkRoomId } from "../service/enter_cache.js";
 const { TOKEN_SECRET_KEY } = process.env;
+
+// Check roomId
+const checkRoomIdMiddle = async (req, res, next) => {
+  const roomId = req.query.roomId;
+  const checkRoomIdStatus = await checkRoomId(roomId);
+  if (checkRoomIdStatus === 0) return res.render("wrongNumber");
+  next();
+}
 
 // 驗證JWT
 const authenticateJWT = (req, res, next) => {
@@ -42,4 +51,4 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage: storage, limits: { fileSize: 1000000 } });
 
-export { authenticateJWT, wrapAsync, upload };
+export { authenticateJWT, checkRoomIdMiddle, wrapAsync, upload };

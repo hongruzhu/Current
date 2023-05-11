@@ -39,8 +39,6 @@ const createRoomPage = async (req, res) => {
 const createRoom = async (req, res) => {
   const roomId = req.query.roomId;
   const title = req.body.title;
-  const checkRoomIdStatus = await checkRoomId(roomId);
-  if (checkRoomIdStatus === 0) return res.render("wrongNumber");
   // 儲存會議名稱到redis，方便之後加進來的user抓取
   await saveRoomTitleCache(roomId, title);
   // 存會議資料到database
@@ -58,9 +56,6 @@ const enterRoom = async (req, res) => {
   if (userId === "") userId = null;
   if (email === "") email = null;
   const roomId = req.query.roomId;
-  // FIXME: 可以寫成middleware，程式碼可讀性高且可重複利用，checkRoomId用到很多次
-  const checkRoomIdStatus = await checkRoomId(roomId);
-  if (checkRoomIdStatus === 0) return res.render("wrongNumber");
   // 存參與者進資料庫
   const confId = await getConfId(roomId);
   await saveConfGuestsDb(userId, confId, "guest", name, email);

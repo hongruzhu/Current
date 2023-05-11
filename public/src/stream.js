@@ -445,7 +445,7 @@ function addMemberList(name, role, picture, peerId) {
   if (picture === null) {
     picture = `/images/user.png`;
   } else {
-    picture = `/uploads/${picture}`;
+    picture = `./uploads/${picture}`;
   }
 
   $("#members-list ul").append(`
@@ -580,7 +580,7 @@ async function stopMicTrack(stream) {
 
 function muteMic(peerId) {
   $(`div[id=${peerId}]`).append(`
-    <img id="muted-icon" src="/images/mute-mic.png" class="absolute top-0 right-0 m-3 h-[10%]" alt="...">
+    <img id="muted-icon" src="./images/mute-mic.png" class="absolute top-0 right-0 m-3 h-[10%]" alt="...">
   `);
 }
 function unmuteMic(peerId) {

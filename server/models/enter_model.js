@@ -1,7 +1,6 @@
 import { pool } from "../util/db.js";
 
 const setConfDb = async (title, roomId) => {
-  // FIXME:status換個名字，不然取名跟裡面存放的東西意思差太遠，可讀性低又難維護
   const [result] = await pool.query(
     `
   INSERT INTO conferences (title, room_id)
