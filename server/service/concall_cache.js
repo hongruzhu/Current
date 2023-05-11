@@ -1,23 +1,23 @@
 import { redis } from "../util/cache.js";
 
-const reviseRoomUserNumber = (roomId, number) => {
+const reviseRoomUserNumber = async (roomId, number) => {
   const count = redis.hincrby("room", roomId, number);
   return count;
 };
 
-const deleteRoomId = (roomId) => {
+const deleteRoomId = async (roomId) => {
   redis.hdel("room", roomId);
 };
 
-const deleteStartTime = (roomId) => {
+const deleteStartTime = async (roomId) => {
   redis.hdel("startTime", roomId);
 };
 
-const deleteShareScreenStatus = (roomId) => {
+const deleteShareScreenStatus = async (roomId) => {
   redis.hdel("shareScreenStatus", roomId);
 };
 
-const deleteWhiteboardStatus = (roomId) => {
+const deleteWhiteboardStatus = async (roomId) => {
   redis.hdel("whiteboardShareName", roomId);
   redis.hdel("whiteboardSharePeerId", roomId);
 };
