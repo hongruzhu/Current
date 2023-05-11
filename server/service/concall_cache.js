@@ -1,6 +1,6 @@
 import { redis } from "../util/cache.js";
 
-const reviseRoomUserNumber = async (roomId, number) => {
+const updateRoomUsers = async (roomId, number) => {
   const count = redis.hincrby("room", roomId, number);
   return count;
 };
@@ -32,22 +32,22 @@ const resetWhiteboardStatus = async (roomId) => {
   redis.hset("whiteboardSharePeerId", roomId, null);
 };
 
-const getCacheStartTime = async (roomId) => {
+const getStartTimeCache = async (roomId) => {
   return await redis.hget("startTime", roomId);
-}
+};
 
-const getCacheTitle = async (roomId) => {
+const getTitleCache = async (roomId) => {
   return await redis.hget("roomTitle", roomId);
 };
 
 export {
-  reviseRoomUserNumber,
+  updateRoomUsers,
   deleteRoomId,
   deleteStartTime,
   deleteShareScreenStatus,
   deleteWhiteboardStatus,
   checkWhiteboardPeerId,
   resetWhiteboardStatus,
-  getCacheStartTime,
-  getCacheTitle
+  getStartTimeCache,
+  getTitleCache,
 };

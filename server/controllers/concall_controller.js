@@ -1,26 +1,26 @@
 import {
-  reviseRoomUserNumber,
+  updateRoomUsers,
   deleteRoomId,
   deleteStartTime,
   deleteShareScreenStatus,
   deleteWhiteboardStatus,
   checkWhiteboardPeerId,
   resetWhiteboardStatus,
-  getCacheStartTime,
-  getCacheTitle,
+  getStartTimeCache,
+  getTitleCache,
 } from "../service/concall_cache.js";
 
 import { getConfId, closeConf } from "../models/concall_model.js";
 
 const getStartTime = async (req, res) => {
   const { roomId } = req.query;
-  const startTime = await getCacheStartTime(roomId);
+  const startTime = await getStartTimeCache(roomId);
   res.json({ data: startTime });
 };
 
 const getRoomTitle = async (req, res) => {
   const { roomId } = req.body;
-  let roomTitle = await getCacheTitle(roomId);
+  let roomTitle = await getTitleCache(roomId);
   if (!roomTitle) roomTitle = "無";
   res.json({ data: roomTitle });
 };
@@ -29,7 +29,7 @@ const joinRoom = async (socket) => {
   socket.on("join-room", (roomId, peerId, name, role, picture) => {
     socket.join(roomId);
     socket.to(roomId).emit("user-connected", peerId, name, role, picture);
-    reviseRoomUserNumber(roomId, 1);
+    updateRoomUsers(roomId, 1);
 
     socket.on("disconnect", async () => {
       socket.to(roomId).emit("user-disconnected", peerId);
@@ -37,7 +37,7 @@ const joinRoom = async (socket) => {
       if (peerId === whiteboardPeerId) {
         await resetWhiteboardStatus(roomId);
       }
-      const count = await reviseRoomUserNumber(roomId, -1);
+      const count = await updateRoomUsers(roomId, -1);
       if (count === 0) {
         const confId = await getConfId(roomId);
         await closeConf(confId, "closed");

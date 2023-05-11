@@ -11,7 +11,7 @@ import {
   saveRoomTitleCache,
   saveRoomStartCache,
 } from "../service/enter_cache.js";
-import { getCacheTitle } from "../service/concall_cache.js";
+import { getTitleCache } from "../service/concall_cache.js";
 
 const getRoomId = async (req, res) => {
   let roomId;
@@ -76,7 +76,7 @@ const verifyRoomId = async (req, res) => {
   }
   // 抓取會議名稱
   // let title = await getTitle(roomId);
-  let title = await getCacheTitle(roomId);
+  let title = await getTitleCache(roomId);
   if (title === "") {
     title = "無";
   }
