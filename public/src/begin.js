@@ -8,7 +8,7 @@ const myPicture = localStorage.getItem(`userPicture`);
 const socket = io();
 
 // 若有上傳大頭貼，把自己的大頭貼append到視訊頁面上
-if (myPicture === "null") {
+if (myPicture === "null" || myPicture === null) {
   $("#myVideo img").attr("src", "/images/user.png");
 } else {
   $("#myVideo img").attr("src", `/uploads/${myPicture}`);

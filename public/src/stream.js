@@ -229,11 +229,12 @@ if (myRole === "host") {
 if (myRole === "guest") {
   $("#my-role").text("來賓");
 }
-
-if (myPicture !== "null") {
-  $("#my-picture").attr("src", `/uploads/${myPicture}`);
-} else {
+console.log(myPicture);
+console.log(typeof myPicture);
+if (myPicture === "null" || myPicture === null) {
   $("#my-picture").attr("src", "/images/user.png");
+} else {
+  $("#my-picture").attr("src", `/uploads/${myPicture}`);
 }
 
 // PeerJS需傳送stream給其他人，把自己畫面的canvas轉回video stream的function
@@ -422,7 +423,7 @@ function addUserNameAndPicture(name, picture, peerId) {
   $(`div[id=${peerId}]`).append(userName);
 
   let userPicture;
-  if (picture === "null") {
+  if (picture === "null" || picture === null) {
     userPicture = $("<img>", {
       class: "hidden absolute top-0 right-0 left-0 bottom-0 m-auto h-2/5",
       src: `/images/user.png`,
@@ -445,8 +446,10 @@ function addMemberList(name, role, picture, peerId) {
   if (role === "guest") {
     role = "來賓";
   }
-  if (picture === "null") {
-    picture = `/images/user.png`;
+  console.log(picture);
+  console.log(typeof picture);
+  if (picture === "null" || picture === null) {
+    picture = "/images/user.png";
   } else {
     picture = `./uploads/${picture}`;
   }
