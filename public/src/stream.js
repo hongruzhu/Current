@@ -445,7 +445,7 @@ function addMemberList(name, role, picture, peerId) {
   if (role === "guest") {
     role = "來賓";
   }
-  if (picture === null) {
+  if (picture === "null") {
     picture = `/images/user.png`;
   } else {
     picture = `./uploads/${picture}`;
