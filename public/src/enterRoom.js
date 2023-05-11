@@ -7,15 +7,13 @@ const roomId = urlParams.get("roomId");
 
 let logInStatus;
 try {
-  const result = await axios({
+  await axios({
     method: "get",
     url: "/token",
     headers,
   });
-  console.log(result.data.data);
   logInStatus = true;
 } catch (e) {
-  console.log(e.response.data);
   localStorage.removeItem("accessToken");
   localStorage.removeItem("userId");
   localStorage.removeItem("userName");
@@ -133,11 +131,11 @@ try {
     localStorage.setItem(`role-${roomId}`, "guest");
   });
 } catch (e) {
+  console.log(e);
   Swal.fire({
     icon: "warning",
     text: "請允許Current存取您的攝影機和麥克風，否則無法進入會議室",
   });
-  console.log(e);
   $("#loading").remove();
   $("#enter-room").on("submit", async (e) => {
     e.preventDefault();

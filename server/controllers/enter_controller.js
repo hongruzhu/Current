@@ -12,6 +12,7 @@ import {
   saveRoomStartCache,
 } from "../service/enter_cache.js";
 import { getTitleCache } from "../service/concall_cache.js";
+import { CustomError } from "../util/error.js";
 
 const getRoomId = async (req, res) => {
   let roomId;
@@ -51,7 +52,7 @@ const createRoom = async (req, res) => {
 
 const enterRoom = async (req, res) => {
   let { name, userId, email } = req.body;
-  if (!name) return res.status(400).json({ err: "請輸入姓名" });
+  if (!name) throw CustomError.badRequest("請輸入姓名");
   if (userId === "") userId = null;
   if (email === "") email = null;
   const roomId = req.query.roomId;

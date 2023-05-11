@@ -7,7 +7,7 @@ const thankyou = async (req, res) => {
 };
 
 const checkAccessToken = async (req, res) => {
-  res.json({ data: "Access token check successfully." });
+  res.json({ data: "Access token check successfully" });
 };
 
 export { index, thankyou, checkAccessToken };

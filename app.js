@@ -49,18 +49,25 @@ const onConnection = (socket) => {
   shareScreen(io, socket);
   whiteboard(io, socket);
 }
-
 io.on("connection", onConnection);
 
 app.use((req, res) => {
-  // console.log("Wrong path: ",req.path);
+  console.log("Wrong path: ",req.path);
 	res.status(404).render("notFound");
 });
 
+import { CustomError } from "./server/util/error.js";
+
 // Error handling
-app.use((err, req, res) => {
-  console.log(err);
-  res.status(500).json({ err: "Internal Server Error" });
+
+app.use((err, req, res, next) => {
+  if (err instanceof CustomError) {
+    return res.status(err.status).json({ err: err.message });
+  }
+  console.error(err);
+  res
+    .status(err.status || 500)
+    .json({ err: err.message || "Internal Server Error" });
 });
 
 server.listen(PORT, async () => {

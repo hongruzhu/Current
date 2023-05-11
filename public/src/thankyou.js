@@ -5,15 +5,13 @@ const headers = {
 
 let logInStatus;
 try {
-  const result = await axios({
+  await axios({
     method: "get",
     url: "/token",
     headers,
   });
-  console.log(result.data.data);
   logInStatus = true;
 } catch (e) {
-  console.log(e);
   localStorage.removeItem("accessToken");
   localStorage.removeItem("userId");
   localStorage.removeItem("userName");

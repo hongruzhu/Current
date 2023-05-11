@@ -278,6 +278,7 @@ const myPeer = new Peer(undefined, {
 
 myPeer.on("open", (peerId) => {
   myPeerId = peerId;
+  // FIXME:問一下小賴，前端是不是所有console.log都不要有？
   console.log(`my peerId: ${peerId}`);
   socket.emit("join-room", roomId, peerId, myName, myRole, myPicture);
 });

@@ -4,14 +4,12 @@ const headers = {
 };
 
 try {
-  const result = await axios({
+  await axios({
     method: "get",
     url: "/token",
     headers,
   });
-  console.log(result.data.data);
 } catch (e) {
-  console.log(e.response.data);
   localStorage.removeItem("accessToken");
   localStorage.removeItem("userId");
   localStorage.removeItem("userName");

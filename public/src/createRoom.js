@@ -7,16 +7,13 @@ try {
   const headers = {
     Authorization: `Bearer ${accessToken}`,
   };
-
-  const result = await axios({
+  await axios({
     method: "get",
     url: "/token",
     headers,
   });
-  console.log(result.data.data);
   logInStatus = true;
 } catch (e) {
-  console.log(e.response.data);
   localStorage.removeItem("accessToken");
   localStorage.removeItem("userId");
   localStorage.removeItem("userName");
@@ -136,10 +133,8 @@ try {
         headers,
         data,
       });
-      console.log(result.data.data);
       window.location.href = result.data.data;
     } catch (e) {
-      console.log(e);
       if (e.response.data.err) {
         await Swal.fire({
           icon: "warning",
@@ -148,6 +143,7 @@ try {
         window.location.href = "/";
         return;
       }
+      console.log(e);
       Swal.fire({
         icon: "error",
         title: "Oops...",

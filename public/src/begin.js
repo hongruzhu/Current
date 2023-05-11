@@ -193,12 +193,12 @@ try {
   let startTime = result.data.data;
   requestAnimationFrame(() => updateTime(startTime));
 } catch (e) {
+  console.log(e);
   Swal.fire({
     icon: "error",
     title: "Oops...",
     text: "Something went wrong!",
   });
-  console.log(e);
 }
 
 function updateTime(startTime) {

@@ -28,7 +28,6 @@ async function signIn() {
       headers,
       data,
     });
-    console.log(result.data.data);
     localStorage.setItem("accessToken", result.data.data.accessToken);
     localStorage.setItem("userId", result.data.data.user.id);
     localStorage.setItem("userName", result.data.data.user.name);
@@ -46,7 +45,6 @@ async function signIn() {
       window.location.href = "/";
     }
   } catch (e) {
-    console.log(e);
     if (e.response.data.err) {
       await Swal.fire({
         icon: "warning",
@@ -54,6 +52,7 @@ async function signIn() {
       });
       return;
     }
+    console.log(e);
     Swal.fire({
       icon: "error",
       title: "Oops...",

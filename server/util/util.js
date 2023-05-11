@@ -3,6 +3,7 @@ dotenv.config();
 import jwt from "jsonwebtoken";
 import multer from "multer";
 import { checkRoomId } from "../service/enter_cache.js";
+import { CustomError } from "./error.js";
 const { TOKEN_SECRET_KEY } = process.env;
 
 // Check roomId
@@ -18,15 +19,12 @@ const authenticateJWT = (req, res, next) => {
   if (req.header("Authorization")) {
     const accessToken = req.header("Authorization").replace("Bearer ", "");
     jwt.verify(accessToken, TOKEN_SECRET_KEY, (err, payload) => {
-      if (err) {
-        res.status(403).json({ err: `Client Error (Wrong token)` });
-        return;
-      }
+      if (err) throw CustomError.forbidden("Client Error (Wrong token)");
       req.payload = payload;
-      next();
+      return next();
     });
   } else {
-    return res.status(401).json({ err: `Client Error (No token)` });
+    throw CustomError.unauthorized("Client Error (No token)");
   }
 };
 

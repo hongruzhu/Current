@@ -4,6 +4,7 @@ import validator from "validator";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import { signUpDb, checkEmail, getUserInfo } from "../models/user_model.js";
+import { CustomError } from "../util/error.js";
 const { TOKEN_EXPIRE, TOKEN_SECRET_KEY } = process.env;
 
 const renderSignInPage = async (req, res) => {
@@ -16,16 +17,14 @@ const renderSignUpPage = async (req, res) => {
 
 const signUp = async (req, res) => {
   let { name, email, password, password_confirmed } = req.body;
-  const state = await signUpValidation(
+  await signUpValidation(
     name,
     email,
     password,
     password_confirmed
   );
-  if (state) return res.status(state.status).json({ err: state.err });
   const check = await checkEmail(email);
-  if (check)
-    return res.status(403).json({ err: "此信箱已註冊過，請輸入其他信箱" });
+  if (check) throw CustomError.forbidden("此信箱已註冊過，請輸入其他信箱");
   const provider = "native";
   const password_hash = await bcrypt.hash(password, 10);
   const id = await signUpDb(provider, name, email, password_hash);
@@ -36,15 +35,12 @@ const signUp = async (req, res) => {
 
 const signIn = async (req, res) => {
   let { email, password } = req.body;
-  const state = await signInValidation(email, password);
-  if (state) return res.status(state.status).json({ err: state.err });
+  await signInValidation(email, password);
   const result = await getUserInfo(email);
-  if (result.length === 0)
-    return res.status(403).json({ err: "此信箱尚未註冊" });
+  if (result.length === 0) throw CustomError.forbidden("此信箱尚未註冊");
   const { id, provider, name, password_hash, picture } = result[0];
   const checkPassword = await bcrypt.compare(password, password_hash);
-  if (!checkPassword)
-    return res.status(403).json({ err: "密碼輸入錯誤，請重新輸入密碼" });
+  if (!checkPassword) throw CustomError.forbidden("密碼輸入錯誤，請重新輸入密碼");
   const data = await generateResponse(id, provider, name, email, picture);
   res.json({data});
 };
@@ -52,11 +48,10 @@ const signIn = async (req, res) => {
 export { renderSignInPage, renderSignUpPage, signUp, signIn };
 
 const signUpValidation = async (name, email, password, password_confirmed) => {
-  if (!name) return { status: 400, err: "Please enter your name" };
-  if (!email) return { status: 400, err: "Please enter your email" };
-  if (!password) return { status: 400, err: "Please enter your password" };
-  if (!validator.isLength(password, { min: 8, max: 12 }))
-    return { status: 400, err: "Password length should be between 8 to 12" };
+  if (!name) throw CustomError.badRequest("請輸入你的姓名");
+  if (!email) throw CustomError.badRequest("請輸入你的 email");
+  if (!password) throw CustomError.badRequest("請輸入你的密碼");
+  if (!validator.isLength(password, { min: 8, max: 12 })) throw CustomError.badRequest("密碼長度需8到12位");
   if (
     !validator.isStrongPassword(password, {
       minLength: 8,
@@ -65,30 +60,18 @@ const signUpValidation = async (name, email, password, password_confirmed) => {
       minNumbers: 1,
       minSymbols: 0,
     })
-  )
-    return {
-      status: 400,
-      err: "Password should have at least 1 lowercase, 1 number, and 1 uppercase",
-    };
-  if (!password_confirmed)
-    return { status: 400, err: "Please confirm your password" };
-  if (!validator.isEmail(email))
-    return { status: 400, err: "Please enter correct email format" };
-  if (password !== password_confirmed)
-    return {
-      status: 400,
-      err: "Confirm password unsuccessfully. Please check again",
-    };
+  ) throw CustomError.badRequest("密碼需大小寫字母及數字各1位");
+  if (!password_confirmed) throw CustomError.badRequest("請確認你的密碼");
+  if (!validator.isEmail(email)) throw CustomError.badRequest("請輸入正確的 email格式");
+  if (password !== password_confirmed) throw CustomError.badRequest("確認密碼失敗，請確認密碼輸入正確");
   return null;
 };
 
 const signInValidation = async (email, password) => {
-  if (!email) return { status: 400, err: "Please enter your email" };
-  if (!validator.isEmail(email))
-    return { status: 400, err: "Please enter correct email format" };
-  if (!password) return { status: 400, err: "Please enter your password" };
-  if (!validator.isLength(password, { min: 8, max: 12 }))
-    return { status: 400, err: "Password length should be between 8 to 12" };
+  if (!email) throw CustomError.badRequest("請輸入你的 email");
+  if (!validator.isEmail(email)) throw CustomError.badRequest("請輸入正確的 email格式");
+  if (!password) throw CustomError.badRequest("請輸入你的密碼");
+  if (!validator.isLength(password, { min: 8, max: 12 })) throw CustomError.badRequest("密碼長度需8到12位");
   if (
     !validator.isStrongPassword(password, {
       minLength: 8,
@@ -97,11 +80,7 @@ const signInValidation = async (email, password) => {
       minNumbers: 1,
       minSymbols: 0,
     })
-  )
-    return {
-      status: 400,
-      err: "Password should have at least 1 lowercase, 1 number, and 1 uppercase",
-    };
+  ) throw CustomError.badRequest("密碼需大小寫字母及數字至少各1位");
   return null;
 };
 

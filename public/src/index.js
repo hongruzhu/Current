@@ -7,15 +7,13 @@ const headers = {
 
 let logInStatus;
 try {
-  const result = await axios({
+  await axios({
     method: "get",
     url: "/token",
     headers,
   });
-  console.log(result.data.data);
   logInStatus = true;
 } catch (e) {
-  console.log(e.response.data);
   localStorage.clear();
   logInStatus = false;
 }
@@ -68,12 +66,12 @@ $("#get-roomid").click(async () => {
     });
     window.location.href = result.request.responseURL;
   } catch (e) {
+    console.log(e);
     Swal.fire({
       icon: "error",
       title: "Oops...",
       text: "Something went wrong!",
     });
-    console.log(e);
   }
 });
 

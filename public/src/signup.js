@@ -54,7 +54,6 @@ async function signUp() {
       window.location.href = "/";
     }
   } catch (e) {
-    console.log(e);
     if (e.response.data.err) {
       await Swal.fire({
         icon: "warning",
@@ -62,6 +61,7 @@ async function signUp() {
       });
       return;
     }
+    console.log(e);
     Swal.fire({
       icon: "error",
       title: "Oops...",
