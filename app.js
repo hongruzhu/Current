@@ -52,15 +52,16 @@ const onConnection = (socket) => {
 
 io.on("connection", onConnection);
 
-// FIXME:補上404 page的middleware
+app.use((req, res) => {
+  console.log("Wrong path: ",req.path);
+	res.status(404).render("notFound");
+});
 
 // Error handling
-/* eslint-disable */
-app.use(function (err, req, res, next) {
+app.use((err, req, res) => {
   console.log(err);
   res.status(500).send("Internal Server Error");
 });
-/* eslint-enable */
 
 server.listen(PORT, async () => {
   console.log(`Listening on port: ${PORT}`);
