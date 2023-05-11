@@ -1,4 +1,4 @@
-import { pool } from "../models/mysql_config.js";
+import { pool } from "../util/db.js";
 
 const setConf = async (title, status) => {
   // FIXME:status換個名字，不然取名跟裡面存放的東西意思差太遠，可讀性低又難維護
@@ -11,7 +11,7 @@ const setConf = async (title, status) => {
   );
   const confId = result.insertId;
   return confId;
-}
+};
 
 const setConfHost = async (user_id, conference_id, role, name, email) => {
   await pool.query(
@@ -31,7 +31,7 @@ const setConfStart = async (confId, start) => {
   `,
     [start, confId]
   );
-}
+};
 
 const getTitle = async (roomId) => {
   const [result] = await pool.query(
@@ -42,7 +42,7 @@ const getTitle = async (roomId) => {
     [roomId]
   );
   return result[0].title;
-}
+};
 
 const setConfGuests = async (userId, confId, role, name, email) => {
   await pool.query(

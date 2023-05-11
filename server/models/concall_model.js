@@ -1,4 +1,4 @@
-import { pool } from "../models/mysql_config.js";
+import { pool } from "../util/db.js";
 
 const getConfId = async (roomId) => {
   const [result] = await pool.query(
