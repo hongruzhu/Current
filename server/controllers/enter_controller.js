@@ -50,7 +50,6 @@ const createRoom = async (req, res) => {
 };
 
 const enterRoom = async (req, res) => {
-  // FIXME:客製化jwt middleware，就可以直接從jwt取一些個人資料，不用偷懶不想多寫一個解析jwt的function
   let { name, userId, email } = req.body;
   if (!name) return res.status(400).json({ err: "請輸入姓名" });
   if (userId === "") userId = null;

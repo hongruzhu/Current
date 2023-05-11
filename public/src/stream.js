@@ -306,7 +306,6 @@ myPeer.on("call", async (call) => {
   if (!otherMicStatus) muteMic(peerId);
 
   // 若自己的視訊鏡頭或mic沒開，讓其他user知道，做出相應處理
-  // FIXME:要確認這樣不會出問題欸，其他user包裝new user的video div產生出來了嗎？
   if (!myWebcamStatus) socket.emit("hide-camera", roomId, myPeerId);
   if (!myMicStatus) socket.emit("mute-mic", roomId, myPeerId);
 });

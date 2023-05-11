@@ -1,7 +1,7 @@
-import { pool } from "../util/db.js";
+import { query } from "../util/db.js";
 
 const getUserAllConf = async (userId) => {
-  const [result] = await pool.query(
+  const [result] = await query(
     `
   SELECT conferences_id, role FROM users_conferences
   WHERE users_id = ?
@@ -12,7 +12,7 @@ const getUserAllConf = async (userId) => {
 };
 
 const getConfData = async (confId) => {
-  const [result] = await pool.query(
+  const [result] = await query(
     `
   SELECT title, start FROM conferences
   WHERE id = ?
@@ -23,7 +23,7 @@ const getConfData = async (confId) => {
 };
 
 const getConfMembers = async (confId) => {
-  const [result] = await pool.query(
+  const [result] = await query(
     `
   SELECT role, name, email FROM users_conferences
   WHERE conferences_id = ?
@@ -34,7 +34,7 @@ const getConfMembers = async (confId) => {
 };
 
 const setUserImage = async (userId, image) => {
-  await pool.query(
+  await query(
     `
     UPDATE users SET picture = ? 
     where id = ?

@@ -1,7 +1,7 @@
-import { pool } from "../util/db.js";
+import { query } from "../util/db.js";
 
 const getConfId = async (roomId) => {
-  const [result] = await pool.query(
+  const [result] = await query(
     `
   SELECT id FROM conferences
   WHERE room_id = ?
@@ -12,7 +12,7 @@ const getConfId = async (roomId) => {
 };
 
 const closeConf = async (confId, status) => {
-  await pool.query(
+  await query(
     `
   UPDATE conferences SET room_id = ? 
   where id = ?

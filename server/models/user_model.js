@@ -1,7 +1,7 @@
-import { pool } from "../util/db.js";
+import { query } from "../util/db.js";
 
 const signUpDb = async (provider, name, email, password_hash) => {
-  const [result] = await pool.query(
+  const [result] = await query(
     `
     INSERT INTO users (provider, name, email, password_hash)
     VALUES (?, ?, ?, ?)
@@ -13,7 +13,7 @@ const signUpDb = async (provider, name, email, password_hash) => {
 };
 
 const checkEmail = async (email) => {
-  const [result] = await pool.query(
+  const [result] = await query(
     `
   SELECT email FROM users
   WHERE email = ?
@@ -24,7 +24,7 @@ const checkEmail = async (email) => {
 };
 
 const getUserInfo = async (email) => {
-  const [result] = await pool.query(
+  const [result] = await query(
     `
   SELECT * FROM users
   WHERE email = ?

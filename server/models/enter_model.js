@@ -1,7 +1,7 @@
-import { pool } from "../util/db.js";
+import { query } from "../util/db.js";
 
 const setConfDb = async (title, roomId) => {
-  const [result] = await pool.query(
+  const [result] = await query(
     `
   INSERT INTO conferences (title, room_id)
   VALUES (?, ?)
@@ -13,7 +13,7 @@ const setConfDb = async (title, roomId) => {
 };
 
 const saveConfHostDb = async (user_id, conference_id, role, name, email) => {
-  await pool.query(
+  await query(
     `
   INSERT INTO users_conferences (users_id, conferences_id, role, name, email)
   VALUES (?, ?, ?, ?, ?)
@@ -23,7 +23,7 @@ const saveConfHostDb = async (user_id, conference_id, role, name, email) => {
 };
 
 const saveConfStartDb = async (confId, start) => {
-  await pool.query(
+  await query(
     `
   UPDATE conferences SET start = ? 
   where id = ?
@@ -33,7 +33,7 @@ const saveConfStartDb = async (confId, start) => {
 };
 
 const saveConfGuestsDb = async (userId, confId, role, name, email) => {
-  await pool.query(
+  await query(
     `
   INSERT INTO users_conferences (users_id, conferences_id, role, name, email)
   VALUES (?, ?, ?, ?, ?)

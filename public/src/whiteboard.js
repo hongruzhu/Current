@@ -111,8 +111,6 @@ async function startWhiteboard() {
   $("#whiteboard canvas").attr("width", whiteboardWidth);
   $("#whiteboard canvas").attr("height", whiteboardHeight);
 
-  // TODO:若包裹canvas的div的長寬變了，canvas的長寬要動態調整，但這蠻細的，要實現非常有難度，先pending
-
   // 開始畫畫
   const canvas = $("#whiteboard canvas")[0];
   const context = canvas.getContext("2d");
