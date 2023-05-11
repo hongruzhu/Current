@@ -231,6 +231,8 @@ if (myRole === "guest") {
 }
 if (myPicture !== null) {
   $("#my-picture").attr("src", `/uploads/${myPicture}`);
+} else {
+  $("#my-picture").attr("src", "/images/user.png");
 }
 
 // PeerJS需傳送stream給其他人，把自己畫面的canvas轉回video stream的function
