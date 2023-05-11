@@ -53,14 +53,14 @@ const onConnection = (socket) => {
 io.on("connection", onConnection);
 
 app.use((req, res) => {
-  console.log("Wrong path: ",req.path);
+  // console.log("Wrong path: ",req.path);
 	res.status(404).render("notFound");
 });
 
 // Error handling
 app.use((err, req, res) => {
   console.log(err);
-  res.status(500).send("Internal Server Error");
+  res.status(500).json({ err: "Internal Server Error" });
 });
 
 server.listen(PORT, async () => {

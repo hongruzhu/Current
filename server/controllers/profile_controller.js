@@ -56,7 +56,7 @@ const userImage = async (req, res) => {
   const image = req.files.user_image[0].filename;
   // 存進資料庫
   await setUserImage(userId, image);
-  res.json({ image });
+  res.json({ data: image });
 };
 
 export { getProfilePage, getRecord, userImage };

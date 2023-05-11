@@ -7,8 +7,7 @@ const thankyou = async (req, res) => {
 };
 
 const checkAccessToken = async (req, res) => {
-  // FIXME:API的格式要一致，我都亂寫一通
-  res.send("Access token check successfully.");
-}
+  res.json({ data: "Access token check successfully." });
+};
 
 export { index, thankyou, checkAccessToken };

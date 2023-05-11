@@ -2,7 +2,6 @@ import {
   setConfDb,
   saveConfHostDb,
   saveConfStartDb,
-  getTitle,
   saveConfGuestsDb,
 } from "../models/enter_model.js";
 import { getConfId } from "../models/concall_model.js";
@@ -12,6 +11,7 @@ import {
   saveRoomTitleCache,
   saveRoomStartCache,
 } from "../service/enter_cache.js";
+import { getCacheTitle } from "../service/concall_cache.js";
 
 const getRoomId = async (req, res) => {
   let roomId;
@@ -48,7 +48,7 @@ const createRoom = async (req, res) => {
   const role = "host";
   const { id, name, email } = req.payload;
   await saveConfHostDb(id, confId, role, name, email);
-  res.send(`/concall?roomId=${roomId}&confId=${confId}`);
+  res.json({ data: `/concall?roomId=${roomId}&confId=${confId}` });
 };
 
 const enterRoom = async (req, res) => {
@@ -81,7 +81,8 @@ const verifyRoomId = async (req, res) => {
     return res.render("concall", { roomId });
   }
   // 抓取會議名稱
-  let title = await getTitle(roomId);
+  // let title = await getTitle(roomId);
+  let title = await getCacheTitle(roomId);
   if (title === "") {
     title = "無";
   }

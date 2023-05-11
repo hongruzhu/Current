@@ -10,7 +10,7 @@ try {
     url: "/token",
     headers,
   });
-  console.log(result.data);
+  console.log(result.data.data);
   logInStatus = true;
 } catch (e) {
   console.log(e);

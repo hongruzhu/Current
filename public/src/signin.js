@@ -28,12 +28,12 @@ async function signIn() {
       headers,
       data,
     });
-    console.log(result.data);
-    localStorage.setItem("accessToken", result.data.accessToken);
-    localStorage.setItem("userId", result.data.user.id);
-    localStorage.setItem("userName", result.data.user.name);
-    localStorage.setItem("userEmail", result.data.user.email);
-    localStorage.setItem("userPicture", result.data.user.picture);
+    console.log(result.data.data);
+    localStorage.setItem("accessToken", result.data.data.accessToken);
+    localStorage.setItem("userId", result.data.data.user.id);
+    localStorage.setItem("userName", result.data.data.user.name);
+    localStorage.setItem("userEmail", result.data.data.user.email);
+    localStorage.setItem("userPicture", result.data.data.user.picture);
     await Swal.fire({
       icon: "success",
       text: "登入成功！",
@@ -46,12 +46,12 @@ async function signIn() {
       window.location.href = "/";
     }
   } catch (e) {
+    console.log(e);
     if (e.response.data.err) {
       await Swal.fire({
         icon: "warning",
         text: e.response.data.err,
       });
-      console.log(e);
       return;
     }
     Swal.fire({
@@ -59,7 +59,6 @@ async function signIn() {
       title: "Oops...",
       text: "Something went wrong!",
     });
-    console.log(e);
   }
 }
 

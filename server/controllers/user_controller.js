@@ -22,28 +22,31 @@ const signUp = async (req, res) => {
     password,
     password_confirmed
   );
-  if (state) return res.status(state.status).send({ err: state.err });
+  if (state) return res.status(state.status).json({ err: state.err });
   const check = await checkEmail(email);
-  if (check) return res.status(403).send({ err: "此信箱已註冊過，請輸入其他信箱" });
+  if (check)
+    return res.status(403).json({ err: "此信箱已註冊過，請輸入其他信箱" });
   const provider = "native";
   const password_hash = await bcrypt.hash(password, 10);
   const id = await signUpDb(provider, name, email, password_hash);
   const picture = null;
-  const response = await generateResponse(id, provider, name, email, picture);
-  res.json(response);
+  const data = await generateResponse(id, provider, name, email, picture);
+  res.json({data});
 };
 
 const signIn = async (req, res) => {
   let { email, password } = req.body;
   const state = await signInValidation(email, password);
-  if (state) return res.status(state.status).send({ err: state.err });
+  if (state) return res.status(state.status).json({ err: state.err });
   const result = await getUserInfo(email);
-  if (result.length === 0) return res.status(403).send({ err: "此信箱尚未註冊" });
+  if (result.length === 0)
+    return res.status(403).json({ err: "此信箱尚未註冊" });
   const { id, provider, name, password_hash, picture } = result[0];
   const checkPassword = await bcrypt.compare(password, password_hash);
-  if (!checkPassword) return res.status(403).send({ err: "密碼輸入錯誤，請重新輸入密碼" });
-  const response = await generateResponse(id, provider, name, email, picture);
-  res.json(response);
+  if (!checkPassword)
+    return res.status(403).json({ err: "密碼輸入錯誤，請重新輸入密碼" });
+  const data = await generateResponse(id, provider, name, email, picture);
+  res.json({data});
 };
 
 export { renderSignInPage, renderSignUpPage, signUp, signIn };
@@ -108,7 +111,7 @@ const generateResponse = async (id, provider, name, email, picture) => {
     provider,
     name,
     email,
-    picture
+    picture,
   };
   const accessToken = jwt.sign(payload, TOKEN_SECRET_KEY, {
     expiresIn: TOKEN_EXPIRE,
@@ -121,7 +124,7 @@ const generateResponse = async (id, provider, name, email, picture) => {
       provider,
       name,
       email,
-      picture
+      picture,
     },
   };
   return response;

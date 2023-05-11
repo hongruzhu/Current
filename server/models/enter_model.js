@@ -1,13 +1,13 @@
 import { pool } from "../util/db.js";
 
-const setConfDb = async (title, status) => {
+const setConfDb = async (title, roomId) => {
   // FIXME:status換個名字，不然取名跟裡面存放的東西意思差太遠，可讀性低又難維護
   const [result] = await pool.query(
     `
-  INSERT INTO conferences (title, status)
+  INSERT INTO conferences (title, room_id)
   VALUES (?, ?)
   `,
-    [title, status]
+    [title, roomId]
   );
   const confId = result.insertId;
   return confId;
@@ -33,17 +33,6 @@ const saveConfStartDb = async (confId, start) => {
   );
 };
 
-const getTitle = async (roomId) => {
-  const [result] = await pool.query(
-    `
-  SELECT title FROM conferences
-  WHERE status = ?
-    `,
-    [roomId]
-  );
-  return result[0].title;
-};
-
 const saveConfGuestsDb = async (userId, confId, role, name, email) => {
   await pool.query(
     `
@@ -54,4 +43,4 @@ const saveConfGuestsDb = async (userId, confId, role, name, email) => {
   );
 };
 
-export { setConfDb, saveConfHostDb, saveConfStartDb, getTitle, saveConfGuestsDb };
+export { setConfDb, saveConfHostDb, saveConfStartDb, saveConfGuestsDb };

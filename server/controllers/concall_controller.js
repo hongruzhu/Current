@@ -10,19 +10,19 @@ import {
   getCacheTitle,
 } from "../service/concall_cache.js";
 
-import { getConfId, changeConfStatus } from "../models/concall_model.js";
+import { getConfId, closeConf } from "../models/concall_model.js";
 
 const getStartTime = async (req, res) => {
   const { roomId } = req.query;
   const startTime = await getCacheStartTime(roomId);
-  res.send(startTime);
+  res.json({ data: startTime });
 };
 
 const getRoomTitle = async (req, res) => {
   const { roomId } = req.body;
   let roomTitle = await getCacheTitle(roomId);
   if (!roomTitle) roomTitle = "無";
-  res.send(roomTitle);
+  res.json({ data: roomTitle });
 };
 
 const joinRoom = async (socket) => {
@@ -40,7 +40,7 @@ const joinRoom = async (socket) => {
       const count = await reviseRoomUserNumber(roomId, -1);
       if (count === 0) {
         const confId = await getConfId(roomId);
-        await changeConfStatus(confId, "closed");
+        await closeConf(confId, "closed");
         deleteRoomId(roomId);
         deleteStartTime(roomId);
         deleteShareScreenStatus(roomId);

@@ -18,12 +18,12 @@ if (myPicture === null) {
 const shareScreenResult = await axios.post("/sharescreen/status", {
   roomId,
 });
-const roomShareScreenStatus = shareScreenResult.data;
+const roomShareScreenStatus = shareScreenResult.data.data;
 
 // 抓取會議室分享小白版的狀態
 const whiteboardResult = await axios.post("/whiteboard/status", { roomId });
-const whiteboardShareName = whiteboardResult.data.name;
-const whiteboardSharePeerId = whiteboardResult.data.peerId;
+const whiteboardShareName = whiteboardResult.data.data.name;
+const whiteboardSharePeerId = whiteboardResult.data.data.peerId;
 
 // 抓取會議名稱，加到會議資訊欄
 if (myRole === "host") {
@@ -35,7 +35,7 @@ if (myRole === "host") {
   }
 } else {
   const result = await axios.post("/concall/title", { roomId });
-  const title = result.data;
+  const title = result.data.data;
   $("#room-title").text(title);
 }
 
@@ -190,7 +190,7 @@ try {
     params: { roomId },
   });
 
-  let startTime = result.data;
+  let startTime = result.data.data;
   requestAnimationFrame(() => updateTime(startTime));
 } catch (e) {
   Swal.fire({

@@ -13,7 +13,7 @@ try {
     url: "/token",
     headers,
   });
-  console.log(result.data);
+  console.log(result.data.data);
   logInStatus = true;
 } catch (e) {
   console.log(e.response.data);
@@ -136,11 +136,11 @@ try {
         headers,
         data,
       });
-      console.log(result.data);
-      window.location.href = result.data;
+      console.log(result.data.data);
+      window.location.href = result.data.data;
     } catch (e) {
+      console.log(e);
       if (e.response.data.err) {
-        console.log(e);
         await Swal.fire({
           icon: "warning",
           text: "請先登入，再建立新的會議",
@@ -153,7 +153,6 @@ try {
         title: "Oops...",
         text: "Something went wrong!",
       });
-      console.log(e);
     }
   });
 } catch (e) {

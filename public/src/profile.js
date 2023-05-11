@@ -9,7 +9,7 @@ try {
     url: "/token",
     headers,
   });
-  console.log(result.data);
+  console.log(result.data.data);
 } catch (e) {
   console.log(e.response.data);
   localStorage.removeItem("accessToken");
@@ -112,20 +112,12 @@ try {
     $("#user-record").prepend(item);
   }
 } catch (e) {
-  if (e.response.data.err) {
-    await Swal.fire({
-      icon: "warning",
-      text: e.response.data.err,
-    });
-    console.log(e);
-  } else {
-    Swal.fire({
-      icon: "error",
-      title: "Oops...",
-      text: "Something went wrong!",
-    });
-    console.log(e);
-  }
+  console.log(e);
+  Swal.fire({
+    icon: "error",
+    title: "Oops...",
+    text: "Something went wrong!",
+  });
 }
 
 // 上傳個人照片
@@ -145,10 +137,7 @@ $("#dropzone-file").on("change", async (e) => {
       },
       body: formData,
     });
-
-    console.log(result);
-
-    const userImage = (await result.json()).image;
+    const userImage = (await result.json()).data;
 
     Swal.fire({
       icon: "success",
