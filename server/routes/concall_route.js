@@ -11,7 +11,6 @@ import {
   unmuteMic,
 } from "../controllers/concall_controller.js";
 
-// FIXME:Socket.io的code，放在MVC的哪裡比較合適？
 const conferenceCall = (io, socket) => {
   joinRoom(socket);
   hideCamera(socket);

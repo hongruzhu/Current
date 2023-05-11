@@ -1,6 +1,6 @@
 import { pool } from "../util/db.js";
 
-const setConf = async (title, status) => {
+const setConfDb = async (title, status) => {
   // FIXME:status換個名字，不然取名跟裡面存放的東西意思差太遠，可讀性低又難維護
   const [result] = await pool.query(
     `
@@ -13,7 +13,7 @@ const setConf = async (title, status) => {
   return confId;
 };
 
-const setConfHost = async (user_id, conference_id, role, name, email) => {
+const saveConfHostDb = async (user_id, conference_id, role, name, email) => {
   await pool.query(
     `
   INSERT INTO users_conferences (users_id, conferences_id, role, name, email)
@@ -23,7 +23,7 @@ const setConfHost = async (user_id, conference_id, role, name, email) => {
   );
 };
 
-const setConfStart = async (confId, start) => {
+const saveConfStartDb = async (confId, start) => {
   await pool.query(
     `
   UPDATE conferences SET start = ? 
@@ -44,7 +44,7 @@ const getTitle = async (roomId) => {
   return result[0].title;
 };
 
-const setConfGuests = async (userId, confId, role, name, email) => {
+const saveConfGuestsDb = async (userId, confId, role, name, email) => {
   await pool.query(
     `
   INSERT INTO users_conferences (users_id, conferences_id, role, name, email)
@@ -54,4 +54,4 @@ const setConfGuests = async (userId, confId, role, name, email) => {
   );
 };
 
-export { setConf, setConfHost, setConfStart, getTitle, setConfGuests };
+export { setConfDb, saveConfHostDb, saveConfStartDb, getTitle, saveConfGuestsDb };

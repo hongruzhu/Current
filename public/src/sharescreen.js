@@ -15,7 +15,7 @@ let myPeerScreenId;
 myPeerScreen.on("open", (peerId) => {
   myPeerScreenId = peerId;
   // 新user進來，傳送自己的myPeerScreenId給聊天室所有人
-  socket.emit("new-give-peerScreenId", roomId, myPeerScreenId);
+  socket.emit("give-peerScreenId-to-new", roomId, myPeerScreenId);
 });
 
 /* ----------------------------- Part 1: 點選分享螢幕按鈕，獲取自己螢幕畫面的stream ----------------------------- */
@@ -103,7 +103,7 @@ async function shareScreen(surface) {
   };
 
   // 若接收到新user進來的通知，自己是分享螢幕的人的話，傳送screen stream給user
-  socket.on("new-give-peerScreenId", (peerId) => {
+  socket.on("give-peerScreenId-to-new", (peerId) => {
     if (myShareScreenStatus) {
       const options = {
         metadata: { name: myName },
