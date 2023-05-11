@@ -6,7 +6,7 @@ const headers = {
 try {
   const result = await axios({
     method: "get",
-    url: "./checkAccessToken",
+    url: "/token",
     headers,
   });
   console.log(result.data);
@@ -20,7 +20,7 @@ try {
     icon: "warning",
     text: "請先登入",
   });
-  window.location.href = "./";
+  window.location.href = "/";
 }
 
 const userName = localStorage.getItem("userName");
@@ -28,9 +28,9 @@ const userEmail = localStorage.getItem("userEmail");
 const userPicture = localStorage.getItem("userPicture");
 
 if (userPicture !== "null") {
-  $("#user-avatar-image").attr("src", `./uploads/${userPicture}`);
+  $("#user-avatar-image").attr("src", `/uploads/${userPicture}`);
   $("#upload-image").addClass("hidden");
-  $("#user-avatar img").attr("src", `./uploads/${userPicture}`);
+  $("#user-avatar img").attr("src", `/uploads/${userPicture}`);
   $("#user-avatar img").removeClass("hidden");
 }
 
@@ -55,7 +55,7 @@ if (profileStatus === "record") {
 $("#user-profile-btn").click(() => {
   $("#user-content-profile").removeClass("hidden");
   $("#user-content-record").addClass("hidden");
-})
+});
 
 $("#user-record-btn").click(() => {
   $("#user-content-record").removeClass("hidden");
@@ -73,10 +73,10 @@ $("#signout").click(() => {
 try {
   const result = await axios({
     method: "post",
-    url: `./getRecord`,
-    headers
+    url: `/profile/record`,
+    headers,
   });
-  const data = result.data.data
+  const data = result.data.data;
 
   for (let i = 0; i < data.length; i++) {
     let title;
@@ -98,7 +98,7 @@ try {
       .padStart(2, "0")} ${hours.toString().padStart(2, "0")}:${minutes
       .toString()
       .padStart(2, "0")}`;
-    const guests = data[i].guests.join(', ');
+    const guests = data[i].guests.join(", ");
 
     const item = $(`      
       <tr class="bg-white border-b break-words">
@@ -111,7 +111,6 @@ try {
     item.append(guestItem);
     $("#user-record").prepend(item);
   }
-
 } catch (e) {
   if (e.response.data.err) {
     await Swal.fire({
@@ -138,7 +137,7 @@ $("#dropzone-file").on("change", async (e) => {
   const accessToken = localStorage.getItem("accessToken");
 
   try {
-    const result = await fetch("/uploadUserImage", {
+    const result = await fetch("/profile/image", {
       method: "POST",
       headers: {
         // "Content-Type": "multipart/form-data",
@@ -155,16 +154,16 @@ $("#dropzone-file").on("change", async (e) => {
       icon: "success",
       text: "上傳成功！",
     });
-    $("#user-avatar img").attr("src", `./uploads/${userImage}`);
+    $("#user-avatar img").attr("src", `/uploads/${userImage}`);
     $("#upload-image").addClass("hidden");
     $("#user-avatar img").removeClass("hidden");
-    $("#user-avatar-image").attr("src", `./uploads/${userImage}`);
+    $("#user-avatar-image").attr("src", `/uploads/${userImage}`);
     localStorage.setItem("userPicture", userImage);
-  } catch(e) {
+  } catch (e) {
     console.log(e);
     Swal.fire({
       icon: "warning",
       text: "圖片大小請在1 MB內",
     });
   }
-})
+});

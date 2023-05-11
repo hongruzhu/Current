@@ -7,7 +7,7 @@ let logInStatus;
 try {
   const result = await axios({
     method: "get",
-    url: "./checkAccessToken",
+    url: "/token",
     headers,
   });
   console.log(result.data);
@@ -27,7 +27,7 @@ if (logInStatus) {
   const userPicture = localStorage.getItem("userPicture");
 
   if (userPicture !== "null") {
-    $("#user-avatar-image").attr("src", `./uploads/${userPicture}`);
+    $("#user-avatar-image").attr("src", `/uploads/${userPicture}`);
   }
 
   $("#user-profile").removeClass("hidden");

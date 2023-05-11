@@ -1,6 +1,6 @@
 $("#signup").on("click", async () => {
   signUp();
-})
+});
 
 $(document).on("keypress", async (e) => {
   if (e.which === 13) signUp();
@@ -33,7 +33,7 @@ async function signUp() {
   try {
     const result = await axios({
       method: "post",
-      url: "./signup",
+      url: "/signup",
       headers,
       data,
     });
@@ -49,9 +49,9 @@ async function signUp() {
     const roomReady = localStorage.getItem("room-ready");
     if (roomReady) {
       localStorage.removeItem("room-ready");
-      window.location.href = `./concall?roomId=${roomReady}`;
+      window.location.href = `/concall?roomId=${roomReady}`;
     } else {
-      window.location.href = "./";
+      window.location.href = "/";
     }
   } catch (e) {
     if (e.response.data.err) {
@@ -101,10 +101,10 @@ async function signUpValidation(name, email, password, password_confirmed) {
     return true;
   }
   if (!validator.isLength(password, { min: 8, max: 12 })) {
-      await Swal.fire({
-        icon: "warning",
-        text: "密碼長度需在8-12碼之間",
-      });
+    await Swal.fire({
+      icon: "warning",
+      text: "密碼長度需在8-12碼之間",
+    });
     return true;
   }
   if (
@@ -129,7 +129,7 @@ async function signUpValidation(name, email, password, password_confirmed) {
     });
     return true;
   }
-  if ( password !== password_confirmed) {
+  if (password !== password_confirmed) {
     await Swal.fire({
       icon: "warning",
       text: "確認密碼失敗，請重新確認密碼",

@@ -3,14 +3,14 @@ import {
   saveConfHostDb,
   saveConfStartDb,
   getTitle,
-  saveConfGuestsDb
+  saveConfGuestsDb,
 } from "../models/enter_model.js";
 import { getConfId } from "../models/concall_model.js";
 import {
   setRoomId,
   checkRoomId,
   saveRoomTitleCache,
-  saveRoomStartCache
+  saveRoomStartCache,
 } from "../service/enter_cache.js";
 
 const getRoomId = async (req, res) => {
@@ -26,9 +26,8 @@ const getRoomId = async (req, res) => {
       state = false;
     }
   }
-  // FIXME:關於cache的function code，在MVC架構裡放在哪裡比較好？
   await setRoomId(roomId);
-  res.redirect(`./createRoom?roomId=${roomId}`);
+  res.redirect(`/room/create?roomId=${roomId}`);
 };
 
 const createRoomPage = async (req, res) => {
@@ -49,7 +48,7 @@ const createRoom = async (req, res) => {
   const role = "host";
   const { id, name, email } = req.payload;
   await saveConfHostDb(id, confId, role, name, email);
-  res.send(`./concall?roomId=${roomId}&confId=${confId}`);
+  res.send(`/concall?roomId=${roomId}&confId=${confId}`);
 };
 
 const enterRoom = async (req, res) => {

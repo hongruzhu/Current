@@ -6,7 +6,7 @@ import {
   startShareScreen,
   givePeerScreenId,
   stopShareScreen,
-  givePeerScreenIdToNew
+  givePeerScreenIdToNew,
 } from "../controllers/sharescreen_controller.js";
 
 const shareScreen = (io, socket) => {
@@ -16,7 +16,7 @@ const shareScreen = (io, socket) => {
   givePeerScreenIdToNew(socket);
 };
 
-router.route("/getShareScreenStatus").post(wrapAsync(getShareScreenStatus));
+router.route("/sharescreen/status").post(wrapAsync(getShareScreenStatus));
 
 export { shareScreen };
 export { router as shareScreen_route };

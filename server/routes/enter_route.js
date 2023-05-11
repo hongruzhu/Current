@@ -7,19 +7,18 @@ import {
   verifyRoomId,
   enterRoom,
   createRoomPage,
-  createRoom
+  createRoom,
 } from "../controllers/enter_controller.js";
 
 // FIXME:API取名沒有符合RESTFUL API格式，有點差太多了，比較常用的是dash，不是camelCase
-router.route("/getRoomId").get(authenticateJWT, wrapAsync(getRoomId));
+router.route("/room").get(authenticateJWT, wrapAsync(getRoomId));
 router
-  .route("/createRoom")
+  .route("/room/create")
   .get(wrapAsync(createRoomPage))
   .post(authenticateJWT, wrapAsync(createRoom));
 router
-  .route("/enterRoom")
+  .route("/room/enter")
   .get(wrapAsync(verifyRoomId))
   .post(wrapAsync(enterRoom));
-router.route("/concall").get(wrapAsync(verifyRoomId));
 
 export { router as enter_route };

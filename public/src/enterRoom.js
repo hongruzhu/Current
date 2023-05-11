@@ -9,7 +9,7 @@ let logInStatus;
 try {
   const result = await axios({
     method: "get",
-    url: "./checkAccessToken",
+    url: "/token",
     headers,
   });
   console.log(result.data);
@@ -23,7 +23,6 @@ try {
   logInStatus = false;
 }
 
-
 if (logInStatus) {
   const userName = localStorage.getItem("userName");
   const userEmail = localStorage.getItem("userEmail");
@@ -31,13 +30,13 @@ if (logInStatus) {
   const userPicture = localStorage.getItem("userPicture");
 
   if (userPicture !== "null") {
-    $("#user-avatar-image").attr("src", `./uploads/${userPicture}`);
+    $("#user-avatar-image").attr("src", `/uploads/${userPicture}`);
   }
 
   $("#user-profile").removeClass("hidden");
   $("#user-name").text(userName);
   $("#user-email").text(userEmail);
-  
+
   $("#name-label").text("準備好加入了嗎？");
   $("#name-label").after(
     `<span class="text-2xl font-medium text-orange-900 text-center m-3">${userName}</span>`
@@ -133,7 +132,7 @@ try {
     localStorage.setItem(`micStatus-${roomId}`, micStatus);
     localStorage.setItem(`role-${roomId}`, "guest");
   });
-} catch(e) {
+} catch (e) {
   Swal.fire({
     icon: "warning",
     text: "請允許Current存取您的攝影機和麥克風，否則無法進入會議室",
@@ -151,12 +150,12 @@ try {
 
 $("#signin").click(() => {
   localStorage.setItem("room-ready", roomId);
-  window.location.href = `./signin`;
+  window.location.href = `/signin`;
 });
 
 $("#signup").click(() => {
   localStorage.setItem("room-ready", roomId);
-  window.location.href = `./signup`;
+  window.location.href = `/signup`;
 });
 
 $("#signout").click(() => {
@@ -164,5 +163,5 @@ $("#signout").click(() => {
   localStorage.removeItem("userId");
   localStorage.removeItem("userName");
   localStorage.removeItem("userEmail");
-  window.location.href = `./concall?roomId=${roomId}`;
+  window.location.href = `/concall?roomId=${roomId}`;
 });

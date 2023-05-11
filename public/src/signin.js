@@ -1,5 +1,5 @@
 $("#signin").on("click", async () => {
-  signIn()
+  signIn();
 });
 
 $(document).on("keypress", async (e) => {
@@ -24,7 +24,7 @@ async function signIn() {
   try {
     const result = await axios({
       method: "post",
-      url: "./signin",
+      url: "/signin",
       headers,
       data,
     });
@@ -41,9 +41,9 @@ async function signIn() {
     const roomReady = localStorage.getItem("room-ready");
     if (roomReady) {
       localStorage.removeItem("room-ready");
-      window.location.href = `./concall?roomId=${roomReady}`;
+      window.location.href = `/concall?roomId=${roomReady}`;
     } else {
-      window.location.href = "./";
+      window.location.href = "/";
     }
   } catch (e) {
     if (e.response.data.err) {

@@ -174,10 +174,10 @@ selfieSegmentation.setOptions({
 });
 
 // 選擇背景效果
-let path ="";
+let path = "";
 $("#no-effect").on("click", () => {
   selfieSegmentation.onResults(originBackground);
-})
+});
 $("#blur-1").on("click", () => {
   selfieSegmentation.onResults(slightBlurBackground);
 });
@@ -218,7 +218,7 @@ async function playing() {
    * 改成setTimeout就解決這個問題了，但不是效能好的做法，來源：https://github.com/google/mediapipe/issues/3018
    */
   // window.requestAnimationFrame(playing);
-  setTimeout(playing, 1000/60);
+  setTimeout(playing, 1000 / 60);
 }
 
 // 在member list加入自己，並插入自己的圖片
@@ -230,7 +230,7 @@ if (myRole === "guest") {
   $("#my-role").text("來賓");
 }
 if (myPicture !== null) {
-  $("#my-picture").attr("src", `./uploads/${myPicture}`);
+  $("#my-picture").attr("src", `/uploads/${myPicture}`);
 }
 
 // PeerJS需傳送stream給其他人，把自己畫面的canvas轉回video stream的function
@@ -326,9 +326,15 @@ socket.on("user-disconnected", (peerId) => {
 // 新user加入，建立peer連線的function
 async function connectToNewUser(peerId, name, role, picture, stream) {
   const options = {
-    metadata: { name: myName, role: myRole, picture: myPicture, myWebcamStatus, myMicStatus },
+    metadata: {
+      name: myName,
+      role: myRole,
+      picture: myPicture,
+      myWebcamStatus,
+      myMicStatus,
+    },
   };
-  
+
   const call = myPeer.call(peerId, stream, options);
   addVideoGridElement(peerId);
   const video = document.createElement("video");
@@ -411,18 +417,18 @@ function addUserNameAndPicture(name, picture, peerId) {
       "absolute z-10 bottom-0 left-0 px-4 py-3 text-base text-white text-shadow",
   });
   $(`div[id=${peerId}]`).append(userName);
-  
+
   let userPicture;
   if (picture === null) {
     userPicture = $("<img>", {
       class: "hidden absolute top-0 right-0 left-0 bottom-0 m-auto h-2/5",
-      src: `./images/user-hide-camera.png`
+      src: `/images/user-hide-camera.png`,
     });
   } else {
     userPicture = $("<img>", {
       class:
         "hidden absolute top-0 right-0 left-0 bottom-0 m-auto h-2/5 aspect-square rounded-full object-cover",
-      src: `./uploads/${picture}`,
+      src: `/uploads/${picture}`,
     });
   }
   $(`div[id=${peerId}]`).append(userPicture);
@@ -437,9 +443,9 @@ function addMemberList(name, role, picture, peerId) {
     role = "來賓";
   }
   if (picture === null) {
-    picture = `./images/user.png`;
+    picture = `/images/user.png`;
   } else {
-    picture = `./uploads/${picture}`
+    picture = `/uploads/${picture}`;
   }
 
   $("#members-list ul").append(`
@@ -574,7 +580,7 @@ async function stopMicTrack(stream) {
 
 function muteMic(peerId) {
   $(`div[id=${peerId}]`).append(`
-    <img id="muted-icon" src="./images/mute-mic.png" class="absolute top-0 right-0 m-3 h-[10%]" alt="...">
+    <img id="muted-icon" src="/images/mute-mic.png" class="absolute top-0 right-0 m-3 h-[10%]" alt="...">
   `);
 }
 function unmuteMic(peerId) {

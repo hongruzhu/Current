@@ -11,7 +11,7 @@ import {
   shareWhiteboardState,
 } from "../controllers/whiteboard_controller.js";
 
-router.route("/getWhiteboardStatus").post(wrapAsync(getWhiteboardStatus));
+router.route("/whiteboard/status").post(wrapAsync(getWhiteboardStatus));
 
 const whiteboard = (io, socket) => {
   startWhiteboard(socket);

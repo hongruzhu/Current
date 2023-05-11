@@ -10,7 +10,7 @@ try {
 
   const result = await axios({
     method: "get",
-    url: "./checkAccessToken",
+    url: "/token",
     headers,
   });
   console.log(result.data);
@@ -25,7 +25,7 @@ try {
     icon: "warning",
     text: "請先登入！",
   });
-  window.location.href = "./"
+  window.location.href = "/";
 }
 
 if (logInStatus) {
@@ -37,7 +37,7 @@ if (logInStatus) {
   $("#user-email").text(userEmail);
 
   if (userPicture !== "null") {
-    $("#user-avatar-image").attr("src", `./uploads/${userPicture}`);
+    $("#user-avatar-image").attr("src", `/uploads/${userPicture}`);
   }
 
   $("#signout").click(() => {
@@ -47,7 +47,6 @@ if (logInStatus) {
     localStorage.removeItem("userEmail");
   });
 }
-
 
 try {
   const myWebcamStream = await navigator.mediaDevices.getUserMedia({
@@ -133,10 +132,11 @@ try {
     try {
       const result = await axios({
         method: "post",
-        url: `./createRoom?roomId=${roomId}`,
+        url: `/room/create?roomId=${roomId}`,
         headers,
         data,
       });
+      console.log(result.data);
       window.location.href = result.data;
     } catch (e) {
       if (e.response.data.err) {
@@ -145,7 +145,7 @@ try {
           icon: "warning",
           text: "請先登入，再建立新的會議",
         });
-        window.location.href = "./";
+        window.location.href = "/";
         return;
       }
       Swal.fire({
@@ -171,7 +171,6 @@ try {
     });
   });
 }
-
 
 // 一鍵複製
 $("#invite-code-copy").on("click", () => {

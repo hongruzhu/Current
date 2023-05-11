@@ -9,18 +9,19 @@ const socket = io();
 
 // 若有上傳大頭貼，把自己的大頭貼append到視訊頁面上
 if (myPicture === null) {
-  $("#myVideo img").attr("src", "./images/user-hide-camera.png");
-  
+  $("#myVideo img").attr("src", "/images/user-hide-camera.png");
 } else {
-  $("#myVideo img").attr("src", `./uploads/${myPicture}`);
+  $("#myVideo img").attr("src", `/uploads/${myPicture}`);
 }
 
 // 抓取會議室分享螢幕的狀態
-const shareScreenResult = await axios.post("./getShareScreenStatus", { roomId });
+const shareScreenResult = await axios.post("/sharescreen/status", {
+  roomId,
+});
 const roomShareScreenStatus = shareScreenResult.data;
 
 // 抓取會議室分享小白版的狀態
-const whiteboardResult = await axios.post("./getWhiteboardStatus", { roomId });
+const whiteboardResult = await axios.post("/whiteboard/status", { roomId });
 const whiteboardShareName = whiteboardResult.data.name;
 const whiteboardSharePeerId = whiteboardResult.data.peerId;
 
@@ -33,7 +34,7 @@ if (myRole === "host") {
     $("#room-title").text(title);
   }
 } else {
-  const result = await axios.post("./getRoomTitle", { roomId });
+  const result = await axios.post("/concall/title", { roomId });
   const title = result.data;
   $("#room-title").text(title);
 }
@@ -47,7 +48,7 @@ export {
   socket,
   roomShareScreenStatus,
   whiteboardShareName,
-  whiteboardSharePeerId
+  whiteboardSharePeerId,
 };
 
 // 右側欄位控制項
@@ -137,13 +138,13 @@ $("#start-recording").on("click", () => {
     // 使用window.open()方法打开一个新窗口
     // 第一个参数是URL，第二个参数是窗口名称，第三个参数是窗口属性（大小，位置等）
     window.open(
-      `/startRecording?roomId=${roomId}`,
+      `/recording?roomId=${roomId}`,
       "Recording conference audio",
       "width=400, height=300"
     );
   }
   openNewWindow();
-})
+});
 
 // 按X關閉右側欄
 $(".close-right-block").on("click", () => {
@@ -151,7 +152,7 @@ $(".close-right-block").on("click", () => {
   $("#info").addClass("hidden");
   $("#chat-room").addClass("hidden");
   $("#members").addClass("hidden");
-})
+});
 
 // 一鍵複製
 $("#invite-code-copy").on("click", () => {
@@ -167,9 +168,8 @@ $("#leave-room").on("click", () => {
   localStorage.removeItem(`micStatus-${roomId}`);
   localStorage.removeItem(`title-${roomId}`);
   localStorage.removeItem(`role-${roomId}`);
-  window.location.href = "./thankyou";
-})
-
+  window.location.href = "/thank";
+});
 
 // 若是創建新會議來到這，把url改成正常樣子
 if (createStatus) {
@@ -186,18 +186,17 @@ if (createStatus) {
 try {
   const result = await axios({
     method: "get",
-    url: "./getStartTime",
-    params: { roomId }
+    url: "/concall/time",
+    params: { roomId },
   });
-  
+
   let startTime = result.data;
   requestAnimationFrame(() => updateTime(startTime));
-
 } catch (e) {
   Swal.fire({
     icon: "error",
     title: "Oops...",
-    text: "Something went wrong!"
+    text: "Something went wrong!",
   });
   console.log(e);
 }

@@ -5,15 +5,15 @@ import { wrapAsync, authenticateJWT, upload } from "../util/util.js";
 import {
   getProfilePage,
   getRecord,
-  userImage
+  userImage,
 } from "../controllers/profile_controller.js";
 
 const userImageUpload = upload.fields([{ name: "user_image", maxCount: 1 }]);
 
 router.route("/profile").get(wrapAsync(getProfilePage));
-router.route("/getRecord").post(authenticateJWT, wrapAsync(getRecord));
+router.route("/profile/record").post(authenticateJWT, wrapAsync(getRecord));
 router
-  .route("/uploadUserImage")
+  .route("/profile/image")
   .post(authenticateJWT, userImageUpload, wrapAsync(userImage));
 
 export { router as profile_route };
