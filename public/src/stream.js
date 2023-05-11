@@ -229,7 +229,8 @@ if (myRole === "host") {
 if (myRole === "guest") {
   $("#my-role").text("來賓");
 }
-if (myPicture !== null) {
+
+if (myPicture !== "null") {
   $("#my-picture").attr("src", `/uploads/${myPicture}`);
 } else {
   $("#my-picture").attr("src", "/images/user.png");
