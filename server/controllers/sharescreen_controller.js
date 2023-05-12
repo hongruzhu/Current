@@ -1,11 +1,11 @@
 import {
-  getShareScreenStatus,
+  getShareScreenStatusCache,
   setShareScreenStatus,
 } from "../service/sharescreen_cache.js";
 
 const startShareScreen = async (socket) => {
   socket.on("start-share-screen", async (roomId, peerScreenId) => {
-    const status = await getShareScreenStatus(roomId);
+    const status = await getShareScreenStatusCache(roomId);
     if (status !== null && status !== "") {
       socket.emit("already-share-screen", status);
       return;
@@ -15,7 +15,7 @@ const startShareScreen = async (socket) => {
     socket.to(roomId).emit("start-share-screen", shareUserSocketId);
 
     socket.on("disconnect", async () => {
-      const status = await getShareScreenStatus(roomId);
+      const status = await getShareScreenStatusCache(roomId);
       if (status === peerScreenId) {
         socket.to(roomId).emit("shareScreen-user-disconnected", peerScreenId);
         await setShareScreenStatus(roomId, null);
@@ -45,7 +45,7 @@ const givePeerScreenIdToNew = async (socket) => {
 
 const getShareScreenStatus = async (req, res) => {
   const { roomId } = req.body;
-  const status = await getShareScreenStatus(roomId);
+  const status = await getShareScreenStatusCache(roomId);
   res.json({ data: status });
 };
 

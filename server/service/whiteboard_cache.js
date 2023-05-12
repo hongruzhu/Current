@@ -5,5 +5,11 @@ const setShareWhiteboardUser = async (roomId, name, peerId) => {
   redis.hset("whiteboardSharePeerId", roomId, peerId);
 }
 
-export { setShareWhiteboardUser };
+const getShareWhiteboardUser = async (roomId) => {
+  const name = await redis.hget("whiteboardShareName", roomId);
+  const peerId = await redis.hget("whiteboardSharePeerId", roomId);
+  return { name, peerId }
+};
+
+export { setShareWhiteboardUser, getShareWhiteboardUser };
 

@@ -1,10 +1,11 @@
-import { redis } from "../util/cache.js";
-import { setShareWhiteboardUser } from "../service/whiteboard_cache.js";
+import {
+  setShareWhiteboardUser,
+  getShareWhiteboardUser
+} from "../service/whiteboard_cache.js";
 
 const getWhiteboardStatus = async (req, res) => {
   const { roomId } = req.body;
-  const name = await redis.hget("whiteboardShareName", roomId);
-  const peerId = await redis.hget("whiteboardSharePeerId", roomId);
+  const { name, peerId } = await getShareWhiteboardUser(roomId);
   const status = { name, peerId };
   res.json({ data: status });
 };
