@@ -1,11 +1,11 @@
 import { redis } from "../util/cache.js";
 
-const getShareScreenStatusCache = async (roomId) => {
+const getShareScreenStatus = async (roomId) => {
   return await redis.hget("shareScreenStatus", roomId);
-}
+};
 
-const setShareScreenStatusCache = async(roomId, peerScreenId) => {
+const setShareScreenStatus = async (roomId, peerScreenId) => {
   redis.hset("shareScreenStatus", roomId, peerScreenId);
-}
+};
 
-export { getShareScreenStatusCache, setShareScreenStatusCache };
+export { getShareScreenStatus, setShareScreenStatus };
