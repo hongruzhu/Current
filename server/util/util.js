@@ -47,6 +47,17 @@ const storage = multer.diskStorage({
     cb(null, file.fieldname + "-" + uniqueSuffix + ".jpg");
   },
 });
-const upload = multer({ storage: storage, limits: { fileSize: 1000000 } });
+const fileFilter = (req, file, cb) => {
+  const fileSize = parseInt(req.headers["content-length"]);
+  if (fileSize > 1000000) {
+    return cb(CustomError.badRequest("檔案請小於1 MB"));
+  }
+  if (!file.originalname.match(/\.(jpg|jpeg|png)$/)) {
+    return cb(CustomError.badRequest("請上傳jpg或png圖片檔"));
+  }
+  cb(null, true);
+}
+
+const upload = multer({ storage: storage, fileFilter });
 
 export { authenticateJWT, checkRoomIdMiddle, wrapAsync, upload };

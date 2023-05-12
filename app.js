@@ -56,19 +56,17 @@ app.use((req, res) => {
 	res.status(404).render("notFound");
 });
 
-import { CustomError } from "./server/util/error.js";
-
 // Error handling
-
+import { CustomError } from "./server/util/error.js";
+/* eslint-disable */
 app.use((err, req, res, next) => {
-  if (err instanceof CustomError) {
-    return res.status(err.status).json({ err: err.message });
-  }
+  if (err instanceof CustomError) return res.status(err.status).json({ err: err.message });
   console.error(err);
   res
     .status(err.status || 500)
     .json({ err: err.message || "Internal Server Error" });
 });
+/* eslint-disable */
 
 server.listen(PORT, async () => {
   console.log(`Listening on port: ${PORT}`);

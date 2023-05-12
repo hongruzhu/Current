@@ -38,6 +38,7 @@
         "io": "readonly",
         "Swiper": "readonly",
         "validator": "readonly",
-        "SelfieSegmentation": "readonly"
+        "SelfieSegmentation": "readonly",
+        "require": "readonly"
     }
 }

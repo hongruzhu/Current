@@ -1,3 +1,6 @@
+// 取消console.log功能
+console.log = function () {};
+
 const urlParams = new URLSearchParams(window.location.search);
 const createStatus = urlParams.get("roomId");
 const roomId = urlParams.get("roomId");

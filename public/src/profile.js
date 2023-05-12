@@ -127,15 +127,14 @@ $("#dropzone-file").on("change", async (e) => {
   const accessToken = localStorage.getItem("accessToken");
 
   try {
-    const result = await fetch("/profile/image", {
-      method: "POST",
+    const result = await axios.post("/profile/image", formData, {
       headers: {
         // "Content-Type": "multipart/form-data",
         Authorization: `Bearer ${accessToken}`,
       },
-      body: formData,
     });
-    const userImage = (await result.json()).data;
+
+    const userImage = result.data.data;
 
     Swal.fire({
       icon: "success",
@@ -147,10 +146,18 @@ $("#dropzone-file").on("change", async (e) => {
     $("#user-avatar-image").attr("src", `/uploads/${userImage}`);
     localStorage.setItem("userPicture", userImage);
   } catch (e) {
+    if (e.response.status === 400) {
+      await Swal.fire({
+        icon: "warning",
+        text: e.response.data.err,
+      });
+      return;
+    }
     console.log(e);
     Swal.fire({
-      icon: "warning",
-      text: "圖片大小請在1 MB內",
+      icon: "error",
+      title: "Oops...",
+      text: "Something went wrong!",
     });
   }
 });
