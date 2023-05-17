@@ -6,6 +6,16 @@ import { checkRoomId } from "../service/enter_cache.js";
 import { CustomError } from "./error.js";
 const { TOKEN_SECRET_KEY } = process.env;
 
+const generateRoomId = (length) => {
+  let result = "";
+  const characters = "abcdefghijklmnopqrstuvwxyz";
+  const charactersLength = characters.length;
+  for (let i = 0; i < length; i++) {
+    result += characters.charAt(Math.floor(Math.random() * charactersLength));
+  }
+  return result;
+};
+
 // Check roomId
 const checkRoomIdMiddle = async (req, res, next) => {
   const roomId = req.query.roomId;
@@ -60,4 +70,4 @@ const fileFilter = (req, file, cb) => {
 
 const upload = multer({ storage: storage, fileFilter });
 
-export { authenticateJWT, checkRoomIdMiddle, wrapAsync, upload };
+export { generateRoomId, authenticateJWT, checkRoomIdMiddle, wrapAsync, upload };

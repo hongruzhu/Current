@@ -12,6 +12,7 @@ import {
   saveRoomStartCache,
 } from "../service/enter_cache.js";
 import { getTitleCache } from "../service/concall_cache.js";
+import { generateRoomId } from "../util/util.js";
 import { CustomError } from "../util/error.js";
 
 const getRoomId = async (req, res) => {
@@ -85,13 +86,3 @@ const verifyRoomId = async (req, res) => {
 };
 
 export { getRoomId, createRoomPage, createRoom, verifyRoomId, enterRoom };
-
-function generateRoomId(length) {
-  let result = "";
-  const characters = "abcdefghijklmnopqrstuvwxyz";
-  const charactersLength = characters.length;
-  for (let i = 0; i < length; i++) {
-    result += characters.charAt(Math.floor(Math.random() * charactersLength));
-  }
-  return result;
-}
