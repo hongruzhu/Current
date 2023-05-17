@@ -4,7 +4,7 @@ import { updateRoomUsers } from "../server/service/concall_cache.js";
 jest.mock("../server/util/cache.js");
 
 describe("updateRoomUsers", () => {
-  afterEach(() => {
+  afterEach(async () => {
     jest.clearAllMocks();
   });
 
