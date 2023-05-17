@@ -1,4 +1,5 @@
 node_modules/
+coverage/
 .env
 .DS_Store
 current_database_schema.sql

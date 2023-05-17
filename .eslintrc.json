@@ -4,7 +4,8 @@
         "browser": true,
         "commonjs": true,
         "es2021": true,
-        "jquery": true
+        "jquery": true,
+        "jest/globals": true
     },
     "extends": [
         "eslint:recommended",
@@ -18,7 +19,9 @@
         "sourceType": "module"
     },
     "plugins": [
-        "react"
+        "react",
+        "node",
+        "jest"
     ],
     "rules": {
         "node/exports-style": ["error", "module.exports"],
@@ -29,7 +32,12 @@
         "node/prefer-global/url-search-params": ["error", "always"],
         "node/prefer-global/url": ["error", "always"],
         "node/prefer-promises/dns": "error",
-        "node/prefer-promises/fs": "error"
+        "node/prefer-promises/fs": "error",
+        "jest/no-disabled-tests": "warn",
+        "jest/no-focused-tests": "error",
+        "jest/no-identical-title": "error",
+        "jest/prefer-to-have-length": "warn",
+        "jest/valid-expect": "error"
     },
     "globals": {
         "axios": "readonly",
