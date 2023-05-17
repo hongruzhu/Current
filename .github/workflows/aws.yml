@@ -20,7 +20,7 @@ jobs:
           USERNAME: ${{ secrets.EC2_USER }}
           PORT: ${{ secrets.EC2_PORT }}
           script: |
-            cd ~/Stylish-Test-Automation/Stylish-Test-Automation
+            cd ~/Current
 
             echo --- git pull --- start
             git pull
