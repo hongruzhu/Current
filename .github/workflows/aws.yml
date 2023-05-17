@@ -45,9 +45,3 @@ jobs:
             pm2 restart all
             pm2 save -f
             echo --- pm2 restart all --- done
-
-            echo --- sudo systemctl restart redis --- start
-            sudo systemctl restart redis
-            echo --- sudo systemctl restart redis --- done
-
-            echo --- test!!! ---
