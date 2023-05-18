@@ -79,7 +79,6 @@ const fileFilter = (req, file, cb) => {
 const upload = multer({ storage: storage, fileFilter });
 
 // multerS3
-// store in s3
 const s3 = new S3Client({
   credentials: {
     accessKeyId: S3_ACCESS_KEY,
