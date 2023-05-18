@@ -24,7 +24,7 @@ describe("chatMessage", () => {
     clientSocket.close();
   });
 
-  test("chatMessage", (done) => {
+  it("chatMessage", (done) => {
     clientSocket.on("chat-message", (roomId, name, msg) => {
       expect(roomId).toBe("roomId");
       expect(name).toBe("name");
@@ -34,7 +34,7 @@ describe("chatMessage", () => {
     serverSocket.emit("chat-message", "roomId", "name", "msg");
   });
 
-  test('emits "chat-message" event to specified room', () => {
+  it('emits "chat-message" event to specified room', () => {
     // 建立假的 socket 物件
     const socket = {
       on: jest.fn(),
@@ -47,6 +47,8 @@ describe("chatMessage", () => {
     const roomId = "room1";
     const name = "John";
     const msg = "Hello, world!";
+
+    // 模擬socket.on接受到參數
     socket.on.mock.calls[0][1](roomId, name, msg);
 
     // 驗證是否正確呼叫 socket.to 和 socket.emit
