@@ -26,9 +26,15 @@ const userEmail = localStorage.getItem("userEmail");
 const userPicture = localStorage.getItem("userPicture");
 
 if (userPicture !== "null") {
-  $("#user-avatar-image").attr("src", `/uploads/${userPicture}`);
+  $("#user-avatar-image").attr(
+    "src",
+    `https://d3u6ahecm1mhmb.cloudfront.net/uploads/${userPicture}`
+  );
   $("#upload-image").addClass("hidden");
-  $("#user-avatar img").attr("src", `/uploads/${userPicture}`);
+  $("#user-avatar img").attr(
+    "src",
+    `https://d3u6ahecm1mhmb.cloudfront.net/uploads/${userPicture}`
+  );
   $("#user-avatar img").removeClass("hidden");
 }
 
@@ -140,10 +146,16 @@ $("#dropzone-file").on("change", async (e) => {
       icon: "success",
       text: "上傳成功！",
     });
-    $("#user-avatar img").attr("src", `/uploads/${userImage}`);
+    $("#user-avatar img").attr(
+      "src",
+      `https://d3u6ahecm1mhmb.cloudfront.net/uploads/${userImage}`
+    );
     $("#upload-image").addClass("hidden");
     $("#user-avatar img").removeClass("hidden");
-    $("#user-avatar-image").attr("src", `/uploads/${userImage}`);
+    $("#user-avatar-image").attr(
+      "src",
+      `https://d3u6ahecm1mhmb.cloudfront.net/uploads/${userImage}`
+    );
     localStorage.setItem("userPicture", userImage);
   } catch (e) {
     if (e.response.status === 400) {

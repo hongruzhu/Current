@@ -12,9 +12,15 @@ const socket = io();
 
 // 若有上傳大頭貼，把自己的大頭貼append到視訊頁面上
 if (myPicture === "null" || myPicture === null) {
-  $("#myVideo img").attr("src", "/images/user.png");
+  $("#myVideo img").attr(
+    "src",
+    "https://d3u6ahecm1mhmb.cloudfront.net/images/user.png"
+  );
 } else {
-  $("#myVideo img").attr("src", `/uploads/${myPicture}`);
+  $("#myVideo img").attr(
+    "src",
+    `https://d3u6ahecm1mhmb.cloudfront.net/uploads/${myPicture}`
+  );
 }
 
 // 抓取會議室分享螢幕的狀態

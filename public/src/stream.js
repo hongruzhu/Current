@@ -232,9 +232,15 @@ if (myRole === "guest") {
 console.log(myPicture);
 console.log(typeof myPicture);
 if (myPicture === "null" || myPicture === null) {
-  $("#my-picture").attr("src", "/images/user.png");
+  $("#my-picture").attr(
+    "src",
+    "https://d3u6ahecm1mhmb.cloudfront.net/images/user.png"
+  );
 } else {
-  $("#my-picture").attr("src", `/uploads/${myPicture}`);
+  $("#my-picture").attr(
+    "src",
+    `https://d3u6ahecm1mhmb.cloudfront.net/uploads/${myPicture}`
+  );
 }
 
 // PeerJS需傳送stream給其他人，把自己畫面的canvas轉回video stream的function
@@ -425,13 +431,13 @@ function addUserNameAndPicture(name, picture, peerId) {
   if (picture === "null" || picture === null) {
     userPicture = $("<img>", {
       class: "hidden absolute top-0 right-0 left-0 bottom-0 m-auto h-2/5",
-      src: `/images/user.png`,
+      src: `https://d3u6ahecm1mhmb.cloudfront.net/images/user.png`,
     });
   } else {
     userPicture = $("<img>", {
       class:
         "hidden absolute top-0 right-0 left-0 bottom-0 m-auto h-2/5 aspect-square rounded-full object-cover",
-      src: `/uploads/${picture}`,
+      src: `https://d3u6ahecm1mhmb.cloudfront.net/uploads/${picture}`,
     });
   }
   $(`div[id=${peerId}]`).append(userPicture);
@@ -448,9 +454,9 @@ function addMemberList(name, role, picture, peerId) {
   console.log(picture);
   console.log(typeof picture);
   if (picture === "null" || picture === null) {
-    picture = "/images/user.png";
+    picture = "https://d3u6ahecm1mhmb.cloudfront.net/images/user.png";
   } else {
-    picture = `./uploads/${picture}`;
+    picture = `https://d3u6ahecm1mhmb.cloudfront.net/uploads/${picture}`;
   }
 
   $("#members-list ul").append(`
@@ -585,7 +591,7 @@ async function stopMicTrack(stream) {
 
 function muteMic(peerId) {
   $(`div[id=${peerId}]`).append(`
-    <img id="muted-icon" src="./images/mute-mic.png" class="absolute top-0 right-0 m-3 h-[10%]" alt="...">
+    <img id="muted-icon" src="https://d3u6ahecm1mhmb.cloudfront.net/images/mute-mic.png" class="absolute top-0 right-0 m-3 h-[10%]" alt="...">
   `);
 }
 function unmuteMic(peerId) {

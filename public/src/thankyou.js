@@ -25,7 +25,10 @@ if (logInStatus) {
   const userPicture = localStorage.getItem("userPicture");
 
   if (userPicture !== "null") {
-    $("#user-avatar-image").attr("src", `/uploads/${userPicture}`);
+    $("#user-avatar-image").attr(
+      "src",
+      `https://d3u6ahecm1mhmb.cloudfront.net/uploads/${userPicture}`
+    );
   }
 
   $("#user-profile").removeClass("hidden");
