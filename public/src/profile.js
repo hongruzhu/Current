@@ -28,12 +28,12 @@ const userPicture = localStorage.getItem("userPicture");
 if (userPicture !== "null") {
   $("#user-avatar-image").attr(
     "src",
-    `https://d3u6ahecm1mhmb.cloudfront.net/uploads/${userPicture}`
+    `https://d3u6ahecm1mhmb.cloudfront.net/${userPicture}`
   );
   $("#upload-image").addClass("hidden");
   $("#user-avatar img").attr(
     "src",
-    `https://d3u6ahecm1mhmb.cloudfront.net/uploads/${userPicture}`
+    `https://d3u6ahecm1mhmb.cloudfront.net/${userPicture}`
   );
   $("#user-avatar img").removeClass("hidden");
 }
@@ -148,13 +148,13 @@ $("#dropzone-file").on("change", async (e) => {
     });
     $("#user-avatar img").attr(
       "src",
-      `https://d3u6ahecm1mhmb.cloudfront.net/uploads/${userImage}`
+      `https://d3u6ahecm1mhmb.cloudfront.net/${userImage}`
     );
     $("#upload-image").addClass("hidden");
     $("#user-avatar img").removeClass("hidden");
     $("#user-avatar-image").attr(
       "src",
-      `https://d3u6ahecm1mhmb.cloudfront.net/uploads/${userImage}`
+      `https://d3u6ahecm1mhmb.cloudfront.net/${userImage}`
     );
     localStorage.setItem("userPicture", userImage);
   } catch (e) {

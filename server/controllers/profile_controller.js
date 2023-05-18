@@ -57,8 +57,6 @@ const getRecord = async (req, res) => {
 const userImage = async (req, res) => {
   const userId = req.payload.id;
 
-  console.log(req.files.user_image[0]);
-
   let image;
   if (NODE_ENV === "production") {
     image = req.files.user_image[0].key;

@@ -19,7 +19,7 @@ if (myPicture === "null" || myPicture === null) {
 } else {
   $("#myVideo img").attr(
     "src",
-    `https://d3u6ahecm1mhmb.cloudfront.net/uploads/${myPicture}`
+    `https://d3u6ahecm1mhmb.cloudfront.net/${myPicture}`
   );
 }
 

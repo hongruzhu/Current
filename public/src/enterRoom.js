@@ -30,7 +30,7 @@ if (logInStatus) {
   if (userPicture !== "null") {
     $("#user-avatar-image").attr(
       "src",
-      `https://d3u6ahecm1mhmb.cloudfront.net/uploads/${userPicture}`
+      `https://d3u6ahecm1mhmb.cloudfront.net/${userPicture}`
     );
   }
 

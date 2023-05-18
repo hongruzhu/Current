@@ -239,7 +239,7 @@ if (myPicture === "null" || myPicture === null) {
 } else {
   $("#my-picture").attr(
     "src",
-    `https://d3u6ahecm1mhmb.cloudfront.net/uploads/${myPicture}`
+    `https://d3u6ahecm1mhmb.cloudfront.net/${myPicture}`
   );
 }
 
@@ -437,7 +437,7 @@ function addUserNameAndPicture(name, picture, peerId) {
     userPicture = $("<img>", {
       class:
         "hidden absolute top-0 right-0 left-0 bottom-0 m-auto h-2/5 aspect-square rounded-full object-cover",
-      src: `https://d3u6ahecm1mhmb.cloudfront.net/uploads/${picture}`,
+      src: `https://d3u6ahecm1mhmb.cloudfront.net/${picture}`,
     });
   }
   $(`div[id=${peerId}]`).append(userPicture);
@@ -456,7 +456,7 @@ function addMemberList(name, role, picture, peerId) {
   if (picture === "null" || picture === null) {
     picture = "https://d3u6ahecm1mhmb.cloudfront.net/images/user.png";
   } else {
-    picture = `https://d3u6ahecm1mhmb.cloudfront.net/uploads/${picture}`;
+    picture = `https://d3u6ahecm1mhmb.cloudfront.net/${picture}`;
   }
 
   $("#members-list ul").append(`
