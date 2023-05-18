@@ -19,7 +19,8 @@ const redis = new Redis({
     return Math.min(times * 50, 2000);
   },
   username: CACHE_USER,
-  password: CACHE_PASSWORD
+  password: CACHE_PASSWORD,
+  tls: {}
 });
 
 export { redis };
