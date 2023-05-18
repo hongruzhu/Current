@@ -4,6 +4,7 @@ import {
 } from "../server/controllers/concall_controller.js";
 import * as concallCache from "../server/service/concall_cache.js";
 
+jest.mock("../server/util/cache.js", () => ({ redis: jest.fn() }));
 jest.mock("../server/service/concall_cache.js");
 
 describe("getStartTime", () => {
@@ -58,6 +59,3 @@ describe("getRoomTitle", () => {
     expect(mockRes.json).toHaveBeenCalledWith({ data: "無" });
   });
 });
-
-
-

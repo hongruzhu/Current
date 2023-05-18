@@ -1,39 +1,6 @@
-import { createServer } from "http";
-import { Server } from "socket.io";
-import Client from "socket.io-client";
 import { chatMessage } from "../server/controllers/chat_controller.js";
 
 describe("chatMessage", () => {
-  let io, serverSocket, clientSocket;
-
-  beforeAll((done) => {
-    const httpServer = createServer();
-    io = new Server(httpServer);
-    httpServer.listen(() => {
-      const port = httpServer.address().port;
-      clientSocket = new Client(`http://localhost:${port}`);
-      io.on("connection", (socket) => {
-        serverSocket = socket;
-      });
-      clientSocket.on("connect", done);
-    });
-  });
-
-  afterAll(() => {
-    io.close();
-    clientSocket.close();
-  });
-
-  it("chatMessage", (done) => {
-    clientSocket.on("chat-message", (roomId, name, msg) => {
-      expect(roomId).toBe("roomId");
-      expect(name).toBe("name");
-      expect(msg).toBe("msg");
-      done();
-    });
-    serverSocket.emit("chat-message", "roomId", "name", "msg");
-  });
-
   it('emits "chat-message" event to specified room', () => {
     // 建立假的 socket 物件
     const socket = {

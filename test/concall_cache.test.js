@@ -1,7 +1,7 @@
 import { redis } from "../server/util/cache.js";
 import { updateRoomUsers } from "../server/service/concall_cache.js";
 
-jest.mock("../server/util/cache.js");
+jest.mock("../server/util/cache.js", () => ({ redis: jest.fn() }));
 
 describe("updateRoomUsers", () => {
   afterEach(async () => {

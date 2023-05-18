@@ -2,6 +2,7 @@ import { checkRoomId, setRoomId } from "../server/service/enter_cache.js";
 import { generateRoomId } from "../server/util/util.js";
 import { getRoomId } from "../server/controllers/enter_controller.js";
 
+jest.mock("../server/util/cache.js", () => ({ redis: jest.fn() }));
 jest.mock("../server/service/enter_cache.js");
 jest.mock("../server/util/util.js");
 
