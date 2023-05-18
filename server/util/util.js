@@ -96,7 +96,7 @@ const multerS3Config = multerS3({
   key: function (req, file, cb) {
     const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
     const ext = file.originalname.split(".").pop();
-    const filename = `${file.fieldname}-${uniqueSuffix}.${ext}`;
+    const filename = `uploads/${file.fieldname}-${uniqueSuffix}.${ext}`;
     cb(null, filename);
   },
 });

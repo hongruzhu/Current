@@ -1,9 +1,12 @@
+import dotenv from "dotenv";
+dotenv.config();
 import {
   getUserAllConf,
   getConfData,
   getConfMembers,
   setUserImage,
 } from "../models/profile_model.js";
+const { NODE_ENV } = process.env;
 
 const getProfilePage = async (req, res) => {
   res.render("profile");
@@ -53,7 +56,15 @@ const getRecord = async (req, res) => {
 
 const userImage = async (req, res) => {
   const userId = req.payload.id;
-  const image = req.files.user_image[0].filename;
+
+  console.log(req.files.user_image[0]);
+
+  let image;
+  if (NODE_ENV === "production") {
+    image = req.files.user_image[0].key;
+  } else {
+    image = req.files.user_image[0].filename;
+  }
   // 存進資料庫
   await setUserImage(userId, image);
   res.json({ data: image });
