@@ -18,6 +18,7 @@ try {
   localStorage.removeItem("userId");
   localStorage.removeItem("userName");
   localStorage.removeItem("userEmail");
+  localStorage.removeItem("userPicture");
   logInStatus = false;
 }
 
