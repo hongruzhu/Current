@@ -19,11 +19,6 @@ https://currentmeet.com
 
 <img width="1024" alt="截圖 2023-05-19 下午5 26 37" src="https://github.com/hongruzhu/Current/assets/121448431/de48e971-c815-4fc8-a709-8fc12e84a3c3">
 
-**Usage Footage**
-
-![未命名 (1920 × 800 像素)](https://github.com/hongruzhu/Current/assets/121448431/44df6c68-08f4-499f-8e34-fb2e347d3f91)
-
-
 ## Table of Contents
 
 - [Features](#features)
@@ -34,6 +29,7 @@ https://currentmeet.com
 
 ## Features
 ### Multi-users video conference
+![未命名 (1920 × 800 像素)](https://github.com/hongruzhu/Current/assets/121448431/44df6c68-08f4-499f-8e34-fb2e347d3f91)
 ### Screen sharing 
 ### Real-time chatroom
 ### Conference recording
