@@ -64,7 +64,7 @@ https://currentmeet.com
 * Trello (Scrum)
 
 ## Architecture
-![截圖 2023-05-19 下午10 06 13](https://github.com/hongruzhu/Current/assets/121448431/098ad5f1-46b5-4cd5-91e2-f5a0949faee2)
+![截圖 2023-05-20 上午12 34 47](https://github.com/hongruzhu/Current/assets/121448431/0e414f08-c69b-4d05-be4b-683bab2fdb28)
 
 ## Database schema
 
