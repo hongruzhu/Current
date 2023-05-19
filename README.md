@@ -35,7 +35,7 @@ https://currentmeet.com
 ## Technologies
 ### Back-End
 * Node.js
-* Express.js
+* Express
 * NGINX
 * Socket.IO
 ### Front-End
@@ -74,8 +74,18 @@ https://currentmeet.com
 ![截圖 2023-05-20 上午1 04 23](https://github.com/hongruzhu/Current/assets/121448431/264962a1-376f-4b96-8359-aa3e50fad547)
 
 ## Features
+### Multi-users video conference
+### Screen sharing 
+### Real-time chatroom
+### Conference recording
+### Background changing
+
 
 ## Contact
+Hong-Ru Zhu
 
+Email: hongru07@gmail.com
+
+Linkedin: https://www.linkedin.com/in/hongruzhu/
 
 
