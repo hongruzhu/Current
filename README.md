@@ -26,11 +26,18 @@ https://currentmeet.com
 
 ## Table of Contents
 
+- [Features](#features)
 - [Technologies](#technologies)
 - [Architecture Diagram](#architecture-diagram)
 - [Database Schema](#database-schema)
-- [Features](#features)
 - [Contact](#contact)
+
+## Features
+### Multi-users video conference
+### Screen sharing 
+### Real-time chatroom
+### Conference recording
+### Background changing
 
 ## Technologies
 ### Back-End
@@ -72,14 +79,6 @@ https://currentmeet.com
 
 ## Database Schema
 ![截圖 2023-05-20 上午1 04 23](https://github.com/hongruzhu/Current/assets/121448431/264962a1-376f-4b96-8359-aa3e50fad547)
-
-## Features
-### Multi-users video conference
-### Screen sharing 
-### Real-time chatroom
-### Conference recording
-### Background changing
-
 
 ## Contact
 Hong-Ru Zhu
