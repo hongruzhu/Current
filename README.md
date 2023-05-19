@@ -3,7 +3,6 @@
 </div>
 
 ---
-
 A real-time online meeting application, with multi-users video conference, chat room, screen sharing,
 whiteboard, recording, and background changing features.
 
