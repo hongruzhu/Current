@@ -67,12 +67,11 @@ https://currentmeet.com
 * ESLint
 * Trello (Scrum)
 
-## Architecture
+## Architecture Diagram
 ![截圖 2023-05-20 上午12 34 47](https://github.com/hongruzhu/Current/assets/121448431/0e414f08-c69b-4d05-be4b-683bab2fdb28)
 
-## Database schema
-
-![截圖_2023-04-14_下午3 04 23](https://github.com/hongruzhu/Current/assets/121448431/4ee592ba-d448-44b4-bc76-dd533105bd17)
+## Database Schema
+![截圖 2023-05-20 上午1 04 23](https://github.com/hongruzhu/Current/assets/121448431/264962a1-376f-4b96-8359-aa3e50fad547)
 
 ## Features
 
