@@ -23,11 +23,11 @@ jobs:
             cd ~/Current
 
             echo --- git pull --- start
-            git pull origin ${{ github.ref }}
+            git pull origin ${{ github.ref_name }}
             echo --- git pull --- done
 
             echo --- git switch --- start
-            git switch ${{ github.ref }}
+            git switch ${{ github.ref_name }}
             echo --- git switch --- done
 
             echo --- npm install --- start
