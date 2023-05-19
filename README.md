@@ -68,6 +68,7 @@ https://currentmeet.com
 
 ## Database schema
 
+![截圖_2023-04-14_下午3 04 23](https://github.com/hongruzhu/Current/assets/121448431/4ee592ba-d448-44b4-bc76-dd533105bd17)
 
 ## Features
 
