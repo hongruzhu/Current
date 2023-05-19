@@ -27,9 +27,9 @@ https://currentmeet.com
 ## Table of Contents
 
 - [Features](#features)
-- [Technologies](#technologies)
 - [Architecture Diagram](#architecture-diagram)
 - [Database Schema](#database-schema)
+- [Technologies](#technologies)
 - [Contact](#contact)
 
 ## Features
@@ -38,6 +38,12 @@ https://currentmeet.com
 ### Real-time chatroom
 ### Conference recording
 ### Background changing
+
+## Architecture Diagram
+![截圖 2023-05-20 上午12 34 47](https://github.com/hongruzhu/Current/assets/121448431/0e414f08-c69b-4d05-be4b-683bab2fdb28)
+
+## Database Schema
+![截圖 2023-05-20 上午1 04 23](https://github.com/hongruzhu/Current/assets/121448431/264962a1-376f-4b96-8359-aa3e50fad547)
 
 ## Technologies
 ### Back-End
@@ -73,12 +79,6 @@ https://currentmeet.com
 * MVC design pattern
 * ESLint
 * Trello (Scrum)
-
-## Architecture Diagram
-![截圖 2023-05-20 上午12 34 47](https://github.com/hongruzhu/Current/assets/121448431/0e414f08-c69b-4d05-be4b-683bab2fdb28)
-
-## Database Schema
-![截圖 2023-05-20 上午1 04 23](https://github.com/hongruzhu/Current/assets/121448431/264962a1-376f-4b96-8359-aa3e50fad547)
 
 ## Contact
 Hong-Ru Zhu
