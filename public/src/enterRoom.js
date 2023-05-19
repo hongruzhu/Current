@@ -165,5 +165,6 @@ $("#signout").click(() => {
   localStorage.removeItem("userId");
   localStorage.removeItem("userName");
   localStorage.removeItem("userEmail");
+  localStorage.removeItem("userPicture");
   window.location.href = `/concall?roomId=${roomId}`;
 });
