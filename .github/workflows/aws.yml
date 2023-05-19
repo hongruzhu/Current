@@ -2,7 +2,7 @@ name: Deploy to Amazon EC2
 on:
   push:
     branches:
-      - test
+      - '*'
 jobs:
   deploy:
     name: Deploy to Amazon EC2
@@ -23,8 +23,12 @@ jobs:
             cd ~/Current
 
             echo --- git pull --- start
-            git pull
+            git pull origin ${{ github.ref }}
             echo --- git pull --- done
+
+            echo --- git switch --- start
+            git switch ${{ github.ref }}
+            echo --- git switch --- done
 
             echo --- npm install --- start
             export NVM_DIR="$HOME/.nvm"
