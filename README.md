@@ -8,6 +8,7 @@ whiteboard, recording, and background changing features.
 
 **Website URL**
 
+
 https://currentmeet.com
 
 **Index Page**
@@ -21,12 +22,12 @@ https://currentmeet.com
 
 ## Table of Contents
 
-* Demo Account
-* Technologies
-* Architecture
-* Database Design
-* Features
-* Contact
+- [Demo Account](#demo-account)
+- [Technologies](#technologies)
+- [Architecture Diagram](#architecture-diagram)
+- [Database Schema](#database-schema)
+- [Features](#features)
+- [Contact](#contact)
 
 ## Demo Account
 * Email: admin@test.com
