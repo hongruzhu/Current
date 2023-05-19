@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Current</title>
+  <link rel="icon" href="https://d3u6ahecm1mhmb.cloudfront.net/images/favicon.ico" />
+  <link rel="bookmark" href="https://d3u6ahecm1mhmb.cloudfront.net/images/favicon.ico" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.5/dist/sweetalert2.min.css"
+    integrity="sha256-aUL5sUzmON2yonFVjFCojGULVNIOaPxlH648oUtA/ng=" crossorigin="anonymous">
+  <link href="https://d3u6ahecm1mhmb.cloudfront.net/src/output.css" rel="stylesheet">
+  <link href="https://d3u6ahecm1mhmb.cloudfront.net/src/style.css" rel="stylesheet">
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"
+    integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/axios@1.1.2/dist/axios.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.5/dist/sweetalert2.all.min.js"
+    integrity="sha256-9AtIfusxXi0j4zXdSxRiZFn0g22OBdlTO4Bdsc2z/tY=" crossorigin="anonymous"></script>
+</head>
+
+<body class="bg-white">
+  <div id="navbar" class="relative flex top-0 left-0 h-24 w-full px-[32px] py-[16px] items-center gap-3 border-b border-gray-200">
+    <a class="logo-btn relative w-[50px] h-[50px] flex items-center justify-center rounded-lg" href="/">
+      <svg class="absolute h-[30px] w-[30px]" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
+        viewBox="0 0 576 512"><!--! Font Awesome Pro 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. -->
+        <path
+          d="M0 128C0 92.7 28.7 64 64 64H320c35.3 0 64 28.7 64 64V384c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V128zM559.1 99.8c10.4 5.6 16.9 16.4 16.9 28.2V384c0 11.8-6.5 22.6-16.9 28.2s-23 5-32.9-1.6l-96-64L416 337.1V320 192 174.9l14.2-9.5 96-64c9.8-6.5 22.4-7.2 32.9-1.6z" />
+      </svg>
+    </a>
+    <a class="text-4xl text-black font-['Product_Sans']" href="/">Current</a>
+    <div id="user-profile" class="flex justify-center items-center gap-4 px-2 ml-auto">
+      <div class="font-medium text-balck text-right">
+        <div id="user-name" class="text-base text-black"></div>
+        <div class="text-base text-gray-500">歡迎使用 Current</div>
+      </div>
+      <button class="avatar" type="button" data-dropdown-toggle="userDropdown" data-dropdown-placement="bottom-end">
+        <div class="w-[45px] h-[45px] rounded-full ring ring-primary ring-yellow-600 ring-offset-base-100 ring-offset-2">
+          <img id="user-avatar-image" class="object-cover" src="https://d3u6ahecm1mhmb.cloudfront.net/images/user.png" />
+        </div>
+      </button>
+    </div>
+    <!-- Dropdown menu -->
+    <div id="userDropdown" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow-lg w-52">
+      <div class="px-4 py-3 text-base text-gray-900">
+        <div>您的 Email</div>
+        <div id="user-email" class="font-medium truncate"></div>
+      </div>
+      <ul class="py-2 text-base text-gray-700" aria-labelledby="avatarButton">
+        <li>
+          <a href="/profile?page=profile" class="block px-4 py-2 hover:bg-gray-100">個人資訊</a>
+        </li>
+        <li>
+          <a href="/profile?page=record" class="block px-4 py-2 hover:bg-gray-100">會議記錄</a>
+        </li>
+        <li>
+          <a id="signout" href="/" class="block px-4 py-2 hover:bg-gray-100">登出</a>
+        </li>
+      </ul>
+    </div>
+    </div>
+  </div>
+  <div id="main" class="h-[calc(100vh-96px)] flex">
+    <aside id="sidebar" class="top-0 left-0 z-20 hidden w-64 h-full font-normal duration-75 lg:flex transition-width" aria-label="Sidebar">
+      <div class="relative flex flex-col flex-1 min-h-0 pt-0 bg-white border-r border-gray-200">
+        <div class="flex flex-col flex-1 pt-5 pb-4 overflow-y-auto">
+          <div class="flex-1 px-3 space-y-1 bg-white divide-y divide-gray-200">
+            <ul class="pb-2 space-y-2">
+              <li>
+                <button id="user-profile-btn" class="flex items-center w-full p-2 text-base text-gray-900 rounded-lg hover:bg-gray-100 group">
+                  <svg class="w-6 h-6 text-gray-500 transition duration-75 group-hover:text-gray-900" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                      d="M10 8a3 3 0 100-6 3 3 0 000 6zM3.465 14.493a1.23 1.23 0 00.41 1.412A9.957 9.957 0 0010 18c2.31 0 4.438-.784 6.131-2.1.43-.333.604-.903.408-1.41a7.002 7.002 0 00-13.074.003z" />
+                  </svg>
+                  <span class="ml-3" sidebar-toggle-item="">個人資訊</span>
+                </button>
+              </li>
+              <li>
+                <button id="user-record-btn" class="flex items-center w-full p-2 text-base text-gray-900 transition duration-75 rounded-lg group hover:bg-gray-100">
+                  <svg class="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 group-hover:text-gray-900"
+                    fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <path
+                      d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z">
+                    </path>
+                  </svg>
+                  <span class="flex-1 ml-3 text-left whitespace-nowrap">會議記錄</span>
+                </button>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </aside>
+    <div id="content" class="w-[calc(100vw-16rem)] flex flex-col">
+      <div id="user-content-profile" class="hidden flex flex-col p-8 bg-white gap-8 w-full h-full">
+        <h3 class="w-full text-2xl font-semibold">個人資訊</h3>
+        <div class="w-full h-full flex gap-10 justify-center">
+          <div id="user-avatar" class="flex flex-col justify-center items-center h-[50%] aspect-square p-4 bg-white gap-2">
+            <img class="hidden mb-4 rounded-full w-[70%] aspect-square object-cover" src="" alt="Jese picture">
+            <div id="upload-image" class="flex items-center justify-center h-full w-full">
+              <label for="dropzone-file"
+                class="flex flex-col items-center justify-center w-full h-full border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100">
+                <div class="flex flex-col items-center justify-center pt-5 pb-6">
+                  <svg aria-hidden="true" class="w-10 h-10 mb-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
+                  </svg>
+                  <p class="mb-2 text-base text-gray-500"><span class="font-semibold">點擊上傳個人照</span></p>
+                  <p class="text-sm text-gray-500 text-center">接受PNG和JPG圖檔</p>
+                  <p class="text-sm text-gray-500 text-center">(大小不超過1MB)</p>
+                </div>
+                <input id="dropzone-file" type="file" name="user_image" class="hidden" />
+              </label>
+            </div>
+          </div>
+          <div class="flex flex-col justify-center gap-6 w-[60%] h-[50%]">
+            <div class="text-lg">
+              <label class="block mb-2 font-medium text-gray-900">姓名</label>
+              <span id="user-profile-name" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5"><span>
+            </div>
+            <div class="text-lg">
+              <label class="block mb-2 font-medium text-gray-900">Email</label>
+              <span id="user-profile-email" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5"><span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="user-content-record" class="hidden flex flex-col p-8 bg-white gap-8 w-full h-full">
+        <h3 class="w-full text-2xl font-semibold">會議記錄</h3>
+        <div class="relative overflow-x-auto shadow-md">
+          <table class="w-full text-sm text-left text-gray-500 table-fixed">
+            <thead class="text-lg text-gray-700 bg-gray-50">
+              <tr>
+                <th scope="col" class="px-6 py-3">會議名稱</th>
+                <th scope="col" class="px-6 py-3">開始時間</th>
+                <th scope="col" class="px-6 py-3">主持人</th>
+                <th scope="col" class="px-6 py-3 w-[50%]">來賓</th>
+              </tr>
+            </thead>
+            <tbody id="user-record" class="text-base">
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script type="module" src="https://d3u6ahecm1mhmb.cloudfront.net/src/profile.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.5/flowbite.min.js"></script>
+</body>

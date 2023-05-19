@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Current - <%= roomId %></title>
+    <link rel="icon" href="https://d3u6ahecm1mhmb.cloudfront.net/images/favicon.ico" />
+    <link rel="bookmark" href="https://d3u6ahecm1mhmb.cloudfront.net/images/favicon.ico" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.5/dist/sweetalert2.min.css"
+      integrity="sha256-aUL5sUzmON2yonFVjFCojGULVNIOaPxlH648oUtA/ng=" crossorigin="anonymous">
+    <link href="https://d3u6ahecm1mhmb.cloudfront.net/src/style.css" rel="stylesheet">
+    <link href="https://d3u6ahecm1mhmb.cloudfront.net/src/output.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"
+      integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios@1.1.2/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.5/dist/sweetalert2.all.min.js"
+      integrity="sha256-9AtIfusxXi0j4zXdSxRiZFn0g22OBdlTO4Bdsc2z/tY=" crossorigin="anonymous"></script>
+  <body class="h-screen w-screen bg-white">
+    <div id="loading" class="fixed h-screen w-screen top-0 left-0 flex items-center justify-center z-10 bg-gray-500 bg-opacity-25">
+      <span class="loader"></span>
+    </div>
+    <div id="navbar" class="relative flex top-0 left-0 h-24 w-full px-[32px] py-[16px] items-center gap-3">
+      <a class="logo-btn relative w-[50px] h-[50px] flex items-center justify-center rounded-lg" href="/">
+        <svg class="absolute h-[30px] w-[30px]" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
+          viewBox="0 0 576 512"><!--! Font Awesome Pro 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. -->
+          <path
+            d="M0 128C0 92.7 28.7 64 64 64H320c35.3 0 64 28.7 64 64V384c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V128zM559.1 99.8c10.4 5.6 16.9 16.4 16.9 28.2V384c0 11.8-6.5 22.6-16.9 28.2s-23 5-32.9-1.6l-96-64L416 337.1V320 192 174.9l14.2-9.5 96-64c9.8-6.5 22.4-7.2 32.9-1.6z" />
+        </svg>
+      </a>
+      <a class="text-4xl text-black font-['Product_Sans']" href="/">Current</a>
+      <div id="user-profile" class="hidden flex justify-center items-center gap-4 px-2 ml-auto">
+        <div class="font-medium text-balck text-right">
+          <div id="user-name" class="text-base text-black"></div>
+          <div class="text-base text-gray-500">歡迎使用 Current</div>
+        </div>
+        <button class="avatar" type="button" data-dropdown-toggle="userDropdown" data-dropdown-placement="bottom-end">
+          <div class="w-[45px] h-[45px] rounded-full ring ring-primary ring-yellow-600 ring-offset-base-100 ring-offset-2">
+            <img class="object-cover" id="user-avatar-image" src="https://d3u6ahecm1mhmb.cloudfront.net/images/user.png" />
+          </div>
+        </button>
+      </div>
+      <!-- Dropdown menu -->
+      <div id="userDropdown" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow-lg w-52">
+        <div class="px-4 py-3 text-base text-gray-900">
+          <div>您的 Email</div>
+          <div id="user-email" class="font-medium truncate"></div>
+        </div>
+        <ul class="py-2 text-base text-gray-700" aria-labelledby="avatarButton">
+          <li>
+            <a href="/profile?page=profile" class="block px-4 py-2 hover:bg-gray-100">個人資訊</a>
+          </li>
+          <li>
+            <a href="/profile?page=record" class="block px-4 py-2 hover:bg-gray-100">會議記錄</a>
+          </li>
+          <li>
+            <button id="signout" class="block text-left px-4 py-2 w-full hover:bg-gray-100">登出</button>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="container mx-auto h-[calc(100vh-10rem)]">
+      <div class="grid grid-cols-3 min-h-full">
+        <div class="col-span-2 flex justify-center items-center">
+          <span id="alert" class="absolute text-black text-3xl whitespace-pre-wrap z-10">請允許Current存取您的攝影機和麥克風
+        才能讓其他參與者看到和聽到您</span>
+          <div id="myVideo" class="relative flex justify-center items-center">
+            <video class="transform-rotateY-180"></video>
+            <button id="hide-camera" type="button"
+              class="absolute bottom-5 right-[42%] p-[2%] bg-transparent border border-white group rounded-full hover:bg-white hover:bg-opacity-50">
+              <svg class="w-6 h-6 text-white"
+                fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <path
+                  d="M2 6a2 2 0 012-2h6a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V6zM14.553 7.106A1 1 0 0014 8v4a1 1 0 00.553.894l2 1A1 1 0 0018 13V7a1 1 0 00-1.447-.894l-2 1z">
+                </path>
+              </svg>
+              <span class="sr-only">Hide camera</span>
+            </button>
+            <button id="mute-mic" type="button"
+              class="absolute bottom-5 left-[42%] p-[2%] group bg-transparent border border-white rounded-full hover:bg-white hover:bg-opacity-50">
+              <svg class="w-6 h-6 text-white"
+                fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <path clip-rule="evenodd" fill-rule="evenodd"
+                  d="M7 4a3 3 0 016 0v4a3 3 0 11-6 0V4zm4 10.93A7.001 7.001 0 0017 8a1 1 0 10-2 0A5 5 0 015 8a1 1 0 00-2 0 7.001 7.001 0 006 6.93V17H6a1 1 0 100 2h8a1 1 0 100-2h-3v-2.07z">
+                </path>
+              </svg>
+              <span class="sr-only">Mute microphone</span>
+            </button>
+          </div>
+        </div>
+        <div class="col-span-1 flex flex-col justify-center items-center">
+          <span class="block mb-2 text-2xl font-medium text-gray-900 text-center">會議名稱</span>
+          <span class="block w-full p-4 text-2xl font-medium text-gray-900 text-center text-orange-900 mb-2"><%= title %></span>
+          <form id="enter-room" class="flex flex-col justify-center items-center" action="/room/enter?roomId=<%= roomId %>" method="post" >
+            <label id="name-label" for="large-input" class="block mb-2 text-2xl font-medium text-gray-900 text-center">請輸入姓名</label>
+            <input type="text" name="userId" class="hidden">
+            <input type="text" name="email" class="hidden">
+            <input type="text" name="name" class="block w-full p-4 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-md focus:ring-blue-500 focus:border-blue-500">
+            <button type="submit" id="enter-room-btn"
+              class="text-white bg-orange-800 hover:bg-orange-700 focus:outline-none focus:ring-4 focus:ring-orange-300 font-medium rounded-full text-lg px-5 py-2.5 text-center m-4">進入會議</button>
+          </form>
+        </div>
+      </div>
+    </div>
+    <script type="module" src="https://d3u6ahecm1mhmb.cloudfront.net/src/enterRoom.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.5/flowbite.min.js"></script>
+  </body>
+</html>

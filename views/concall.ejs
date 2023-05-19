@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Current - <%= roomId %></title>
+    <link rel="icon" href="https://d3u6ahecm1mhmb.cloudfront.net/images/favicon.ico" />
+    <link rel="bookmark" href="https://d3u6ahecm1mhmb.cloudfront.net/images/favicon.ico" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.5/dist/sweetalert2.min.css"
+      integrity="sha256-aUL5sUzmON2yonFVjFCojGULVNIOaPxlH648oUtA/ng=" crossorigin="anonymous">
+    <link href="https://d3u6ahecm1mhmb.cloudfront.net/src/style.css" rel="stylesheet">
+    <link href="https://d3u6ahecm1mhmb.cloudfront.net/src/output.css" rel="stylesheet">
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="https://unpkg.com/peerjs@1.3.2/dist/peerjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.5/flowbite.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"
+      integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios@1.1.2/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/control_utils/control_utils.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation/selfie_segmentation.js"
+      crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.5/dist/sweetalert2.all.min.js"
+      integrity="sha256-9AtIfusxXi0j4zXdSxRiZFn0g22OBdlTO4Bdsc2z/tY=" crossorigin="anonymous"></script>
+  </head>
+  <body class="bg-white">
+    <div id="loading"
+      class="fixed h-screen w-screen top-0 left-0 flex items-center justify-center z-10 bg-gray-500 bg-opacity-25">
+      <span class="loader"></span>
+    </div>
+    <div id="main" class="flex items-center justify-center h-[calc(100vh-4rem)] p-2">
+      <div id="left-block" class="w-[78%] flex flex-col items-center">
+        <div id="display" class="w-full h-full grid grid-cols-fluid-l gap-1 items-center">
+          <div id="myVideo" class="relative pb-[56.25%] overflow-hidden h-0 bg-gray-100">
+            <canvas width="1280" height="720" class="absolute w-full h-full t-0 l-0 transform-rotateY-180"></canvas>
+            <span class="absolute z-10 bottom-0 left-0 px-4 py-3 text-base text-white text-shadow">你</span>
+            <img class="hidden absolute top-0 right-0 left-0 bottom-0 m-auto h-2/5 aspect-square rounded-full object-cover" src="">
+          </div>
+        </div>
+        <div id="share-screen" class="hidden flex-[1_0_auto] relative w-full flex flex-col items-center">
+          <div id="share-screen-reminder" class="flex justify-between items-center inline-block align-top w-full h-10 bg-gray-300 mt-0 mb-1 rounded-lg">
+            <span id="who-share-screen" class="ml-2 text-black">你正在與所有人分享螢幕畫面</span>
+          </div>
+          <div id="share-screen-video" class="relative w-full flex-[1_0_auto]">
+          </div>
+        </div>
+        <div id="whiteboard" class="hidden flex-[1_0_auto] relative flex justify-center">
+          <canvas id="my-whiteboard" class="border-black border rounded-xl"></canvas>
+          <div id="whiteboard-reminder" class="absolute w-full h-8 flex justify-between">
+            <div id="left-items" class="order-1">
+            </div>
+            <div id="right-items" class="order-2 flex">
+            </div>
+          </div>
+          <div id="whiteboard-toolbar" class="absolute flex flex-col bg-gray-300 rounded-3xl w-[3%] left-4 top-[25%]">
+            <div id="color" class="flex flex-col items-center mt-2 mb-1">
+              <div id="black" class="pen-color flex justify-center items-center w-[80%] aspect-square top-1 rounded-full hover:bg-gray-200 border-2 border-black">
+                <div class="rounded-full bg-black w-[60%] aspect-square"></div>
+              </div>
+              <div id="yellow" class="pen-color flex justify-center items-center w-[80%] aspect-square top-1 rounded-full hover:bg-gray-200">
+                <div class="rounded-full bg-yellow-300 w-[60%] aspect-square"></div>
+              </div>
+              <div id="red" class="pen-color flex justify-center items-center w-[80%] aspect-square top-1 rounded-full hover:bg-gray-200">
+                <div class="rounded-full bg-red-600 w-[60%] aspect-square"></div>
+              </div>
+              <div id="purple" class="pen-color flex justify-center items-center w-[80%] aspect-square top-1 rounded-full hover:bg-gray-200">
+                <div class="rounded-full bg-purple-600 w-[60%] aspect-square"></div>
+              </div>
+              <div id="blue" class="pen-color flex justify-center items-center w-[80%] aspect-square top-1 rounded-full hover:bg-gray-200">
+                <div class="rounded-full bg-blue-600 w-[60%] aspect-square"></div>
+              </div>
+              <div id="green" class="pen-color flex justify-center items-center w-[80%] aspect-square top-1 rounded-full hover:bg-gray-200">
+                <div class="rounded-full bg-green-600 w-[60%] aspect-square"></div>
+              </div>
+            </div>
+            <div id="eraser" class="flex flex-col items-center">
+              <div class="w-[80%] aspect-square border-t-2 border-black border-b-2">
+                <div class="pen-color flex justify-center items-center top-1 w-full aspect-square rounded-full hover:bg-gray-200">
+                  <svg class="" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd">
+                    <path
+                      d="M5.662 23l-5.369-5.365c-.195-.195-.293-.45-.293-.707 0-.256.098-.512.293-.707l14.929-14.928c.195-.194.451-.293.707-.293.255 0 .512.099.707.293l7.071 7.073c.196.195.293.451.293.708 0 .256-.097.511-.293.707l-11.216 11.219h5.514v2h-12.343zm3.657-2l-5.486-5.486-1.419 1.414 4.076 4.072h2.829zm6.605-17.581l-10.677 10.68 5.658 5.659 10.676-10.682-5.657-5.657z" />
+                  </svg>
+                </div>
+              </div>
+            </div>
+            <div id="brush" class="flex flex-col items-center mt-1 mb-2">
+              <div id="brush-mini" class="pen-brush flex justify-center items-center w-[80%] aspect-square top-1 rounded-full hover:bg-gray-200 border-2 border-black">
+                <div class="rounded-full bg-gray-800 w-[10%] aspect-square"></div>
+              </div>
+              <div id="brush-small" class="pen-brush flex justify-center items-center w-[80%] aspect-square top-1 rounded-full hover:bg-gray-200">
+                <div class="rounded-full bg-gray-800 w-[20%] aspect-square"></div>
+              </div>
+              <div id="brush-medium" class="pen-brush flex justify-center items-center w-[80%] aspect-square top-1 rounded-full hover:bg-gray-200">
+                <div class="rounded-full bg-gray-800 w-[35%] aspect-square"></div>
+              </div>
+              <div id="brush-big" class="pen-brush flex justify-center items-center w-[80%] aspect-square top-1 rounded-full hover:bg-gray-200">
+                <div class="rounded-full bg-gray-800 w-[55%] aspect-square"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="right-block" class="hidden w-[22%] h-full pl-2 min-w-[250px]">
+        <div id="chat-room" class="hidden relative w-full h-full bg-gray-200 rounded-lg drop-shadow-md overflow-hidden">
+          <div id="chatroom-header" class="flex justify-between text-xl m-4">
+            <span class="font-bold text-black">聊天室</span>
+            <button class="close-right-block flex items-center justify-center rounded-full hover:bg-gray-300 h-8 w-8">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 50" width="20px" height="20px">
+                <path
+                  d="M 9.15625 6.3125 L 6.3125 9.15625 L 22.15625 25 L 6.21875 40.96875 L 9.03125 43.78125 L 25 27.84375 L 40.9375 43.78125 L 43.78125 40.9375 L 27.84375 25 L 43.6875 9.15625 L 40.84375 6.3125 L 25 22.15625 Z" />
+              </svg>
+            </button>
+          </div>
+          <div id="messages" class="absolute top-16 w-full h-[calc(100%-8.25rem)] p-1.5 overflow-y-scroll break-words"></div>
+          <form id="chat" class="absolute bottom-0 w-full p-1.5">
+            <label for="chat" class="sr-only">Your message</label>
+            <div class="flex items-center px-1 py-2 rounded-lg bg-gray-100">
+              <button type="button"
+                class="hidden inline-flex justify-center p-2 text-gray-500 rounded-lg cursor-pointer hover:text-gray-900 hover:bg-gray-100">
+                <svg aria-hidden="true" class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"
+                  xmlns="http://www.w3.org/2000/svg">
+                  <path fill-rule="evenodd"
+                    d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z"
+                    clip-rule="evenodd"></path>
+                </svg>
+                <span class="sr-only">Upload image</span>
+              </button>
+              <textarea id="message-input" rows="1" class="resize-none block mx-1 p-2.5 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500" placeholder="Your message..."></textarea>
+              <button type="submit"
+                class="inline-flex justify-center p-2 text-blue-600 rounded-full cursor-pointer hover:bg-blue-100">
+                <svg aria-hidden="true" class="w-6 h-6 rotate-90" fill="currentColor" viewBox="0 0 20 20"
+                  xmlns="http://www.w3.org/2000/svg">
+                  <path
+                    d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z">
+                  </path>
+                </svg>
+                <span class="sr-only">Send message</span>
+              </button>
+            </div>
+          </form>
+        </div>
+        <div id="members" class="hidden relative w-full h-full bg-gray-200 rounded-lg drop-shadow-md overflow-hidden overflow-y-scroll">
+          <div id="members-header" class="flex justify-between text-xl m-4">
+            <span class="font-bold text-black">參與者</span>
+            <button class="close-right-block flex items-center justify-center rounded-full hover:bg-gray-300 h-8 w-8">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 50" width="20px" height="20px">
+                <path
+                  d="M 9.15625 6.3125 L 6.3125 9.15625 L 22.15625 25 L 6.21875 40.96875 L 9.03125 43.78125 L 25 27.84375 L 40.9375 43.78125 L 43.78125 40.9375 L 27.84375 25 L 43.6875 9.15625 L 40.84375 6.3125 L 25 22.15625 Z" />
+              </svg>
+            </button>
+          </div>
+          <div id="members-list" class="mx-4">
+            <ul class="divide-y divide-gray-200">
+              <li class="py-2">
+                <div class="flex items-center space-x-4">
+                  <div class="flex-shrink-0">
+                    <img id="my-picture" class="w-10 h-10 rounded-full object-cover" src="https://d3u6ahecm1mhmb.cloudfront.net/images/user.png" alt="">
+                  </div>
+                  <div class="flex-1 min-w-0">
+                    <p id="my-name" class="text-base font-medium text-gray-900 truncate"></p>
+                    <p id="my-role" class="text-base text-gray-500 truncate"></p>
+                  </div>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div id="info" class="hidden relative w-full h-full bg-gray-200 rounded-lg drop-shadow-md overflow-hidden">
+          <div id="info-header" class="flex justify-between text-xl m-4">
+            <span class="font-bold text-black">會議資訊</span>
+            <button class="close-right-block flex items-center justify-center rounded-full hover:bg-gray-300 h-8 w-8">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 50" width="20px" height="20px">
+                <path
+                  d="M 9.15625 6.3125 L 6.3125 9.15625 L 22.15625 25 L 6.21875 40.96875 L 9.03125 43.78125 L 25 27.84375 L 40.9375 43.78125 L 43.78125 40.9375 L 27.84375 25 L 43.6875 9.15625 L 40.84375 6.3125 L 25 22.15625 Z" />
+              </svg>
+            </button>
+          </div>
+          <div id="info-content" class="m-4">
+            <dl class="max-w-md text-gray-900 divide-y divide-gray-200">
+              <div class="flex flex-col pb-3 break-words">
+                <dt class="mb-1 text-gray-500 md:text-lg text-black">會議名稱</dt>
+                <dd id="room-title" class="text-lg font-semibold"></dd>
+              </div>
+              <div class="flex flex-col py-3 break-words">
+                <div class="flex items-center">
+                  <dt class="text-gray-500 md:text-lg text-black">會議連結</dt>
+                  <button id="invite-url-copy"
+                    class="inline-flex justify-center p-2 text-yellow-600 rounded-lg cursor-pointer bg-gray-200 hover:bg-gray-100">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5">
+                      <path
+                        d="M7 3.5A1.5 1.5 0 018.5 2h3.879a1.5 1.5 0 011.06.44l3.122 3.12A1.5 1.5 0 0117 6.622V12.5a1.5 1.5 0 01-1.5 1.5h-1v-3.379a3 3 0 00-.879-2.121L10.5 5.379A3 3 0 008.379 4.5H7v-1z" />
+                      <path
+                        d="M4.5 6A1.5 1.5 0 003 7.5v9A1.5 1.5 0 004.5 18h7a1.5 1.5 0 001.5-1.5v-5.879a1.5 1.5 0 00-.44-1.06L9.44 6.439A1.5 1.5 0 008.378 6H4.5z" />
+                    </svg>
+                  </button>
+                </div>
+                <dd id="invite-url" class="text-lg font-semibold">https://currentmeet.com/concall?roomId=<%= roomId %></dd>
+              </div>
+              <div class="flex flex-col pt-3 break-words">
+                <div class="flex items-center">
+                  <dt class="text-gray-500 md:text-lg text-black">會議代碼</dt>
+                  <button id="invite-code-copy"
+                    class="inline-flex justify-center p-2 text-yellow-600 rounded-lg cursor-pointer bg-gray-200 hover:bg-gray-100">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5">
+                      <path
+                        d="M7 3.5A1.5 1.5 0 018.5 2h3.879a1.5 1.5 0 011.06.44l3.122 3.12A1.5 1.5 0 0117 6.622V12.5a1.5 1.5 0 01-1.5 1.5h-1v-3.379a3 3 0 00-.879-2.121L10.5 5.379A3 3 0 008.379 4.5H7v-1z" />
+                      <path
+                        d="M4.5 6A1.5 1.5 0 003 7.5v9A1.5 1.5 0 004.5 18h7a1.5 1.5 0 001.5-1.5v-5.879a1.5 1.5 0 00-.44-1.06L9.44 6.439A1.5 1.5 0 008.378 6H4.5z" />
+                    </svg>
+                  </button>
+                </div>
+                <dd id="invite-code" class="text-lg font-semibold"><%= roomId %></dd>
+              </div>
+            </dl>
+          </div>
+        </div>
+        <div id="background" class="hidden relative w-full h-full bg-gray-200 rounded-lg drop-shadow-md overflow-hidden">
+          <div id="background-header" class="flex justify-between text-xl m-4">
+            <span class="font-bold text-black">更換背景</span>
+            <button class="close-right-block flex items-center justify-center rounded-full hover:bg-gray-300 h-8 w-8">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 50" width="20px" height="20px">
+                <path
+                  d="M 9.15625 6.3125 L 6.3125 9.15625 L 22.15625 25 L 6.21875 40.96875 L 9.03125 43.78125 L 25 27.84375 L 40.9375 43.78125 L 43.78125 40.9375 L 27.84375 25 L 43.6875 9.15625 L 40.84375 6.3125 L 25 22.15625 Z" />
+              </svg>
+            </button>
+          </div>
+          <div id="background-content" class="m-4">
+            <div class="flex flex-col w-full">
+              <p class="text-lg text-gray-900 mb-2">無效果和模糊效果</p>
+              <div class="flex gap-4">
+                <button id="no-effect"
+                  class="flex items-center justify-center aspect-square w-[30%] rounded-lg border-2 border-gray-100 focus:outline-none focus:ring-4 focus:ring-yellow-400 hover:ring-4 hover:ring-white">
+                  <svg class="w-[50%] h-[50%]" xmlns="http://www.w3.org/2000/svg" viewBox="0 96 960 960">
+                    <path
+                      d="M480 976q-83 0-156-31.5T197 859q-54-54-85.5-127T80 576q0-83 31.5-156T197 293q54-54 127-85.5T480 176q83 0 156 31.5T763 293q54 54 85.5 127T880 576q0 83-31.5 156T763 859q-54 54-127 85.5T480 976Zm0-66.666q139.583 0 236.459-96.875Q813.334 715.583 813.334 576q0-58.442-19.834-112.554-19.833-54.113-56.167-98.78L268.666 833.333q44 37.001 98.329 56.501 54.33 19.5 113.005 19.5Zm-256.667-122 468.001-468.001q-44.667-37-98.78-56.833Q538.442 242.666 480 242.666q-139.583 0-236.459 96.875Q146.666 436.417 146.666 576q0 58.675 20.5 113.005 20.5 54.329 56.167 98.329Z" />
+                  </svg>
+                </button>
+                <button id="blur-1"
+                  class="flex items-center justify-center aspect-square w-[30%] rounded-lg border-2 border-gray-100 focus:outline-none focus:ring-4 focus:ring-yellow-400 hover:ring-4 hover:ring-white">
+                  <svg class="w-[50%] h-[50%]" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="9.33653" cy="0.586526" r="0.586526" stroke="none"></circle>
+                    <circle cx="14.5094" cy="0.586526" r="0.586526" stroke="none"></circle>
+                    <circle cx="14.5094" cy="23.4137" r="0.586526" stroke="none"></circle>
+                    <circle cx="9.33653" cy="23.4137" r="0.586526" stroke="none"></circle>
+                    <circle cx="4.4209" cy="4.99023" r="0.75" stroke="none"></circle>
+                    <circle cx="9.49316" cy="4.99023" r="0.75" stroke="none"></circle>
+                    <circle cx="14.5664" cy="4.99023" r="0.75" stroke="none"></circle>
+                    <circle cx="19.7207" cy="4.99023" r="0.75" stroke="none"></circle>
+                    <circle cx="19.7207" cy="9.72314" r="0.75" stroke="none"></circle>
+                    <circle cx="19.7207" cy="14.7964" r="0.75" stroke="none"></circle>
+                    <circle cx="19.7207" cy="19.8687" r="0.75" stroke="none"></circle>
+                    <circle cx="4.41992" cy="19.8687" r="0.75" stroke="none"></circle>
+                    <circle cx="4.4209" cy="14.7964" r="0.75" stroke="none"></circle>
+                    <circle cx="4.4209" cy="9.72314" r="0.75" stroke="none"></circle>
+                    <circle cx="0.735391" cy="14.8081" r="0.585" stroke="none"></circle>
+                    <circle cx="0.735391" cy="9.7349" r="0.585" stroke="none"></circle>
+                    <circle cx="23.4053" cy="14.8081" r="0.585" stroke="none"></circle>
+                    <circle cx="23.4053" cy="9.7349" r="0.585" stroke="none"></circle>
+                    <path
+                      d="M11.889 12.6812C13.1096 12.6812 14.1083 11.6826 14.1083 10.462C14.1083 9.24135 13.1096 8.24268 11.889 8.24268C10.6684 8.24268 9.66969 9.24135 9.66969 10.462C9.66969 11.6826 10.6684 12.6812 11.889 12.6812Z"
+                      stroke="none"></path>
+                    <path
+                      d="M16.4678 18.0999C16.4678 15.6999 13.5572 14.6631 12.0689 14.6631C10.5806 14.6631 7.66992 15.6999 7.66992 18.0999V19.4631H16.4678V18.0999Z"
+                      stroke="none"></path>
+                    <path
+                      d="M11.889 12.6812C13.1096 12.6812 14.1083 11.6826 14.1083 10.462C14.1083 9.24135 13.1096 8.24268 11.889 8.24268C10.6684 8.24268 9.66969 9.24135 9.66969 10.462C9.66969 11.6826 10.6684 12.6812 11.889 12.6812Z"
+                      fill="none" stroke-width="1.8"></path>
+                    <path
+                      d="M16.4678 18.0999C16.4678 15.6999 13.5572 14.6631 12.0689 14.6631C10.5806 14.6631 7.66992 15.6999 7.66992 18.0999V19.4631H16.4678V18.0999Z"
+                      fill="none" stroke-width="1.8"></path>
+                  </svg>
+                </button>
+                <button id="blur-2"
+                  class="flex items-center justify-center aspect-square w-[30%] rounded-lg border-2 border-gray-100 focus:outline-none focus:ring-4 focus:ring-yellow-400 hover:ring-4 hover:ring-white">
+                  <svg class="w-[50%] h-[50%]" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="0.895148" cy="9.19837" r="0.895148" stroke="none"></circle>
+                    <circle cx="0.895148" cy="14.1339" r="0.895148" stroke="none"></circle>
+                    <circle cx="23.1051" cy="9.19837" r="0.895148" stroke="none"></circle>
+                    <circle cx="23.1051" cy="14.1339" r="0.895148" stroke="none"></circle>
+                    <circle cx="9.53187" cy="0.895148" r="0.895148" stroke="none"></circle>
+                    <circle cx="14.4684" cy="0.895148" r="0.895148" stroke="none"></circle>
+                    <circle cx="14.4684" cy="23.1046" r="0.895148" stroke="none"></circle>
+                    <circle cx="9.53187" cy="23.1046" r="0.895148" stroke="none"></circle>
+                    <circle cx="5.02959" cy="4.82452" r="1.12334" stroke="none"></circle>
+                    <circle cx="9.61358" cy="4.82452" r="1.12334" stroke="none"></circle>
+                    <circle cx="14.1956" cy="4.82452" r="1.12334" stroke="none"></circle>
+                    <circle cx="18.7786" cy="4.82452" r="1.12334" stroke="none"></circle>
+                    <circle cx="18.7786" cy="9.40801" r="1.12334" stroke="none"></circle>
+                    <circle cx="18.7786" cy="13.9905" r="1.12334" stroke="none"></circle>
+                    <circle cx="18.7786" cy="18.5731" r="1.12334" stroke="none"></circle>
+                    <circle cx="5.02959" cy="18.5731" r="1.12334" stroke="none"></circle>
+                    <circle cx="5.02959" cy="13.9905" r="1.12334" stroke="none"></circle>
+                    <circle cx="5.02959" cy="9.40801" r="1.12334" stroke="none"></circle>
+                    <path fill-rule="evenodd" clip-rule="evenodd"
+                      d="M13.9364 10.2191C13.9364 11.4114 12.9609 12.387 11.7685 12.387C10.5762 12.387 9.60069 11.4114 9.60069 10.2191C9.60069 9.0268 10.5762 8.05127 11.7685 8.05127C12.9609 8.05127 13.9364 9.0268 13.9364 10.2191ZM11.9357 14.3229C13.3895 14.3229 16.2326 15.3357 16.2326 17.6801V19.0117H7.63867V17.6801C7.63867 15.3357 10.4818 14.3229 11.9357 14.3229Z"
+                      stroke="none"></path>
+                    <path
+                      d="M16.2326 19.0117V19.9117H17.1326V19.0117H16.2326ZM7.63867 19.0117H6.73867V19.9117H7.63867V19.0117ZM11.7685 13.287C13.4579 13.287 14.8364 11.9085 14.8364 10.2191H13.0364C13.0364 10.9144 12.4638 11.487 11.7685 11.487V13.287ZM8.70069 10.2191C8.70069 11.9085 10.0792 13.287 11.7685 13.287V11.487C11.0733 11.487 10.5007 10.9144 10.5007 10.2191H8.70069ZM11.7685 7.15127C10.0792 7.15127 8.70069 8.52974 8.70069 10.2191H10.5007C10.5007 9.52386 11.0733 8.95127 11.7685 8.95127V7.15127ZM14.8364 10.2191C14.8364 8.52974 13.4579 7.15127 11.7685 7.15127V8.95127C12.4638 8.95127 13.0364 9.52386 13.0364 10.2191H14.8364ZM17.1326 17.6801C17.1326 16.0841 16.1487 14.9971 15.0991 14.3547C14.0629 13.7205 12.8256 13.4229 11.9357 13.4229V15.2229C12.4995 15.2229 13.4107 15.4317 14.1595 15.89C14.895 16.3401 15.3326 16.9317 15.3326 17.6801H17.1326ZM17.1326 19.0117V17.6801H15.3326V19.0117H17.1326ZM7.63867 19.9117H16.2326V18.1117H7.63867V19.9117ZM6.73867 17.6801V19.0117H8.53867V17.6801H6.73867ZM11.9357 13.4229C11.0457 13.4229 9.80843 13.7205 8.77217 14.3547C7.72257 14.9971 6.73867 16.0841 6.73867 17.6801H8.53867C8.53867 16.9317 8.97636 16.3401 9.7118 15.89C10.4606 15.4317 11.3718 15.2229 11.9357 15.2229V13.4229Z"
+                      stroke="none"></path>
+                  </svg>
+                </button>
+              </div>
+              <div class="divider"></div>
+              <p class="text-lg text-gray-900 mb-2">圖片背景</p>
+              <div class="grid grid-cols-2 gap-4">
+                <button id="bg-1"
+                  class="rounded-lg focus:outline-none focus:ring-4 focus:ring-yellow-400 hover:ring-4 hover:ring-white">
+                  <img class="aspect-video max-w-full rounded-lg" src="/assets/bg-1.jpg" alt="">
+                </button>
+                <button id="bg-2"
+                  class="rounded-lg focus:outline-none focus:ring-4 focus:ring-yellow-400 hover:ring-4 hover:ring-white">
+                  <img class="h-auto max-w-full rounded-lg" src="/assets/bg-2.jpg" alt="">
+                </button>
+                <button id="bg-3"
+                  class="rounded-lg focus:outline-none focus:ring-4 focus:ring-yellow-400 hover:ring-4 hover:ring-white">
+                  <img class="h-auto max-w-full rounded-lg" src="/assets/bg-3.jpg" alt="">
+                </button>
+                <button id="bg-4"
+                  class="rounded-lg focus:outline-none focus:ring-4 focus:ring-yellow-400 hover:ring-4 hover:ring-white">
+                  <img class="h-auto max-w-full rounded-lg" src="/assets/bg-4.jpg" alt="">
+                </button>
+                <button id="bg-5"
+                  class="rounded-lg focus:outline-none focus:ring-4 focus:ring-yellow-400 hover:ring-4 hover:ring-white">
+                  <img class="h-auto max-w-full rounded-lg" src="/assets/bg-5.jpg" alt="">
+                </button>
+                <button id="bg-6"
+                  class="rounded-lg focus:outline-none focus:ring-4 focus:ring-yellow-400 hover:ring-4 hover:ring-white">
+                  <img class="h-auto max-w-full rounded-lg" src="/assets/bg-6.jpg" alt="">
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="function-bar" class="fixed bottom-0 left-0 z-50 grid w-full h-16 grid-cols-1 px-8 bg-white border-t border-gray-200 md:grid-cols-3">
+      <div class="items-center justify-center hidden mr-auto text-gray-500 md:flex">
+        <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"
+          aria-hidden="true">
+          <path clip-rule="evenodd" fill-rule="evenodd"
+            d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z">
+          </path>
+        </svg>
+        <span id="timer" class="text-base"></span>
+      </div>
+      <div class="flex items-center justify-center mx-auto">
+        <button id="mute-mic" data-tooltip-target="tooltip-microphone" type="button"
+          class="p-2.5 group bg-gray-100 rounded-full hover:bg-gray-200 mr-4">
+          <svg class="w-5 h-5 text-green-500 group-hover:text-green-500"
+            fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path clip-rule="evenodd" fill-rule="evenodd"
+              d="M7 4a3 3 0 016 0v4a3 3 0 11-6 0V4zm4 10.93A7.001 7.001 0 0017 8a1 1 0 10-2 0A5 5 0 015 8a1 1 0 00-2 0 7.001 7.001 0 006 6.93V17H6a1 1 0 100 2h8a1 1 0 100-2h-3v-2.07z">
+            </path>
+          </svg>
+          <span class="sr-only">Mute microphone</span>
+        </button>
+        <div id="tooltip-microphone" role="tooltip"
+          class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip">
+          關閉麥克風
+        </div>
+        <button id="hide-camera" data-tooltip-target="tooltip-camera" type="button"
+          class="p-2.5 bg-gray-100 group rounded-full hover:bg-gray-200 mr-4">
+          <svg class="w-5 h-5 text-green-500 group-hover:text-green-500"
+            fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path
+              d="M2 6a2 2 0 012-2h6a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V6zM14.553 7.106A1 1 0 0014 8v4a1 1 0 00.553.894l2 1A1 1 0 0018 13V7a1 1 0 00-1.447-.894l-2 1z">
+            </path>
+          </svg>
+          <span class="sr-only">Hide camera</span>
+        </button>
+        <div id="tooltip-camera" role="tooltip"
+          class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip">
+          關閉鏡頭
+        </div>
+        <button id="share-screen-btn" data-tooltip-target="tooltip-screen" type="button"
+          class="p-2.5 bg-gray-100 group rounded-full hover:bg-gray-200 mr-4">
+          <svg class="w-5 h-5 text-gray-500 group-hover:text-gray-900"
+            fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path fill-rule="evenodd"
+              d="M2 4.25A2.25 2.25 0 014.25 2h11.5A2.25 2.25 0 0118 4.25v8.5A2.25 2.25 0 0115.75 15h-3.105a3.501 3.501 0 001.1 1.677A.75.75 0 0113.26 18H6.74a.75.75 0 01-.484-1.323A3.501 3.501 0 007.355 15H4.25A2.25 2.25 0 012 12.75v-8.5zm1.5 0a.75.75 0 01.75-.75h11.5a.75.75 0 01.75.75v7.5a.75.75 0 01-.75.75H4.25a.75.75 0 01-.75-.75v-7.5z"
+              clip-rule="evenodd" />
+          </svg>
+          <span class="sr-only">Share screen</span>
+        </button>
+        <div id="tooltip-screen" role="tooltip"
+          class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip">
+          分享螢幕
+        </div>
+        <div id="share-screen-list" class="hidden absolute top-[-12rem] z-10 bg-white divide-y divide-gray-100 rounded-lg shadow w-60">
+          <ul class="p-1 space-y-1 text-sm text-gray-700" aria-labelledby="dropdownRadioHelperButton">
+            <li>
+              <div class="flex pl-1 py-2 rounded">
+                <div class="ml-2 text-sm">
+                  <label for="helper-radio-4" class="font-medium text-gray-900">
+                    <div>分享螢幕畫面</div>
+                  </label>
+                </div>
+              </div>
+            </li>
+            <li>
+              <div id="entire" class="flex p-1 rounded hover:bg-gray-100">
+                <div class="ml-2 text-sm">
+                  <label for="helper-radio-5" class="font-medium text-gray-900">
+                    <div>整個畫面</div>
+                    <p id="helper-radio-text-6" class="text-xs font-normal text-gray-500">Mac無法共享聲音</p>
+                  </label>
+                </div>
+              </div>
+            </li>
+            <li>
+              <div id="window" class="flex p-1 rounded hover:bg-gray-100">
+                <div class="ml-2 text-sm">
+                  <label for="helper-radio-6" class="font-medium text-gray-900">
+                    <div>單個視窗</div>
+                    <p id="helper-radio-text-6" class="text-xs font-normal text-gray-500">Mac無法共享聲音</p>
+                  </label>
+                </div>
+              </div>
+            </li>
+            <li>
+              <div id="paging" class="flex p-1 rounded hover:bg-gray-100">
+                <div class="ml-2 text-sm">
+                  <label for="helper-radio-6" class="font-medium text-gray-900">
+                    <div>單一分頁</div>
+                    <p id="helper-radio-text-6" class="text-xs font-normal text-gray-500">若要共享畫面聲音，此為最佳選擇</p>
+                  </label>
+                </div>
+              </div>
+            </li>
+          </ul>
+        </div>
+        <button id="start-whiteboard" data-tooltip-target="tooltip-whiteboard" type="button"
+          class="p-2.5 bg-gray-100 group rounded-full hover:bg-gray-200 mr-4">
+          <svg class="w-5 h-5 text-gray-500 group-hover:text-gray-900" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path clip-rule="evenodd" fill-rule="evenodd"
+              d="M 18.646484 1.2890625 C 18.268016 1.2612656 17.889562 1.4509844 17.695312 1.8027344 L 15.931641 5 L 4 5 C 2.3550302 5 1 6.3550302 1 8 L 1 18 C 1 19.64497 2.3550302 21 4 21 L 20 21 C 21.64497 21 23 19.64497 23 18 L 23 8 C 23 6.3683814 21.665943 5.025654 20.039062 5.0039062 L 20.876953 3.484375 C 21.007953 3.245375 21.036078 2.963125 20.955078 2.703125 C 20.874078 2.443125 20.690266 2.2274688 20.447266 2.1054688 L 19.017578 1.390625 C 18.897828 1.331125 18.772641 1.2983281 18.646484 1.2890625 z M 4 7 L 14.828125 7 L 13.125 10.087891 C 13.043 10.236891 13 10.401312 13 10.570312 L 13 11.992188 A 1.0001 1.0001 0 0 0 12.445312 12.167969 C 11.929994 12.511515 11.700847 12.483693 11.261719 12.316406 C 10.822591 12.149119 10.25 11.71875 9.625 11.21875 C 9 10.71875 8.3225906 10.149119 7.4492188 9.8164062 C 7.0125328 9.6500498 6.5090892 9.5734519 5.9902344 9.6210938 C 5.4713796 9.6687354 4.9376529 9.8397416 4.4453125 10.167969 A 1.0001 1.0001 0 1 0 5.5546875 11.832031 C 6.0700066 11.488485 6.2991532 11.516307 6.7382812 11.683594 C 7.1774093 11.850881 7.75 12.28125 8.375 12.78125 C 9 13.28125 9.6774096 13.850881 10.550781 14.183594 C 11.424153 14.516307 12.570006 14.488485 13.554688 13.832031 A 1.0001 1.0001 0 0 0 14.013672 12.998047 C 14.162069 12.996009 14.310498 12.96243 14.447266 12.894531 L 15.876953 12.181641 C 16.058953 12.090641 16.206688 11.946531 16.304688 11.769531 L 18.9375 7 L 20 7 C 20.56503 7 21 7.4349698 21 8 L 21 18 C 21 18.56503 20.56503 19 20 19 L 4 19 C 3.4349698 19 3 18.56503 3 18 L 3 8 C 3 7.4349698 3.4349698 7 4 7 z" />
+          </svg>
+          <span class="sr-only">分享白版</span>
+        </button>
+        <div id="tooltip-whiteboard" role="tooltip"
+          class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip">
+          分享白版
+        </div>
+        <button id="start-recording" data-tooltip-target="tooltip-recording" type="button"
+          class="p-2 bg-gray-100 group rounded-full hover:bg-gray-200 mr-4">
+          <svg class="w-6 h-6 text-gray-500 group-hover:text-gray-900" xmlns="http://www.w3.org/2000/svg" viewBox="0 96 960 960" fill="currentColor" aria-hidden="true">
+            <path clip-rule="evenodd" fill-rule="evenodd"
+              d="M158 814q-37-50-57.5-110.5T80 576q0-67 20-127t57-110l58 57q-26 38-40.5 83.5T160 576q0 51 14.5 97t40.5 84l-57 57Zm322 162q-67 0-127-20t-110-57l57-58q38 26 83.5 40.5T480 896q51 0 96.5-14.5T660 841l57 58q-50 37-110 57t-127 20Zm322-162-57-57q26-38 40.5-84t14.5-97q0-51-14.5-96.5T745 396l58-57q37 50 57 110t20 127q0 67-20.5 127.5T802 814ZM299 311l-57-57q50-37 110.5-57.5T480 176q68 0 128 20.5T718 254l-57 57q-38-26-84-40.5T480 256q-51 0-97 14.5T299 311Zm181 465q-83 0-141.5-58.5T280 576q0-83 58.5-141.5T480 376q83 0 141.5 58.5T680 576q0 83-58.5 141.5T480 776Z" />
+          </svg>
+          <span class="sr-only">Start recording</span>
+        </button>
+        <div id="tooltip-recording" role="tooltip"
+          class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip">
+          會議錄影
+        </div>
+        <button id="end-call" data-tooltip-target="tooltip-ending" data-modal-target="popup-modal" data-modal-toggle="popup-modal" type="button" class="px-4 py-2.5 bg-red-600 group rounded-full hover:bg-red-500">
+          <svg class="w-5 h-5 text-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+            fill="currentColor" aria-hidden="true">
+            <path fill="none" d="M0 0h24v24H0V0z"></path>
+            <path
+              d="M4.51 15.48l2-1.59c.48-.38.76-.96.76-1.57v-2.6c3.02-.98 6.29-.99 9.32 0v2.61c0 .61.28 1.19.76 1.57l1.99 1.58c.8.63 1.94.57 2.66-.15l1.22-1.22c.8-.8.8-2.13-.05-2.88-6.41-5.66-16.07-5.66-22.48 0-.85.75-.85 2.08-.05 2.88l1.22 1.22c.71.72 1.85.78 2.65.15z">
+            </path>
+          </svg>
+          <span class="sr-only">End call</span>
+        </button>
+        <div id="tooltip-ending" role="tooltip"
+          class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip">
+          結束會議
+        </div>
+      </div>
+      <div class="items-center justify-center hidden ml-auto md:flex">
+        <button id="show-members-btn" data-tooltip-target="tooltip-participants" type="button"
+          class="p-2.5 group rounded-full hover:bg-gray-100 mr-1">
+          <svg class="w-5 h-5 text-gray-500 group-hover:text-gray-900"
+            fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path
+              d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z">
+            </path>
+          </svg>
+          <span class="sr-only">Show participants</span>
+        </button>
+        <div id="tooltip-participants" role="tooltip"
+          class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip">
+          顯示所有參與者
+        </div>
+        <button id="chat-room-btn" data-tooltip-target="tooltip-chatroom" type="button"
+          class="p-2.5 group rounded-full hover:bg-gray-100 mr-1">
+          <svg class="w-5 h-5 text-gray-500 group-hover:text-gray-900"
+            fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path fill-rule="evenodd"
+              d="M10 2c-2.236 0-4.43.18-6.57.524C1.993 2.755 1 4.014 1 5.426v5.148c0 1.413.993 2.67 2.43 2.902 1.168.188 2.352.327 3.55.414.28.02.521.18.642.413l1.713 3.293a.75.75 0 001.33 0l1.713-3.293a.783.783 0 01.642-.413 41.102 41.102 0 003.55-.414c1.437-.231 2.43-1.49 2.43-2.902V5.426c0-1.413-.993-2.67-2.43-2.902A41.289 41.289 0 0010 2zM6.75 6a.75.75 0 000 1.5h6.5a.75.75 0 000-1.5h-6.5zm0 2.5a.75.75 0 000 1.5h3.5a.75.75 0 000-1.5h-3.5z"
+              clip-rule="evenodd" />
+          </svg>
+          <span class="sr-only">Chat room</span>
+        </button>
+        <div id="tooltip-chatroom" role="tooltip"
+          class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip">
+          聊天室
+        </div>
+        <button id="change-background-btn" data-tooltip-target="tooltip-background" type="button"
+          class="p-2.5 group rounded-full hover:bg-gray-100 mr-1">
+          <svg class="w-6 h-6 text-gray-500 group-hover:text-gray-900" xmlns="http://www.w3.org/2000/svg" viewBox="0 96 960 960"
+            fill="currentColor" aria-hidden="true">
+            <path clip-rule="evenodd" fill-rule="evenodd"
+              d="M120 482v-85l181-181h85L120 482Zm0-196v-70h70l-70 70Zm527 67q-10-11-21.5-21.5T602 313l97-97h85L647 353ZM220 695l77-77q7 11 14.5 20t16.5 17q-28 7-56.5 17.5T220 695Zm480-197v-2q0-19-3-37t-9-35l152-152v86L700 498ZM436 280l65-64h85l-64 64q-11-2-21-3t-21-1q-11 0-22 1t-22 3ZM120 681v-85l144-144q-2 11-3 22t-1 22q0 11 1 21t3 20L120 681Zm709 83q-8-12-18.5-23T788 721l52-52v85l-11 10Zm-116-82q-7-3-14-5.5t-14-4.5q-9-3-17.5-6t-17.5-5l190-191v86L713 682Zm-233-26q-66 0-113-47t-47-113q0-66 47-113t113-47q66 0 113 47t47 113q0 66-47 113t-113 47Zm0-80q33 0 56.5-23.5T560 496q0-33-23.5-56.5T480 416q-33 0-56.5 23.5T400 496q0 33 23.5 56.5T480 576ZM160 936v-71q0-34 17-63t47-44q51-26 115.5-44T480 696q76 0 140.5 18T736 758q30 15 47 44t17 63v71H160Zm81-80h478q-2-9-7-15.5T699 830q-36-18-91.5-36T480 776q-72 0-127.5 18T261 830q-8 4-13 11t-7 15Zm239 0Zm0-360Z" />
+          </svg>
+          <span class="sr-only">Change background</span>
+        </button>
+        <div id="tooltip-background" role="tooltip"
+          class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip">
+          更換背景
+        </div>
+        <button id="show-info-btn" data-tooltip-target="tooltip-information" type="button"
+          class="p-2.5 group rounded-full hover:bg-gray-100">
+          <svg class="w-5 h-5 text-gray-500 group-hover:text-gray-900"
+            fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path clip-rule="evenodd" fill-rule="evenodd"
+              d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z">
+            </path>
+          </svg>
+          <span class="sr-only">Show information</span>
+        </button>
+        <div id="tooltip-information" role="tooltip"
+          class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip">
+          會議資訊
+        </div>
+      </div>
+    </div>
+    <div id="popup-modal" tabindex="-1"
+      class="fixed top-0 left-0 right-0 z-50 hidden p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
+      <div class="relative w-full max-w-md max-h-full">
+        <div class="relative bg-white rounded-lg shadow">
+          <button type="button"
+            class="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center"
+            data-modal-hide="popup-modal">
+            <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
+              xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd"
+                d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                clip-rule="evenodd"></path>
+            </svg>
+            <span class="sr-only">Close modal</span>
+          </button>
+          <div class="p-6 text-center">
+            <svg aria-hidden="true" class="mx-auto mb-4 text-gray-400 w-14 h-14" fill="none"
+              stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            <h3 class="mb-5 text-2xl font-normal text-gray-500">確定要離開會議室?</h3>
+            <button id="leave-room" data-modal-hide="popup-modal" type="button"
+              class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-base inline-flex items-center px-5 py-2.5 text-center mr-2">
+              離開
+            </button>
+            <button data-modal-hide="popup-modal" type="button"
+              class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-base font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10">取消</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script type="module" src="https://d3u6ahecm1mhmb.cloudfront.net/src/begin.js"></script>
+    <script type="module" src="https://d3u6ahecm1mhmb.cloudfront.net/src/stream.js"></script>
+    <script type="module" src="https://d3u6ahecm1mhmb.cloudfront.net/src/worker.js"></script>
+    <script type="module" src="https://d3u6ahecm1mhmb.cloudfront.net/src/chatroom.js"></script>
+    <script type="module" src="https://d3u6ahecm1mhmb.cloudfront.net/src/sharescreen.js"></script>
+    <script type="module" src="https://d3u6ahecm1mhmb.cloudfront.net/src/whiteboard.js"></script>
+  </body>
+</html>

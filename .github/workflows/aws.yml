@@ -1,0 +1,51 @@
+name: Deploy to Amazon EC2
+on:
+  push:
+    branches:
+      - '*'
+jobs:
+  deploy:
+    name: Deploy to Amazon EC2
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout the files
+        uses: actions/checkout@v3
+
+      - name: Deploy to Server
+        uses: appleboy/ssh-action@v0.1.8
+        with:
+          KEY: ${{ secrets.EC2_SSH_KEY }}
+          HOST: ${{ secrets.EC2_HOST }}
+          USERNAME: ${{ secrets.EC2_USER }}
+          PORT: ${{ secrets.EC2_PORT }}
+          script: |
+            cd ~/Current
+
+            echo --- git pull --- start
+            git pull origin ${{ github.ref_name }}
+            echo --- git pull --- done
+
+            echo --- git switch --- start
+            git switch ${{ github.ref_name }}
+            echo --- git switch --- done
+
+            echo --- npm install --- start
+            export NVM_DIR="$HOME/.nvm"
+            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+            [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+            npm i
+            echo --- npm install --- done
+
+            echo --- pm2 stop all --- start
+            pm2 stop all
+            echo --- pm2 stop all --- done
+
+            echo --- npm test --- start
+            npm test
+            echo --- npm test --- done
+
+            echo --- pm2 restart all --- start
+            pm2 restart all
+            pm2 save -f
+            echo --- pm2 restart all --- done
