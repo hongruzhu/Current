@@ -31,7 +31,11 @@ https://currentmeet.com
 ### Multi-users video conference
 ![未命名 (1920 × 800 像素)](https://github.com/hongruzhu/Current/assets/121448431/44df6c68-08f4-499f-8e34-fb2e347d3f91)
 ### Screen sharing 
+![Current Usage Footage GIF (1)](https://github.com/hongruzhu/Current/assets/121448431/287cebda-f66b-4907-a0b9-ec781f886806)
+
 ### Real-time chatroom
+![Current Usage Footage GIF](https://github.com/hongruzhu/Current/assets/121448431/821bf512-467c-4a46-b694-f8ea320a73ee)
+
 ### Conference recording
 ### Background changing
 
