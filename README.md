@@ -41,8 +41,10 @@ https://currentmeet.com
 ![Current Usage Footage GIF (2)](https://github.com/hongruzhu/Current/assets/121448431/6ca5c850-6a78-49b7-8cea-216d659aa5c2)
 
 ### Conference Recording
+![Current Usage Footage GIF (3)](https://github.com/hongruzhu/Current/assets/121448431/ca7f9c74-f853-4f32-bd44-7ecf2ce85f7d)
 
 ### Background Changing
+
 
 ## Architecture Diagram
 ![截圖 2023-05-20 上午12 34 47](https://github.com/hongruzhu/Current/assets/121448431/0e414f08-c69b-4d05-be4b-683bab2fdb28)
