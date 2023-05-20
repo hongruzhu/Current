@@ -44,4 +44,26 @@ if (process.env.NODE_ENV === "production") {
   });
 }
 
-export { redis };
+redis.on("ready", () => {
+  console.info("redis is ready");
+});
+
+const redisPub = redis.duplicate();
+const redisSub = redis.duplicate();
+
+redisPub.on("ready", () => {
+  console.info("redisPub is ready");
+});
+redisSub.on("ready", () => {
+  console.info("redisSub is ready");
+});
+
+redisPub.on("error", (err) => {
+  console.error(err);
+});
+redisSub.on("error", (err) => {
+  console.error(err);
+});
+
+
+export { redis, redisPub, redisSub };
