@@ -4,11 +4,8 @@ dotenv.config();
 // Express Initialization
 import express from "express";
 import http from "http";
-import { Server } from "socket.io";
-
 const app = express();
 const server = http.createServer(app);
-const io = new Server(server);
 const { PORT } = process.env;
 
 app.set("view engine", "ejs");
@@ -38,10 +35,16 @@ app.use(
 );
 
 // Socket.IO routes
+import { Server } from "socket.io";
+import { createAdapter } from "@socket.io/redis-adapter";
+import { redisPub, redisSub } from "./server/util/cache.js";
 import { conferenceCall } from "./server/routes/concall_route.js";
 import { chat } from "./server/routes/chat_route.js";
 import { shareScreen } from "./server/routes/sharescreen_route.js";
 import { whiteboard } from "./server/routes/whiteboard_route.js";
+
+const io = new Server(server);
+io.adapter(createAdapter(redisPub, redisSub));
 
 const onConnection = (socket) => {
   conferenceCall(io, socket);
@@ -51,6 +54,7 @@ const onConnection = (socket) => {
 }
 io.on("connection", onConnection);
 
+// Wrong path handling
 app.use((req, res) => {
   console.log("Wrong path: ",req.path);
 	res.status(404).render("notFound");
