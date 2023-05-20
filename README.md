@@ -43,15 +43,15 @@ Implemented screen sharing with audio using **PeerJS** and **Socket.IO**.
 
 ![Current Usage Footage GIF (1)](https://github.com/hongruzhu/Current/assets/121448431/287cebda-f66b-4907-a0b9-ec781f886806)
 
-### Real-time Chatroom
-Developed a real-time chatroom with **Socket.IO** for communication among users.
-
-![Current Usage Footage GIF](https://github.com/hongruzhu/Current/assets/121448431/821bf512-467c-4a46-b694-f8ea320a73ee)
-
 ### Collaborative Whiteboard
 Created a collaborative whiteboard with **Canvas API** and **Socket.IO**, effectively managing race conditions with a **queue**.
 
 ![Current Usage Footage GIF (2)](https://github.com/hongruzhu/Current/assets/121448431/6ca5c850-6a78-49b7-8cea-216d659aa5c2)
+
+### Real-time Chatroom
+Developed a real-time chatroom with **Socket.IO** for communication among users.
+
+![Current Usage Footage GIF](https://github.com/hongruzhu/Current/assets/121448431/821bf512-467c-4a46-b694-f8ea320a73ee)
 
 ### Conference Recording
 Realized conference recording by leveraging the **Web Audio API** to merge screen video and mic audio and utilizing the **MediaStream Recording API** to record and generate conference videos.
