@@ -41,8 +41,7 @@ https://currentmeet.com
 ![Current Usage Footage GIF (2)](https://github.com/hongruzhu/Current/assets/121448431/6ca5c850-6a78-49b7-8cea-216d659aa5c2)
 
 ### Conference Recording
-<!-- ![Current Usage Footage GIF (3)](https://github.com/hongruzhu/Current/assets/121448431/ca7f9c74-f853-4f32-bd44-7ecf2ce85f7d) -->
-<img width="1500" src="https://github.com/hongruzhu/Current/assets/121448431/ca7f9c74-f853-4f32-bd44-7ecf2ce85f7d">
+![Current Usage Footage GIF (3)](https://github.com/hongruzhu/Current/assets/121448431/822537b7-5d80-4d6d-a0fa-850ad350c346)
 
 ### Background Changing
 
