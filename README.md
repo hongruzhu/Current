@@ -33,6 +33,11 @@ Developed multi-users video conference with webcam and mic toggling by integrati
 
 ![未命名 (1920 × 800 像素)](https://github.com/hongruzhu/Current/assets/121448431/44df6c68-08f4-499f-8e34-fb2e347d3f91)
 
+### Background Changing
+Achieved real-time background changing by extracting the person's image from the webcam using MediaPipe and utilizing the Canvas API for layered rendering and animation.
+
+![Current Usage Footage GIF (4)](https://github.com/hongruzhu/Current/assets/121448431/038148ec-8846-4607-8f1e-4fa314d51ffd)
+
 ### Screen Sharing 
 Implemented screen sharing with audio using PeerJS and Socket.IO.
 
@@ -52,10 +57,6 @@ Created a collaborative whiteboard with Canvas API and Socket.IO, effectively ma
 Realized conference recording by leveraging the Web Audio API to merge screen video and mic audio and utilizing the MediaStream Recording API to record and generate conference videos.
 
 ![Current Usage Footage GIF (3)](https://github.com/hongruzhu/Current/assets/121448431/822537b7-5d80-4d6d-a0fa-850ad350c346)
-
-### Background Changing
-Achieved real-time background changing by extracting the person's image from the webcam using MediaPipe and utilizing the Canvas API for layered rendering and animation.
-
 
 ## Architecture Diagram
 ![截圖 2023-05-20 上午12 34 47](https://github.com/hongruzhu/Current/assets/121448431/0e414f08-c69b-4d05-be4b-683bab2fdb28)
