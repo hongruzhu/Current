@@ -91,7 +91,6 @@ Realized conference recording by leveraging the **Web Audio API** to merge scree
 * CloudWatch
 * Route 53
 * Elastic Load Balancer (ELB)
-* Auto Scaling
 ### Test & CICD
 * Jest
 * GitHub Actions
