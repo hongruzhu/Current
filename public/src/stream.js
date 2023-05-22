@@ -280,7 +280,7 @@ if (!myMicStatus) stopMicTrack(myStream);
 /* ----------------------------- Step 2: 確定好要交換的stream後，開始處理Peer連線，進行stream交換 ----------------------------- */
 // Peer setup
 const myPeer = new Peer(undefined, {
-  host: "currentmeet.com", // currentmeet.com
+  host: "peer-server.currentmeet.com", // currentmeet.com
   port: "443", // 443
   path: "/myapp",
   debug: 2,
