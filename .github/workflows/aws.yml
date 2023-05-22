@@ -22,6 +22,10 @@ jobs:
           script: |
             cd ~/Current
 
+            echo --- git pull --- start
+            git pull origin ${{ github.ref_name }}
+            echo --- git pull --- done
+
             echo --- git switch --- start
             git switch ${{ github.ref_name }}
             echo --- git switch --- done
