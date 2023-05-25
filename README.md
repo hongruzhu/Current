@@ -68,7 +68,7 @@ https://currentmeet.com
 
 ## Database Schema
 
-The ocupacity part is prepared for scaling in the future.
+The transparent part is prepared for future expansion .
 
 ![截圖 2023-05-25 下午7 58 54](https://github.com/hongruzhu/Current/assets/121448431/cc9a796a-4265-4182-bf0a-ad258f4e5be6)
 
