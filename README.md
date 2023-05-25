@@ -68,7 +68,9 @@ https://currentmeet.com
 
 ## Database Schema
 
-![Current Backend Architecture](https://github.com/hongruzhu/Current/assets/121448431/3a7d2886-0958-4f8d-9109-93e0079cc9a7)
+The ocupacity part is prepared for scaling in the future.
+
+![截圖 2023-05-25 下午7 58 54](https://github.com/hongruzhu/Current/assets/121448431/cc9a796a-4265-4182-bf0a-ad258f4e5be6)
 
 ## Features
 ### Multi-users Video Conference
