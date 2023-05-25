@@ -64,7 +64,7 @@ https://currentmeet.com
 
 ## Architecture Diagram
 
-![截圖 2023-05-20 上午12 34 47](https://github.com/hongruzhu/Current/assets/121448431/0e414f08-c69b-4d05-be4b-683bab2fdb28)
+![截圖 2023-05-25 下午6 28 18](https://github.com/hongruzhu/Current/assets/121448431/42a42cf7-0144-47c7-b7c8-a404153398c7)
 
 ## Database Schema
 
