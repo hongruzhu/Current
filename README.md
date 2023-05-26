@@ -22,8 +22,8 @@ https://currentmeet.com
 ## Table of Contents
 
 - [Technologies](#technologies)
-- [Architecture Diagram](#architecture-diagram)
 - [How does WebRTC work to realize a P2P connection?](#how-does-webrtc-work-to-realize-a-p2p-connection)
+- [Architecture Diagram](#architecture-diagram)
 - [Database Schema](#database-schema)
 - [Features](#features)
 - [Contact](#contact)
@@ -63,10 +63,6 @@ https://currentmeet.com
 * ESLint
 * Trello (Scrum)
 
-## Architecture Diagram
-
-![截圖 2023-05-25 下午6 28 18](https://github.com/hongruzhu/Current/assets/121448431/42a42cf7-0144-47c7-b7c8-a404153398c7)
-
 ## How does WebRTC work to realize a P2P connection?
 
 ![截圖 2023-05-26 下午6 45 56](https://github.com/hongruzhu/Current/assets/121448431/1ad2d7b2-ce13-41e3-aaba-3c25c8e3b02a)
@@ -93,6 +89,10 @@ User A and B exchange their SDP and ICE candidates through the Signaling Server.
 The optimal candidates for establishing a connection are selected from the exchanged ICE candidates. The connection is established using UDP. If STUN-based NAT traversal fails, the connection resorts to using TURN relay, although this is no longer considered a true P2P connection.
 
 Once the connection is successfully established, User A and B can commence data transmission to each other. 🥳
+
+## Architecture Diagram
+
+![截圖 2023-05-25 下午6 28 18](https://github.com/hongruzhu/Current/assets/121448431/42a42cf7-0144-47c7-b7c8-a404153398c7)
 
 ## Database Schema
 
