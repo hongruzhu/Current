@@ -82,7 +82,7 @@ User A and B individually collect Interactive Connectivity Establishment (ICE) c
 
 **Step 4 & 5:** 
 
-User A and B exchange their SDP and ICE candidates through the Signaling Server.
+User A and B exchange their ICE candidates through the Signaling Server.
 
 **Step 6:**
 
