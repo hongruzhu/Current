@@ -65,7 +65,7 @@ https://currentmeet.com
 
 ## How does WebRTC work to realize a P2P connection?
 
-![截圖 2023-05-26 下午6 45 56](https://github.com/hongruzhu/Current/assets/121448431/1ad2d7b2-ce13-41e3-aaba-3c25c8e3b02a)
+![截圖 2023-05-26 下午7 58 50](https://github.com/hongruzhu/Current/assets/121448431/f9a67865-d4b1-4ae7-8c8e-26a2f0ec6312)
 
 **Step 1 & 2:** 
 
