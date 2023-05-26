@@ -66,6 +66,34 @@ https://currentmeet.com
 
 ![截圖 2023-05-25 下午6 28 18](https://github.com/hongruzhu/Current/assets/121448431/42a42cf7-0144-47c7-b7c8-a404153398c7)
 
+## How does WebRTC work to realize a P2P connection?
+
+**Step 1 & 2:** 
+
+User A and B exchange their Session Description Protocol (SDP) through a Signaling Server. Each user creates their own SDP, which contains information about their media streams, such as audio and video.
+
+**What's Session Description Protocol (SDP)?**
+* SDP contains detailed information about media streams, such as audio and video, including encoding formats, transport protocols, and port numbers. It describes the parameters required to establish a connection between two peers.
+* The purpose of exchanging SDPs through the Signaling Server is to enable the peers to mutually confirm each other's media requirements and capabilities, in order to establish a suitable connection.
+* During the SDP exchange, the peers can also negotiate, for example, to choose the most appropriate encoding format and transport protocol, ensuring smooth communication.
+
+**Step 3:**
+
+User A and B individually collect Interactive Connectivity Establishment (ICE) candidates. This involves obtaining their public IP address and port from a Session Traversal Utilities for NAT (STUN) server and acquiring relay IP address and port from a Traversal Using Relays around NAT (TURN) server when STUN fails to perform NAT traversal.
+
+**Step 4 & 5:** 
+
+User A and B exchange their SDP and ICE candidates through the Signaling Server.
+
+**Step 6:**
+
+The optimal candidates for establishing a connection are selected from the exchanged ICE candidates. The connection is established using UDP. If STUN-based NAT traversal fails, the connection resorts to using TURN relay, although this is no longer considered a true P2P connection.
+
+Once the connection is successfully established, User A and B can commence data transmission to each other. 🥳
+
+![截圖 2023-05-26 下午6 45 56](https://github.com/hongruzhu/Current/assets/121448431/1ad2d7b2-ce13-41e3-aaba-3c25c8e3b02a)
+
+
 ## Database Schema
 
 The transparent part is prepared for future expansion .
