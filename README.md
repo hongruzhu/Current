@@ -25,8 +25,8 @@ https://currentmeet.com
 - [Architecture Diagram](#architecture-diagram)
 - [Database Schema](#database-schema)
 - [Features](#features)
-- [How does WebRTC work to realize a P2P connection?](#how-does-webrtc-work-to-realize-a-p2p-connection)
 - [Contact](#contact)
+- [Appendix: How does WebRTC work to realize a P2P connection?](#appendix-how-does-webrtc-work-to-realize-a-p2p-connection)
 
 ## Technologies
 ### Back-End
@@ -104,7 +104,14 @@ Realized conference recording by leveraging the **Web Audio API** to merge scree
 
 ![Current Usage Footage GIF (3)](https://github.com/hongruzhu/Current/assets/121448431/822537b7-5d80-4d6d-a0fa-850ad350c346)
 
-## How does WebRTC work to realize a P2P connection?
+## Contact
+Hong-Ru Zhu
+
+Email: hongru07@gmail.com
+
+Linkedin: https://www.linkedin.com/in/hongruzhu/
+
+## Appendix: How does WebRTC work to realize a P2P connection?
 
 ![截圖 2023-05-26 下午7 58 50](https://github.com/hongruzhu/Current/assets/121448431/f9a67865-d4b1-4ae7-8c8e-26a2f0ec6312)
 
@@ -130,12 +137,5 @@ User A and B exchange their ICE candidates through the Signaling Server.
 The optimal candidates for establishing a connection are selected from the exchanged ICE candidates. The connection is established using UDP. If STUN-based NAT traversal fails, the connection resorts to using TURN relay, although this is no longer considered a true P2P connection.
 
 Once the connection is successfully established, User A and B can commence data transmission to each other. 🥳
-
-## Contact
-Hong-Ru Zhu
-
-Email: hongru07@gmail.com
-
-Linkedin: https://www.linkedin.com/in/hongruzhu/
 
 
