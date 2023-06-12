@@ -16,6 +16,7 @@ const getRecord = async (req, res) => {
   const userId = req.payload.id;
   const userEmail = req.payload.email;
   const result = await getUserAllConf(userId);
+  // 刪除重複的會議
   const userConf = result.filter((item, index, self) => {
     return (
       index === self.findIndex((t) => t.conferences_id === item.conferences_id)
