@@ -2,11 +2,11 @@
   <img width="250" src="https://github.com/hongruzhu/Current/assets/121448431/5bd9e381-91b2-4679-8091-b075481343f6">
 </div> -->
 
-# [Current](https://currentmeet.com)
+# Current
 A real-time online meeting application, with multi-users video conference, chat room, screen sharing,
 whiteboard, recording, and background changing features.
 
-**Website URL**
+**Website URL (no longer valid)**
 
 https://currentmeet.com
 
